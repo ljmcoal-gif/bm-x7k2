@@ -1,0 +1,1027 @@
+<!--
+  독립형(standalone) 버전 — Flask 서버 없이 브라우저만으로 동작합니다.
+  CORS 프록시를 통해 클라이언트에서 직접 Google News RSS를 수집합니다.
+
+  ⚠️  공식(권장) 버전은 app.py 기반의 Flask 모드입니다.
+      Flask 모드는 백엔드에서 뉴스를 수집·캐싱하며 Naver·TheBell도 지원합니다.
+      실행: python3 app.py  →  http://localhost:5001
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🔋 배터리·딥테크 모니터링</title>
+    <!-- 모바일: 홈 화면에 추가 시 앱처럼 보이도록 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="배터리 모니터">
+    <meta name="theme-color" content="#0f1117">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f1117'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle'%3E%F0%9F%94%8B%3C/text%3E%3C/svg%3E">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+/* ═══════════════════════════════════════════════════════════
+   배터리 업계 모니터링 대시보드 — 다크 테마
+   ═══════════════════════════════════════════════════════════ */
+:root {
+    --bg-primary: #0f1117;
+    --bg-secondary: #1a1d2e;
+    --bg-card: #1e2235;
+    --bg-hover: #252a42;
+    --text-primary: #e4e6f0;
+    --text-secondary: #8b8fa3;
+    --text-muted: #5c6078;
+    --accent-blue: #4f8cff;
+    --accent-green: #34d399;
+    --accent-yellow: #fbbf24;
+    --accent-red: #f87171;
+    --accent-purple: #a78bfa;
+    --accent-orange: #fb923c;
+    --border-color: #2a2e45;
+    --shadow: 0 4px 24px rgba(0,0,0,.3);
+    --radius: 12px;
+    --radius-sm: 8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;min-height:100vh}
+
+/* ── 헤더 ──────────────────────────────────────────── */
+.header{display:flex;justify-content:space-between;align-items:center;padding:20px 32px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.header h1{font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{display:block;font-size:.8rem;color:var(--text-secondary);margin-top:2px}
+.header-right{display:flex;align-items:center;gap:16px}
+.last-updated{font-size:.8rem;color:var(--text-muted)}
+
+/* ── 버튼 ──────────────────────────────────────────── */
+.btn{padding:8px 20px;border:none;border-radius:var(--radius-sm);font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s ease}
+.btn-refresh{background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));color:#fff}
+.btn-refresh:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(79,140,255,.3)}
+.btn-refresh.spinning .refresh-icon{animation:spin 1s linear infinite}
+.btn-reset{background:var(--bg-hover);color:var(--text-secondary);border:1px solid var(--border-color)}
+.btn-reset:hover{background:var(--border-color);color:var(--text-primary)}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.refresh-icon{display:inline-block;font-size:1rem}
+
+/* ── 요약 카드 ─────────────────────────────────────── */
+.summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;padding:24px 32px}
+.card{background:var(--bg-card);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:14px;border:1px solid var(--border-color);transition:all .25s ease;cursor:pointer;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card.active{border-color:var(--accent-blue)}
+.card-total::before{background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple))}
+.card-order::before{background:var(--accent-green)}
+.card-production::before{background:var(--accent-yellow)}
+.card-shipping::before{background:var(--accent-orange)}
+.card-ma::before{background:var(--accent-purple)}
+.card-tech::before{background:#22d3ee}
+.card-defense::before{background:#94a3b8}
+.card-critical::before{background:var(--accent-red)}
+.card-icon{font-size:2rem}
+.card-value{font-size:1.8rem;font-weight:800;letter-spacing:-.5px}
+.card-label{font-size:.78rem;color:var(--text-secondary);margin-top:2px}
+
+/* ── 차트 ──────────────────────────────────────────── */
+.charts-section{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;padding:0 32px 24px}
+.chart-container{background:var(--bg-card);border-radius:var(--radius);padding:20px;border:1px solid var(--border-color)}
+.chart-container h3{font-size:.95rem;margin-bottom:16px;color:var(--text-secondary);font-weight:600}
+.company-list{max-height:260px;overflow-y:auto}
+.company-item{display:flex;align-items:center;padding:8px 6px;border-bottom:1px solid var(--border-color);cursor:pointer;transition:background .15s;border-radius:4px}
+.company-item:hover{background:var(--bg-hover)}
+.company-name{font-size:.85rem;min-width:110px}
+.company-count{font-size:.8rem;font-weight:700;color:var(--accent-blue);background:rgba(79,140,255,.1);padding:2px 10px;border-radius:12px}
+.company-bar{flex:1;height:6px;background:var(--bg-hover);border-radius:3px;margin:0 12px;overflow:hidden}
+.company-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple));border-radius:3px;transition:width .5s ease}
+
+/* ── 필터 바 ───────────────────────────────────────── */
+.filter-bar{display:flex;align-items:flex-end;gap:16px;padding:0 32px 20px;flex-wrap:wrap}
+.filter-group{display:flex;flex-direction:column;gap:4px}
+.filter-group label{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.filter-group select,.filter-group input{background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 14px;border-radius:var(--radius-sm);font-size:.85rem;min-width:160px;outline:none;transition:border-color .2s}
+.filter-group select:focus,.filter-group input:focus{border-color:var(--accent-blue)}
+.search-group{flex:1;min-width:200px}
+.search-group input{width:100%}
+
+/* ── 알림 배너 ─────────────────────────────────────── */
+.alert-banner{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:var(--radius-sm);padding:12px 20px;margin:0 32px 16px;display:none;align-items:center;gap:10px;animation:fadeIn .4s ease}
+.alert-banner.visible{display:flex}
+.alert-banner .alert-icon{font-size:1.2rem}
+.alert-banner .alert-text{font-size:.85rem;color:var(--accent-red)}
+
+/* ── 뉴스 피드 ─────────────────────────────────────── */
+.news-feed{padding:0 32px 32px;display:flex;flex-direction:column;gap:12px;min-height:400px}
+.news-item{background:var(--bg-card);border-radius:var(--radius);padding:18px 22px;border:1px solid var(--border-color);transition:all .2s ease;animation:fadeIn .3s ease}
+.news-item:hover{border-color:var(--accent-blue);box-shadow:0 2px 16px rgba(79,140,255,.08)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.news-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:12px}
+.news-title{font-size:.95rem;font-weight:600;line-height:1.5;flex:1}
+.news-title a{color:var(--text-primary);text-decoration:none;transition:color .15s}
+.news-title a:hover{color:var(--accent-blue)}
+.news-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.3px}
+.badge-order{background:rgba(52,211,153,.12);color:var(--accent-green)}
+.badge-production{background:rgba(251,191,36,.12);color:var(--accent-yellow)}
+.badge-shipping{background:rgba(251,146,60,.12);color:var(--accent-orange)}
+.badge-ma{background:rgba(167,139,250,.14);color:var(--accent-purple)}
+.badge-tech{background:rgba(34,211,238,.12);color:#22d3ee}
+.badge-defense{background:rgba(148,163,184,.14);color:#94a3b8}
+.badge-other{background:rgba(139,143,163,.12);color:var(--text-secondary)}
+.badge-critical{background:rgba(248,113,113,.15);color:var(--accent-red)}
+.badge-warning{background:rgba(251,191,36,.12);color:var(--accent-yellow)}
+.badge-info{background:rgba(79,140,255,.12);color:var(--accent-blue)}
+.badge-lang-ko{background:rgba(79,140,255,.10);color:#9db8ff}
+.badge-lang-en{background:rgba(248,113,113,.10);color:#fca5a5}
+
+.news-source{font-size:.75rem;color:var(--text-muted)}
+.news-date{font-size:.75rem;color:var(--text-muted)}
+.news-summary{font-size:.82rem;color:var(--text-secondary);margin-top:6px;line-height:1.5}
+.translate-btn{margin-left:auto;background:rgba(79,140,255,.12);color:var(--accent-blue);border:1px solid rgba(79,140,255,.25);border-radius:14px;font-size:.72rem;font-weight:600;padding:3px 12px;cursor:pointer;transition:all .15s}
+.translate-btn:hover{background:rgba(79,140,255,.22)}
+.translate-btn:disabled{opacity:.6;cursor:default}
+.news-translation{margin-top:8px;padding:10px 14px;background:rgba(79,140,255,.06);border-left:3px solid var(--accent-blue);border-radius:6px}
+.news-translation .tr-title{font-size:.9rem;font-weight:600;color:var(--text-primary);line-height:1.5}
+.news-translation .tr-summary{font-size:.82rem;color:var(--text-secondary);margin-top:5px;line-height:1.5}
+.news-translation .tr-note{font-size:.68rem;color:var(--text-muted);margin-top:6px}
+.company-tag{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:4px;background:rgba(167,139,250,.1);color:var(--accent-purple);margin-right:4px}
+
+/* ── 로딩 ──────────────────────────────────────────── */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;color:var(--text-secondary)}
+.loading p{margin-top:12px;font-size:.95rem}
+.loading-sub{font-size:.8rem!important;color:var(--text-muted)}
+.spinner{width:40px;height:40px;border:3px solid var(--border-color);border-top-color:var(--accent-blue);border-radius:50%;animation:spin .8s linear infinite}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-muted)}
+.empty-state .icon{font-size:3rem;margin-bottom:16px}
+.empty-state h3{font-size:1.1rem;color:var(--text-secondary);margin-bottom:8px}
+
+/* ── 소스 탭 ──────────────────────────────────────── */
+.source-tabs{display:flex;gap:8px;padding:0 32px 16px;flex-wrap:wrap}
+.source-tab{padding:6px 16px;border-radius:20px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-secondary)}
+.source-tab:hover{border-color:var(--accent-blue);color:var(--text-primary)}
+.source-tab.active{background:var(--accent-blue);color:#fff;border-color:var(--accent-blue)}
+.source-tab .tab-count{font-size:.7rem;background:rgba(255,255,255,.15);padding:1px 6px;border-radius:8px;margin-left:4px}
+
+/* ── 푸터 ──────────────────────────────────────────── */
+.footer{text-align:center;padding:24px 32px;color:var(--text-muted);font-size:.75rem;border-top:1px solid var(--border-color);margin-top:24px}
+.footer p{margin:4px 0}
+
+/* ── 토스트 ────────────────────────────────────────── */
+.toast-container{position:fixed;top:80px;right:32px;z-index:200;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:12px 20px;font-size:.85rem;box-shadow:var(--shadow);animation:slideIn .3s ease,fadeOut .5s ease 3s forwards;display:flex;align-items:center;gap:8px}
+.toast-success{border-left:3px solid var(--accent-green)}
+.toast-error{border-left:3px solid var(--accent-red)}
+.toast-info{border-left:3px solid var(--accent-blue)}
+@keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeOut{to{opacity:0;transform:translateY(-10px)}}
+
+/* ── 스크롤바 ──────────────────────────────────────── */
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-primary)}::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
+
+/* ── 반응형 ────────────────────────────────────────── */
+@media(max-width:1200px){.charts-section{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.header{flex-direction:column;align-items:flex-start;gap:12px;padding:16px 20px}.summary-cards{grid-template-columns:repeat(2,1fr);padding:16px 20px}.charts-section{grid-template-columns:1fr;padding:0 20px 20px}.filter-bar{flex-direction:column;padding:0 20px 16px}.news-feed{padding:0 20px 20px}.source-tabs{padding:0 20px 16px}}
+@media(max-width:480px){.summary-cards{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <!-- ═══ 헤더 ═══ -->
+    <header class="header">
+        <div class="header-left">
+            <h1>🔋 배터리·딥테크 모니터링</h1>
+            <span class="subtitle">수주 · 생산/운송차질 · M&A · 기술동향 · 방산 실시간 트래킹</span>
+        </div>
+        <div class="header-right">
+            <span id="lastUpdated" class="last-updated">업데이트 중...</span>
+            <button id="refreshBtn" class="btn btn-refresh">
+                <span class="refresh-icon">↻</span> 새로고침
+            </button>
+        </div>
+    </header>
+
+    <!-- ═══ 상단 요약 카드 ═══ -->
+    <section class="summary-cards">
+        <div class="card card-total">
+            <div class="card-icon">📊</div>
+            <div class="card-content">
+                <div class="card-value" id="totalCount">-</div>
+                <div class="card-label">전체 뉴스</div>
+            </div>
+        </div>
+        <div class="card card-order" data-filter-category="수주">
+            <div class="card-icon">📝</div>
+            <div class="card-content">
+                <div class="card-value" id="orderCount">-</div>
+                <div class="card-label">수주 / 계약</div>
+            </div>
+        </div>
+        <div class="card card-production" data-filter-category="생산차질">
+            <div class="card-icon">🏭</div>
+            <div class="card-content">
+                <div class="card-value" id="productionCount">-</div>
+                <div class="card-label">생산 차질</div>
+            </div>
+        </div>
+        <div class="card card-shipping" data-filter-category="운송차질">
+            <div class="card-icon">🚢</div>
+            <div class="card-content">
+                <div class="card-value" id="shippingCount">-</div>
+                <div class="card-label">운송 차질</div>
+            </div>
+        </div>
+        <div class="card card-ma" data-filter-category="M&A딜">
+            <div class="card-icon">🤝</div>
+            <div class="card-content">
+                <div class="card-value" id="maCount">-</div>
+                <div class="card-label">M&A · 딜</div>
+            </div>
+        </div>
+        <div class="card card-tech" data-filter-category="기술동향">
+            <div class="card-icon">🔬</div>
+            <div class="card-content">
+                <div class="card-value" id="techCount">-</div>
+                <div class="card-label">기술 동향</div>
+            </div>
+        </div>
+        <div class="card card-defense" data-filter-category="방산딥테크">
+            <div class="card-icon">🛡️</div>
+            <div class="card-content">
+                <div class="card-value" id="defenseCount">-</div>
+                <div class="card-label">방산 · 딥테크</div>
+            </div>
+        </div>
+        <div class="card card-critical" data-filter-severity="critical">
+            <div class="card-icon">🚨</div>
+            <div class="card-content">
+                <div class="card-value" id="criticalCount">-</div>
+                <div class="card-label">긴급 알림</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 차트 & 기업 ═══ -->
+    <section class="charts-section">
+        <div class="chart-container">
+            <h3>📈 카테고리별 분포</h3>
+            <canvas id="categoryChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>⚠️ 심각도 분포</h3>
+            <canvas id="severityChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>🏢 주요 기업 언급 빈도</h3>
+            <div id="companyList" class="company-list"></div>
+        </div>
+    </section>
+
+    <!-- ═══ 알림 배너 ═══ -->
+    <div class="alert-banner" id="alertBanner">
+        <span class="alert-icon">🚨</span>
+        <span class="alert-text" id="alertText"></span>
+    </div>
+
+    <!-- ═══ 필터 & 검색 ═══ -->
+    <section class="filter-bar">
+        <div class="filter-group">
+            <label>카테고리</label>
+            <select id="filterCategory">
+                <option value="all">전체</option>
+                <option value="수주">📝 수주 / 계약</option>
+                <option value="생산차질">🏭 생산 차질</option>
+                <option value="운송차질">🚢 운송 차질</option>
+                <option value="M&A딜">🤝 M&A · 딜</option>
+                <option value="기술동향">🔬 기술 동향</option>
+                <option value="방산딥테크">🛡️ 방산 · 딥테크</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>심각도</label>
+            <select id="filterSeverity">
+                <option value="all">전체</option>
+                <option value="critical">🔴 긴급</option>
+                <option value="warning">🟡 주의</option>
+                <option value="info">🔵 정보</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>언어</label>
+            <select id="filterLang">
+                <option value="all">전체</option>
+                <option value="ko">🇰🇷 국문</option>
+                <option value="en">🇺🇸 영문</option>
+            </select>
+        </div>
+        <div class="filter-group search-group">
+            <label>검색</label>
+            <input type="text" id="filterSearch" placeholder="키워드 검색...">
+        </div>
+        <button class="btn btn-reset" id="resetBtn">필터 초기화</button>
+    </section>
+
+    <!-- ═══ 소스 탭 ═══ -->
+    <section class="source-tabs" id="sourceTabs"></section>
+
+    <!-- ═══ 뉴스 피드 ═══ -->
+    <section class="news-feed" id="newsFeed">
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>뉴스를 수집하고 있습니다...</p>
+            <p class="loading-sub">Google News RSS에서 배터리 업계 뉴스를 가져오는 중</p>
+        </div>
+    </section>
+
+    <!-- ═══ 푸터 ═══ -->
+    <footer class="footer">
+        <p>🔋 Battery Industry Monitor | 소스: Google News RSS (국문 🇰🇷 + 영문 🇺🇸)</p>
+        <p>자동 새로고침: 10분 간격 | 데이터는 참고용이며 투자 판단의 근거로 사용하지 마세요</p>
+    </footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   배터리·딥테크 모니터링 — 분류 설정 (인라인, 단일 파일용)
+   ▸ 키워드를 추가/수정하려면 아래 배열에 단어만 넣으면 됩니다.
+   ═══════════════════════════════════════════════════════════ */
+
+const BATTERY_COMPANIES = [
+    // ── 국내 배터리 셀/소재 ──
+    "LG에너지솔루션","LG엔솔","LGES","삼성SDI","Samsung SDI",
+    "SK온","SK이노베이션","SK On","CATL","BYD",
+    "파나소닉","Panasonic","에코프로비엠","에코프로",
+    "포스코퓨처엠","포스코케미칼","엘앤에프","L&F",
+    "천보","솔브레인","일진머티리얼즈","SK아이이테크놀로지",
+    "코스모신소재","대주전자재료","노스볼트","Northvolt","엔켐",
+    // ── 완성차 ──
+    "테슬라","Tesla","현대차","기아","GM","Ford","BMW",
+    "폭스바겐","Volkswagen","리비안","Rivian","스텔란티스",
+    // ── 차세대 배터리/딥테크 타겟사 (CVC 관심) ──
+    "Factorial Energy","팩토리얼","Standard Energy","스탠다드에너지",
+    "퀀텀스케이프","QuantumScape","Solid Power","솔리드파워",
+    "삼성전자","SES","에임","Sila",
+    // ── 방산·로보틱스·드론 ──
+    "한화에어로스페이스","한화시스템","LIG넥스원","한국항공우주","KAI",
+    "현대로템","두산로보틱스","레인보우로보틱스","보스턴다이내믹스","Boston Dynamics",
+];
+
+const CATEGORY_KEYWORDS = {
+    "수주": ["수주","계약","공급계약","납품","공급","MOU","협약","선정",
+             "파트너","합작","JV","조인트벤처","투자유치","대규모 계약",
+             "배터리 공급","셀 공급","팩 공급","물량 확보","오더","order",
+             "supply agreement","수조원","조 원","공급 계약"],
+    "생산차질": ["생산 차질","생산차질","가동 중단","가동중단","감산",
+                "라인 중단","공장 중단","공장 화재","폭발","품질 이슈",
+                "품질이슈","리콜","불량","수율","수율 저하","설비 고장",
+                "파업","생산 지연","생산지연","셧다운","shutdown",
+                "생산 축소","감원","구조조정","공급 부족","원자재 부족",
+                "양극재 부족","음극재 부족","전해질 부족","분리막 부족",
+                "생산량 감소","가동률","공장 폐쇄","철수"],
+    "운송차질": ["운송 차질","운송차질","물류 차질","물류차질","배송 지연",
+                "배송지연","선적 지연","선적지연","항만 파업","항만파업",
+                "운임 급등","운임급등","해운","컨테이너 부족","항만 적체",
+                "통관 지연","통관지연","관세","수출 규제","수입 규제",
+                "홍해","수에즈","파나마 운하","공급망 차질","공급망차질",
+                "supply chain","logistics","shipping delay","물류비"],
+    // ── M&A·딜 (CVC/전략투자 관점) ──
+    "M&A딜": ["인수","합병","M&A","인수합병","피인수","경영권","매각",
+             "바이아웃","SPAC","스팩","합작법인","조인트벤처","JV",
+             "라이선스","라이선싱","licensing","지분투자","지분 인수","지분 매입",
+             "전략적 투자","전략투자","CVC","벤처투자","시리즈A","시리즈B","시리즈C",
+             "프리IPO","Pre-IPO","IPO","상장","펀딩","투자라운드","밸류에이션","valuation"],
+    // ── 기술동향 (차세대 배터리/소재) ──
+    "기술동향": ["전고체","반고체","전고체 배터리","반고체 배터리","solid-state",
+               "VIB","바나듐","바나듐 배터리","바나듐이온","vanadium",
+               "나트륨이온","나트륨 배터리","sodium-ion","LFP","리튬메탈",
+               "실리콘 음극","차세대 배터리","신기술","특허","R&D","연구개발",
+               "에너지밀도","급속충전","ESS","장수명","양산 기술","파일럿 라인"],
+    // ── 방산·딥테크 (드론/로보틱스/방산) ──
+    "방산딥테크": ["방산","방위산업","방위","국방","군수","무기체계","미사일","레이더",
+                 "드론","무인기","UAV","무인 시스템","무인기체",
+                 "로보틱스","로봇","휴머노이드","자율주행","자율 시스템","Boston Dynamics"],
+};
+
+const SEVERITY_KEYWORDS = {
+    "critical": ["긴급","심각","대규모","전면 중단","폭발","화재","리콜","파업","대형","철수","파산","위기"],
+    "warning":  ["차질","지연","부족","중단","감산","축소","급등","적체","감소","하락","우려","경고"],
+    "info":     ["계약","수주","공급","협약","MOU","파트너","투자","확대","증설","성장","호실적"],
+};
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   배터리 업계 모니터링 대시보드 — 클라이언트 사이드 엔진
+   ═══════════════════════════════════════════════════════════ */
+
+// Google News RSS를 가져오기 위한 CORS 프록시 후보
+// ✅ 개방형 프록시(codetabs, allorigins)를 우선 → file:// 로 열어도 작동
+//    corsproxy.io는 origin=null(file://)을 거부하므로 후순위로
+const CORS_PROXIES = [
+    (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+];
+
+// ✅ + 대신 공백 사용 (encodeURIComponent가 +를 %2B로 이중 인코딩하는 버그 방지)
+const SEARCH_QUERIES = [
+    // ── 기존: 수주/생산/운송 ──
+    "배터리 수주",
+    "배터리 생산 차질",
+    "배터리 운송 물류",
+    "LG에너지솔루션",
+    "삼성SDI 배터리",
+    "SK온",
+    "2차전지 수주 계약",
+    "배터리 공장 가동",
+    "전기차 배터리 공급망",
+    "배터리 소재 공급",
+    "에코프로 포스코퓨처엠",
+    "배터리 리콜 품질",
+    // ── 신설: 기술동향 (차세대 배터리/소재) ──
+    "전고체 배터리",
+    "반고체 배터리",
+    "바나듐 배터리 ESS",
+    "나트륨이온 배터리",
+    "Factorial Energy",
+    "스탠다드에너지 배터리",
+    // ── 신설: M&A·딜 (CVC) ──
+    "배터리 인수 합병 M&A",
+    "배터리 SPAC 상장 투자",
+    "배터리 지분투자 라이선싱",
+    // ── 신설: 방산·딥테크 ──
+    "방산 드론 수주",
+    "로보틱스 휴머노이드 투자",
+];
+
+// ✅ 영어 기사 검색어 (미국/영문 로케일로 수집)
+const SEARCH_QUERIES_EN = [
+    // 배터리 산업 일반
+    "EV battery supply deal",
+    "battery gigafactory production",
+    "battery plant shutdown recall",
+    "LG Energy Solution",
+    "Samsung SDI battery",
+    "SK On battery",
+    "CATL battery",
+    "battery supply chain disruption",
+    // 기술동향
+    "solid-state battery",
+    "vanadium flow battery",
+    "sodium-ion battery",
+    "Factorial Energy",
+    "QuantumScape Solid Power",
+    // M&A·딜
+    "battery startup acquisition merger",
+    "battery SPAC IPO funding",
+    "battery joint venture licensing deal",
+    // 방산·딥테크
+    "defense drone contract",
+    "robotics humanoid funding",
+];
+
+let allArticles = [];
+let filteredArticles = [];
+let categoryChart = null;
+let severityChart = null;
+let searchTimer = null;
+let currentSourceFilter = "all";
+const AUTO_REFRESH = 10 * 60 * 1000;
+
+// ── 초기화 ────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+    // 정적 요소 이벤트 리스너
+    document.getElementById("refreshBtn").addEventListener("click", refreshData);
+    document.getElementById("resetBtn").addEventListener("click", resetFilters);
+    document.getElementById("filterCategory").addEventListener("change", applyFilters);
+    document.getElementById("filterSeverity").addEventListener("change", applyFilters);
+    document.getElementById("filterLang").addEventListener("change", applyFilters);
+    document.getElementById("filterSearch").addEventListener("input", debounceSearch);
+
+    // 요약 카드 — data-filter-category / data-filter-severity 위임
+    document.querySelector(".summary-cards").addEventListener("click", (e) => {
+        const catCard = e.target.closest("[data-filter-category]");
+        if (catCard) { filterByCategory(catCard.dataset.filterCategory); return; }
+        const sevCard = e.target.closest("[data-filter-severity]");
+        if (sevCard) filterBySeverity(sevCard.dataset.filterSeverity);
+    });
+
+    // 동적으로 렌더링되는 기업 목록 / 소스 탭 — 이벤트 위임
+    document.getElementById("companyList").addEventListener("click", (e) => {
+        const item = e.target.closest("[data-company]");
+        if (item) filterByCompany(item.dataset.company);
+    });
+    document.getElementById("sourceTabs").addEventListener("click", (e) => {
+        const tab = e.target.closest(".source-tab");
+        if (tab) filterBySource(tab.dataset.source);
+    });
+
+    // 뉴스 피드 — 번역 버튼 이벤트 위임
+    document.getElementById("newsFeed").addEventListener("click", (e) => {
+        const trBtn = e.target.closest("[data-translate]");
+        if (trBtn) translateArticle(trBtn.dataset.translate, trBtn);
+    });
+
+    fetchAllNews();
+    setInterval(fetchAllNews, AUTO_REFRESH);
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// RSS 파서 (순수 JS XML 파싱)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function parseRSS(xmlText) {
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlText, "text/xml");
+    const items = xml.querySelectorAll("item");
+    const articles = [];
+
+    items.forEach(item => {
+        const title = item.querySelector("title")?.textContent || "";
+        const link = item.querySelector("link")?.textContent || "";
+        const pubDate = item.querySelector("pubDate")?.textContent || "";
+        const description = item.querySelector("description")?.textContent || "";
+        const source = item.querySelector("source")?.textContent || "Google News";
+
+        // HTML 태그 제거
+        const cleanDesc = description.replace(/<[^>]*>/g, "").trim();
+
+        articles.push({
+            id: hashStr(title + source),
+            title: title,
+            link: link,
+            source: source,
+            published: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
+            summary: cleanDesc.slice(0, 200),
+        });
+    });
+    return articles;
+}
+
+function hashStr(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const ch = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + ch;
+        hash |= 0;
+    }
+    return Math.abs(hash).toString(36);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 데이터 수집
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ✅ AbortSignal.timeout() 대신 AbortController 사용 (호환성 향상)
+function fetchWithTimeout(url, timeoutMs = 9000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    return fetch(url, { signal: controller.signal })
+        .finally(() => clearTimeout(timer));
+}
+
+async function fetchWithProxy(url) {
+    for (const makeProxy of CORS_PROXIES) {
+        try {
+            const proxyUrl = makeProxy(url);
+            const resp = await fetchWithTimeout(proxyUrl, 9000);
+            if (resp.ok) {
+                const text = await resp.text();
+                if (text.includes("<item>") || text.includes("<entry>")) return text;
+            }
+        } catch (e) { /* 다음 프록시 시도 */ }
+    }
+    return null;
+}
+
+// ✅ locale: "ko"(국문) | "en"(영문) — 언어별 Google News 로케일 파라미터
+async function fetchGoogleNewsRSS(query, locale = "ko") {
+    const loc = locale === "en"
+        ? "hl=en-US&gl=US&ceid=US:en"
+        : "hl=ko&gl=KR&ceid=KR:ko";
+    // ✅ 공백은 그대로 encodeURIComponent가 %20으로 처리 (이중인코딩 없음)
+    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&${loc}`;
+    const xmlText = await fetchWithProxy(url);
+    if (!xmlText) return [];
+    try { return parseRSS(xmlText).map(a => ({ ...a, lang: locale })); }
+    catch (e) { console.warn("RSS 파싱 실패:", query, e); return []; }
+}
+
+async function fetchAllNews() {
+    showLoading(true);
+    showToast("뉴스 수집 중... (최대 30초 소요)", "info");
+
+    // ✅ 새로고침 시 기존 데이터 초기화
+    allArticles = [];
+    const seenIds = new Set();
+    let collected = 0;
+
+    // ✅ 국문 + 영문 검색어를 하나의 작업 목록으로 결합
+    const tasks = [
+        ...SEARCH_QUERIES.map(q => ({ q, locale: "ko" })),
+        ...SEARCH_QUERIES_EN.map(q => ({ q, locale: "en" })),
+    ];
+
+    // ✅ 전체 병렬 요청 → 도착하는 순서대로 즉시 화면에 반영
+    const promises = tasks.map(async ({ q, locale }) => {
+        const articles = await fetchGoogleNewsRSS(q, locale);
+        const newOnes = articles.filter(a => !seenIds.has(a.id));
+        newOnes.forEach(a => seenIds.add(a.id));
+
+        // 중간 렌더링: 데이터 오는 즉시 반영
+        const classified = newOnes.map(article => {
+            const text = `${article.title} ${article.summary}`;
+            return { ...article, categories: classifyCategory(text), severity: classifySeverity(text), companies: findCompanies(text) };
+        });
+        allArticles = [...allArticles, ...classified]
+            .sort((a, b) => new Date(b.published) - new Date(a.published));
+        collected += classified.length;
+
+        if (classified.length > 0) {
+            showLoading(false);
+            applyFilters();
+        }
+    });
+
+    await Promise.allSettled(promises);
+
+    showLoading(false);
+    if (collected > 0) {
+        applyFilters();
+        showToast(`총 ${collected}건의 뉴스를 수집했습니다`, "success");
+    } else {
+        showToast("뉴스 수집 실패 — 네트워크 상태를 확인해주세요", "error");
+        document.getElementById("newsFeed").innerHTML = `
+            <div class="empty-state">
+                <div class="icon">📡</div>
+                <h3>뉴스를 불러오지 못했습니다</h3>
+                <p>인터넷 연결을 확인하거나 잠시 후 새로고침 해주세요</p>
+            </div>`;
+    }
+}
+
+async function refreshData() {
+    const btn = document.getElementById("refreshBtn");
+    btn.classList.add("spinning");
+    btn.disabled = true;
+    try { await fetchAllNews(); }
+    finally { btn.classList.remove("spinning"); btn.disabled = false; }
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 분류 엔진
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function classifyCategory(text) {
+    const t = text.toLowerCase();
+    const cats = [];
+    for (const [cat, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+        for (const kw of keywords) {
+            if (t.includes(kw.toLowerCase())) { cats.push(cat); break; }
+        }
+    }
+    return cats.length ? cats : ["기타"];
+}
+
+function classifySeverity(text) {
+    const t = text.toLowerCase();
+    for (const [sev, keywords] of Object.entries(SEVERITY_KEYWORDS)) {
+        for (const kw of keywords) {
+            if (t.includes(kw)) return sev;
+        }
+    }
+    return "info";
+}
+
+function findCompanies(text) {
+    const found = new Set();
+    for (const c of BATTERY_COMPANIES) {
+        if (text.includes(c)) found.add(c);
+    }
+    return [...found];
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 필터링
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function applyFilters() {
+    const cat = document.getElementById("filterCategory").value;
+    const sev = document.getElementById("filterSeverity").value;
+    const lang = document.getElementById("filterLang").value;
+    const search = document.getElementById("filterSearch").value.trim().toLowerCase();
+
+    filteredArticles = allArticles.filter(a => {
+        if (cat !== "all" && !a.categories.includes(cat)) return false;
+        if (sev !== "all" && a.severity !== sev) return false;
+        if (lang !== "all" && (a.lang || "ko") !== lang) return false;
+        if (currentSourceFilter !== "all" && a.source !== currentSourceFilter) return false;
+        if (search && !a.title.toLowerCase().includes(search) && !a.summary.toLowerCase().includes(search)) return false;
+        return true;
+    });
+
+    renderDashboard();
+}
+
+function filterByCategory(cat) {
+    document.getElementById("filterCategory").value = cat;
+    applyFilters();
+    updateActiveCards();
+}
+function filterBySeverity(sev) {
+    document.getElementById("filterSeverity").value = sev;
+    applyFilters();
+}
+function filterByCompany(name) {
+    document.getElementById("filterSearch").value = name;
+    applyFilters();
+}
+function filterBySource(source) {
+    currentSourceFilter = source;
+    document.querySelectorAll(".source-tab").forEach(t => t.classList.toggle("active", t.dataset.source === source));
+    applyFilters();
+}
+function resetFilters() {
+    document.getElementById("filterCategory").value = "all";
+    document.getElementById("filterSeverity").value = "all";
+    document.getElementById("filterLang").value = "all";
+    document.getElementById("filterSearch").value = "";
+    currentSourceFilter = "all";
+    document.querySelectorAll(".source-tab").forEach(t => t.classList.toggle("active", t.dataset.source === "all"));
+    document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+    applyFilters();
+}
+function updateActiveCards() {
+    const cat = document.getElementById("filterCategory").value;
+    document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+    const map = {"수주":".card-order","생산차질":".card-production","운송차질":".card-shipping","M&A딜":".card-ma","기술동향":".card-tech","방산딥테크":".card-defense"};
+    if (map[cat]) document.querySelector(map[cat])?.classList.add("active");
+}
+function debounceSearch() { clearTimeout(searchTimer); searchTimer = setTimeout(applyFilters, 350); }
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 렌더링
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function renderDashboard() {
+    const stats = computeStats(allArticles);
+    const filteredStats = computeStats(filteredArticles);
+
+    renderSummaryCards(stats);
+    renderCharts(stats);
+    renderCompanyList(stats.topCompanies);
+    renderSourceTabs(stats.sources);
+    renderAlertBanner(stats);
+    renderNewsFeed(filteredArticles);
+    updateLastUpdated();
+}
+
+function computeStats(articles) {
+    const stats = { "수주": 0, "생산차질": 0, "운송차질": 0, "M&A딜": 0, "기술동향": 0, "방산딥테크": 0, "기타": 0 };
+    const sevStats = { critical: 0, warning: 0, info: 0 };
+    const companyMap = {};
+    const sourceMap = {};
+
+    articles.forEach(a => {
+        a.categories.forEach(c => stats[c] = (stats[c] || 0) + 1);
+        sevStats[a.severity] = (sevStats[a.severity] || 0) + 1;
+        a.companies.forEach(c => companyMap[c] = (companyMap[c] || 0) + 1);
+        sourceMap[a.source] = (sourceMap[a.source] || 0) + 1;
+    });
+
+    const topCompanies = Object.entries(companyMap).sort((a, b) => b[1] - a[1]).slice(0, 12);
+    const sources = Object.entries(sourceMap).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+    return { ...stats, sevStats, topCompanies, sources, total: articles.length };
+}
+
+function renderSummaryCards(stats) {
+    animateCounter("totalCount", stats.total);
+    animateCounter("orderCount", stats["수주"]);
+    animateCounter("productionCount", stats["생산차질"]);
+    animateCounter("shippingCount", stats["운송차질"]);
+    animateCounter("maCount", stats["M&A딜"]);
+    animateCounter("techCount", stats["기술동향"]);
+    animateCounter("defenseCount", stats["방산딥테크"]);
+    animateCounter("criticalCount", stats.sevStats.critical);
+}
+
+function animateCounter(id, target) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const start = parseInt(el.textContent) || 0;
+    const dur = 500, startTime = performance.now();
+    function tick(now) {
+        const p = Math.min((now - startTime) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(start + (target - start) * eased);
+        if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+}
+
+function renderCharts(stats) {
+    // 카테고리 도넛 차트
+    const catCtx = document.getElementById("categoryChart").getContext("2d");
+    if (categoryChart) categoryChart.destroy();
+    categoryChart = new Chart(catCtx, {
+        type: "doughnut",
+        data: {
+            labels: ["수주/계약", "생산 차질", "운송 차질", "M&A·딜", "기술 동향", "방산·딥테크", "기타"],
+            datasets: [{
+                data: [stats["수주"], stats["생산차질"], stats["운송차질"], stats["M&A딜"], stats["기술동향"], stats["방산딥테크"], stats["기타"]],
+                backgroundColor: ["#34d399", "#fbbf24", "#fb923c", "#a78bfa", "#22d3ee", "#94a3b8", "#5c6078"],
+                borderWidth: 0, hoverOffset: 6,
+            }],
+        },
+        options: {
+            responsive: true, cutout: "65%",
+            plugins: { legend: { position: "bottom", labels: { color: "#8b8fa3", font: { size: 11 }, padding: 12 } } },
+        },
+    });
+
+    // 심각도 가로 바 차트
+    const sevCtx = document.getElementById("severityChart").getContext("2d");
+    if (severityChart) severityChart.destroy();
+    severityChart = new Chart(sevCtx, {
+        type: "bar",
+        data: {
+            labels: ["🔴 긴급", "🟡 주의", "🔵 정보"],
+            datasets: [{
+                data: [stats.sevStats.critical, stats.sevStats.warning, stats.sevStats.info],
+                backgroundColor: ["#f87171", "#fbbf24", "#4f8cff"],
+                borderRadius: 6, maxBarThickness: 40,
+            }],
+        },
+        options: {
+            responsive: true, indexAxis: "y",
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: "#2a2e45" }, ticks: { color: "#8b8fa3" } },
+                y: { grid: { display: false }, ticks: { color: "#8b8fa3", font: { size: 12 } } },
+            },
+        },
+    });
+}
+
+function renderCompanyList(companies) {
+    const el = document.getElementById("companyList");
+    if (!companies.length) { el.innerHTML = '<div class="empty-state"><p>기업 데이터 없음</p></div>'; return; }
+    const max = companies[0][1];
+    el.innerHTML = companies.map(([name, cnt]) => `
+        <div class="company-item" data-company="${esc(name)}">
+            <span class="company-name">${esc(name)}</span>
+            <div class="company-bar"><div class="company-bar-fill" style="width:${(cnt/max*100).toFixed(0)}%"></div></div>
+            <span class="company-count">${cnt}</span>
+        </div>`).join("");
+}
+
+function renderSourceTabs(sources) {
+    const el = document.getElementById("sourceTabs");
+    let html = `<div class="source-tab ${currentSourceFilter==="all"?"active":""}" data-source="all">전체</div>`;
+    sources.forEach(([name, cnt]) => {
+        html += `<div class="source-tab ${currentSourceFilter===name?"active":""}" data-source="${esc(name)}">${esc(name)} <span class="tab-count">${cnt}</span></div>`;
+    });
+    el.innerHTML = html;
+}
+
+function renderAlertBanner(stats) {
+    const banner = document.getElementById("alertBanner");
+    const count = stats.sevStats.critical;
+    if (count > 0) {
+        document.getElementById("alertText").innerHTML = `<strong>${count}건</strong>의 긴급 알림이 감지되었습니다. 배터리 업계에 중대한 이슈가 발생했을 수 있습니다.`;
+        banner.classList.add("visible");
+    } else {
+        banner.classList.remove("visible");
+    }
+}
+
+function renderNewsFeed(articles) {
+    const el = document.getElementById("newsFeed");
+    if (!articles.length) {
+        el.innerHTML = `<div class="empty-state"><div class="icon">📭</div><h3>검색 결과가 없습니다</h3><p>필터를 변경하거나 검색어를 수정해 보세요</p></div>`;
+        return;
+    }
+    el.innerHTML = articles.slice(0, 100).map((a, i) => `
+        <div class="news-item" data-id="${esc(a.id)}" style="animation-delay:${i*0.02}s">
+            <div class="news-header">
+                <div class="news-title">
+                    <a href="${esc(a.link)}" target="_blank" rel="noopener">${esc(a.title)}</a>
+                </div>
+                ${sevBadge(a.severity)}
+            </div>
+            ${a.summary ? `<div class="news-summary">${esc(truncate(a.summary, 150))}</div>` : ""}
+            ${a.lang === "en" ? `<div class="news-translation" data-tr-for="${esc(a.id)}" style="display:none"></div>` : ""}
+            <div class="news-meta">
+                ${langBadge(a.lang)}
+                ${catBadges(a.categories)}
+                ${companyTags(a.companies)}
+                <span class="news-source">📰 ${esc(a.source)}</span>
+                <span class="news-date">🕐 ${fmtDate(a.published)}</span>
+                ${a.lang === "en" ? `<button class="translate-btn" data-translate="${esc(a.id)}">🌐 번역</button>` : ""}
+            </div>
+        </div>`).join("");
+}
+
+// ── 무료 번역 (MyMemory API, 키 불필요 · CORS 지원) ──
+const _translationCache = {};   // id -> {title, summary}
+
+async function _mymemory(text) {
+    if (!text) return "";
+    // MyMemory는 쿼리당 ~500자 제한 → 안전하게 자름
+    const q = text.slice(0, 480);
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=en|ko`;
+    const resp = await fetchWithTimeout(url, 9000);
+    if (!resp.ok) throw new Error("translation http " + resp.status);
+    const data = await resp.json();
+    const out = data?.responseData?.translatedText;
+    if (!out) throw new Error("translation empty");
+    return out;
+}
+
+async function translateArticle(id, btn) {
+    const item = btn.closest(".news-item");
+    const box = item.querySelector(`[data-tr-for="${CSS.escape(id)}"]`);
+    if (!box) return;
+
+    // 이미 번역돼 있으면 표시 토글 (원문 ↔ 번역)
+    if (_translationCache[id]) {
+        const showing = box.style.display !== "none";
+        box.style.display = showing ? "none" : "block";
+        btn.textContent = showing ? "🌐 번역" : "🔁 원문";
+        return;
+    }
+
+    const article = allArticles.find(a => a.id === id);
+    if (!article) return;
+
+    btn.disabled = true;
+    btn.textContent = "⏳ 번역 중...";
+    try {
+        const [titleKo, summaryKo] = await Promise.all([
+            _mymemory(article.title),
+            _mymemory(truncate(article.summary, 300)),
+        ]);
+        _translationCache[id] = { title: titleKo, summary: summaryKo };
+        box.innerHTML = `
+            <div class="tr-title">📌 ${esc(titleKo)}</div>
+            ${summaryKo ? `<div class="tr-summary">${esc(summaryKo)}</div>` : ""}
+            <div class="tr-note">⚡ 자동 번역 (MyMemory) · 참고용</div>`;
+        box.style.display = "block";
+        btn.textContent = "🔁 원문";
+    } catch (e) {
+        showToast("번역 실패 — 잠시 후 다시 시도해주세요", "error");
+        btn.textContent = "🌐 번역";
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function catBadges(cats) {
+    const m = {"수주":["badge-order","📝"],"생산차질":["badge-production","🏭"],"운송차질":["badge-shipping","🚢"],"M&A딜":["badge-ma","🤝"],"기술동향":["badge-tech","🔬"],"방산딥테크":["badge-defense","🛡️"],"기타":["badge-other","📋"]};
+    return (cats||[]).map(c => { const b = m[c]||m["기타"]; return `<span class="badge ${b[0]}">${b[1]} ${c}</span>`; }).join("");
+}
+function sevBadge(s) {
+    const m = {critical:["badge-critical","🔴 긴급"],warning:["badge-warning","🟡 주의"],info:["badge-info","🔵 정보"]};
+    const b = m[s]||m["info"];
+    return `<span class="badge ${b[0]}">${b[1]}</span>`;
+}
+function companyTags(companies) {
+    return (companies||[]).slice(0,3).map(c => `<span class="company-tag">${esc(c)}</span>`).join("");
+}
+function langBadge(lang) {
+    return lang === "en"
+        ? `<span class="badge badge-lang-en">🇺🇸 EN</span>`
+        : `<span class="badge badge-lang-ko">🇰🇷 KO</span>`;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 유틸
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function esc(t) {
+    if (!t) return "";
+    const d = document.createElement("div"); d.textContent = t; return d.innerHTML;
+}
+function truncate(t, n) { return (!t || t.length <= n) ? t : t.slice(0, n) + "…"; }
+function fmtDate(iso) {
+    if (!iso) return "";
+    try {
+        const d = new Date(iso), now = new Date(), diff = (now - d) / 1000;
+        if (diff < 60) return "방금 전";
+        if (diff < 3600) return `${Math.floor(diff/60)}분 전`;
+        if (diff < 86400) return `${Math.floor(diff/3600)}시간 전`;
+        if (diff < 604800) return `${Math.floor(diff/86400)}일 전`;
+        return d.toLocaleDateString("ko-KR",{year:"numeric",month:"short",day:"numeric"});
+    } catch { return ""; }
+}
+function updateLastUpdated() {
+    document.getElementById("lastUpdated").textContent = `마지막 업데이트: ${new Date().toLocaleTimeString("ko-KR")}`;
+}
+function showLoading(show) {
+    const el = document.getElementById("loadingIndicator");
+    if (!el) return;
+    el.style.display = (show && allArticles.length === 0) ? "flex" : "none";
+}
+function showToast(msg, type="info") {
+    let c = document.querySelector(".toast-container");
+    if (!c) { c = document.createElement("div"); c.className = "toast-container"; document.body.appendChild(c); }
+    const t = document.createElement("div");
+    t.className = `toast toast-${type}`;
+    const icons = {success:"✅",error:"❌",info:"ℹ️"};
+    t.innerHTML = `<span>${icons[type]||"ℹ️"}</span><span>${msg}</span>`;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 4000);
+}
+</script>
+</body>
+</html>
