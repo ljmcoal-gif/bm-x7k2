@@ -1,130 +1,124 @@
 # CLAUDE.md
 
-Guidance for AI assistants (Claude Code and others) working in this repository.
+이 저장소에서 작업하는 AI 어시스턴트(Claude Code 및 기타)를 위한 가이드입니다.
 
-## What this is
+## 이 프로젝트는
 
-A **single-file, client-side web dashboard** that monitors battery / deep-tech
-industry news in real time. The UI and all copy are in **Korean** (`lang="ko"`).
+배터리·딥테크 산업 뉴스를 실시간으로 모니터링하는 **단일 파일 클라이언트
+사이드 웹 대시보드**입니다. UI와 모든 문구는 **한국어**(`lang="ko"`)입니다.
 
-- 🔋 **배터리·딥테크 모니터링** — "Battery & Deep-Tech Monitoring"
-- Tracks news across categories: 수주/계약 (orders/contracts), 생산 차질
-  (production disruptions), 운송 차질 (logistics disruptions), M&A·딜
-  (M&A/deals), 기술 동향 (tech trends), 방산·딥테크 (defense/deep-tech).
-- Collects **Google News RSS** for both Korean (🇰🇷) and English (🇺🇸)
-  search queries, classifies each article, and renders charts, summary cards,
-  a company-frequency list, source tabs, and a filterable news feed.
+- 🔋 **배터리·딥테크 모니터링**
+- 카테고리별 뉴스 추적: 수주/계약, 생산 차질, 운송 차질, M&A·딜,
+  기술 동향, 방산·딥테크.
+- 한국어(🇰🇷)·영어(🇺🇸) 검색어 모두에 대해 **Google News RSS**를 수집하고,
+  각 기사를 분류한 뒤 차트, 요약 카드, 기업 언급 빈도 목록, 소스 탭,
+  필터 가능한 뉴스 피드를 렌더링합니다.
 
-## Repository layout
+## 저장소 구성
 
-This repo contains **exactly one file**:
+이 저장소는 **단 하나의 파일**로 이루어져 있습니다:
 
 ```
-index.html   ← the entire application (HTML + CSS + JS, all inline)
+index.html   ← 애플리케이션 전체 (HTML + CSS + JS, 모두 인라인)
 ```
 
-There is **no build step, no package manager, no dependencies to install, and
-no test suite.** The only external runtime dependency is Chart.js, loaded from
-a CDN (`cdn.jsdelivr.net/npm/chart.js@4.4.0`).
+**빌드 단계, 패키지 매니저, 설치할 의존성, 테스트 스위트가 전혀 없습니다.**
+유일한 런타임 외부 의존성은 CDN으로 로드되는 Chart.js
+(`cdn.jsdelivr.net/npm/chart.js@4.4.0`)뿐입니다.
 
-> **Note on the file header:** The comment at the top of `index.html` describes
-> this as the "standalone" version and refers to an "official" Flask backend
-> (`app.py`, port 5001, with Naver/TheBell support). **That `app.py` does not
-> exist in this repository** — only the standalone `index.html` is present. Do
-> not assume a backend exists; if a task requires one, confirm with the user
-> before creating it.
+> **파일 헤더에 대한 참고:** `index.html` 상단 주석은 이 파일을 "독립형
+> (standalone)" 버전으로 설명하며, "공식" Flask 백엔드(`app.py`, 5001 포트,
+> Naver·TheBell 지원)를 언급합니다. **그러나 그 `app.py`는 이 저장소에
+> 존재하지 않습니다** — 독립형 `index.html`만 있습니다. 백엔드가 있다고
+> 가정하지 마세요. 작업에 백엔드가 필요하면 먼저 사용자에게 확인하세요.
 
-## How to run
+## 실행 방법
 
-Because everything is client-side, just open the file:
+모든 것이 클라이언트 사이드이므로 파일을 그냥 열면 됩니다:
 
-- Open `index.html` directly in a browser (works from `file://`), **or**
-- Serve it locally, e.g. `python3 -m http.server 8000` then visit
-  `http://localhost:8000/index.html`.
+- 브라우저에서 `index.html`을 직접 열거나(`file://`로도 동작), **또는**
+- 로컬에서 서빙. 예: `python3 -m http.server 8000` 실행 후
+  `http://localhost:8000/index.html` 접속.
 
-On load it immediately fetches news and then auto-refreshes every **10 minutes**
+로드 즉시 뉴스를 가져오고, 이후 **10분**마다 자동 새로고침합니다
 (`AUTO_REFRESH = 10 * 60 * 1000`).
 
-## Architecture (all inside `index.html`)
+## 아키텍처 (모두 `index.html` 내부)
 
-The file has three sections: a `<style>` block, the static HTML markup, and two
-`<script>` blocks (config, then the engine).
+파일은 세 부분으로 구성됩니다: `<style>` 블록, 정적 HTML 마크업, 그리고 두
+개의 `<script>` 블록(설정, 그다음 엔진).
 
-### 1. Configuration script (first `<script>`)
+### 1. 설정 스크립트 (첫 번째 `<script>`)
 
-Plain JS arrays/objects — **this is the main place to edit content/behavior**:
+순수 JS 배열/객체 — **콘텐츠/동작을 수정할 주요 위치입니다**:
 
-- `BATTERY_COMPANIES` — company names matched against article text (Korean +
-  English aliases, e.g. `"LG에너지솔루션"`, `"LGES"`).
-- `CATEGORY_KEYWORDS` — keyword lists per category; an article gets a category
-  if any keyword appears in its text.
-- `SEVERITY_KEYWORDS` — `critical` / `warning` / `info` keyword lists; **order
-  matters** — the first matching tier wins (critical is checked first).
+- `BATTERY_COMPANIES` — 기사 텍스트와 매칭되는 기업명(한국어 + 영어 별칭,
+  예: `"LG에너지솔루션"`, `"LGES"`).
+- `CATEGORY_KEYWORDS` — 카테고리별 키워드 목록. 기사 텍스트에 키워드가 하나라도
+  나타나면 해당 카테고리가 부여됩니다.
+- `SEVERITY_KEYWORDS` — `critical` / `warning` / `info` 키워드 목록. **순서가
+  중요** — 가장 먼저 매칭되는 단계가 적용됩니다(critical을 먼저 검사).
 
-### 2. Engine script (second `<script>`)
+### 2. 엔진 스크립트 (두 번째 `<script>`)
 
-- `CORS_PROXIES` — ordered list of public CORS proxy builders (codetabs,
-  allorigins, corsproxy.io). `fetchWithProxy()` tries them in order until one
-  returns RSS-looking text. Open proxies are first so `file://` works.
-- `SEARCH_QUERIES` (Korean) and `SEARCH_QUERIES_EN` (English) — the Google News
-  search terms. Add/remove queries here to change coverage.
-- `fetchGoogleNewsRSS(query, locale)` builds a Google News RSS URL with the
-  right locale params (`hl/gl/ceid`) and parses the result.
-- `parseRSS()` parses RSS XML with `DOMParser`; `hashStr()` makes a stable id
-  from `title + source` for de-duplication.
-- `fetchAllNews()` runs all queries in parallel, de-dupes by id, classifies,
-  and renders progressively as results arrive.
-- Classification: `classifyCategory()`, `classifySeverity()`,
-  `findCompanies()`.
-- Filtering: `applyFilters()` plus `filterBy*` helpers (category, severity,
-  company, source) driven by the dropdowns, search box, summary cards, and
-  source tabs. Event handling uses **event delegation** (set up in the
-  `DOMContentLoaded` listener) — dynamically rendered elements carry `data-*`
-  attributes rather than inline handlers.
-- Rendering: `renderDashboard()` orchestrates `renderSummaryCards`,
-  `renderCharts` (Chart.js doughnut + bar), `renderCompanyList`,
-  `renderSourceTabs`, `renderAlertBanner`, `renderNewsFeed`.
-- Translation: English articles get a 🌐 번역 button that calls the free
-  **MyMemory** API (`translateArticle` / `_mymemory`, en→ko, no key), with an
-  in-memory `_translationCache` and original/translation toggle.
-- Utilities: `esc()` (HTML-escape — **always use it when injecting text into
-  `innerHTML`**), `truncate()`, `fmtDate()` (relative Korean time),
-  `showToast()`, `showLoading()`.
+- `CORS_PROXIES` — 공개 CORS 프록시 빌더의 순서 목록(codetabs, allorigins,
+  corsproxy.io). `fetchWithProxy()`가 순서대로 시도하여 RSS처럼 보이는 텍스트를
+  반환할 때까지 진행. 개방형 프록시를 앞에 둬서 `file://`에서도 작동합니다.
+- `SEARCH_QUERIES`(한국어)와 `SEARCH_QUERIES_EN`(영어) — Google News 검색어.
+  여기에서 쿼리를 추가/삭제하여 수집 범위를 조정합니다.
+- `fetchGoogleNewsRSS(query, locale)`는 알맞은 로케일 파라미터(`hl/gl/ceid`)로
+  Google News RSS URL을 만들고 결과를 파싱합니다.
+- `parseRSS()`는 `DOMParser`로 RSS XML을 파싱하고, `hashStr()`는 중복 제거를
+  위해 `title + source`로 안정적인 id를 생성합니다.
+- `fetchAllNews()`는 모든 쿼리를 병렬 실행하고, id로 중복을 제거하며, 분류한 뒤
+  결과가 도착하는 대로 점진적으로 렌더링합니다.
+- 분류: `classifyCategory()`, `classifySeverity()`, `findCompanies()`.
+- 필터링: `applyFilters()`와 `filterBy*` 헬퍼들(카테고리, 심각도, 기업, 소스)이
+  드롭다운, 검색 박스, 요약 카드, 소스 탭으로 구동됩니다. 이벤트 처리는
+  **이벤트 위임**(DOMContentLoaded 리스너에서 설정)을 사용 — 동적으로
+  렌더링되는 요소는 인라인 핸들러 대신 `data-*` 속성을 가집니다.
+- 렌더링: `renderDashboard()`가 `renderSummaryCards`, `renderCharts`(Chart.js
+  도넛 + 바), `renderCompanyList`, `renderSourceTabs`, `renderAlertBanner`,
+  `renderNewsFeed`를 조율합니다.
+- 번역: 영어 기사에는 🌐 번역 버튼이 붙으며, 무료 **MyMemory** API
+  (`translateArticle` / `_mymemory`, en→ko, 키 불필요)를 호출합니다. 메모리 내
+  `_translationCache`와 원문/번역 토글을 사용합니다.
+- 유틸리티: `esc()`(HTML 이스케이프 — **`innerHTML`에 텍스트를 주입할 때 항상
+  사용**), `truncate()`, `fmtDate()`(상대 시간 한국어 표기), `showToast()`,
+  `showLoading()`.
 
-## Conventions to follow
+## 따라야 할 규칙
 
-- **Keep it single-file.** All HTML, CSS, and JS stay inline in `index.html`
-  unless the user explicitly asks to split the project.
-- **No frameworks/bundlers.** Vanilla JS only; the sole CDN dependency is
-  Chart.js. Don't introduce npm/build tooling without being asked.
-- **Korean-first UI.** User-facing strings are Korean. Match the existing tone
-  and the emoji-prefixed labels (📝 수주, 🏭 생산 차질, etc.).
-- **Security:** any user/feed-derived text inserted via `innerHTML` must go
-  through `esc()` (and `CSS.escape()` for selectors, as in `translateArticle`).
-- **Styling:** use the existing CSS custom properties in `:root` (e.g.
-  `--bg-card`, `--accent-blue`) and the established dark-theme palette; the
-  layout is responsive with breakpoints at 1200/768/480px.
-- **Comments** in the source are in Korean and use box-drawing separators
-  (`═══`, `──`); keep that style if adding comments nearby.
-- **Categories are a fixed set.** If you add a category, update *all* of:
-  `CATEGORY_KEYWORDS`, the summary card markup, the filter `<select>`, the
-  chart labels/colors in `renderCharts`, the `computeStats` stats object, the
-  `catBadges` map, and `updateActiveCards`.
+- **단일 파일 유지.** 사용자가 명시적으로 분리를 요청하지 않는 한 모든 HTML,
+  CSS, JS는 `index.html`에 인라인으로 둡니다.
+- **프레임워크/번들러 금지.** 바닐라 JS만 사용하며, 유일한 CDN 의존성은
+  Chart.js입니다. 요청 없이 npm/빌드 도구를 도입하지 마세요.
+- **한국어 우선 UI.** 사용자 대상 문자열은 한국어입니다. 기존 톤과 이모지 접두
+  레이블(📝 수주, 🏭 생산 차질 등)을 맞추세요.
+- **보안:** 사용자/피드에서 유래한 텍스트를 `innerHTML`로 삽입할 때는 반드시
+  `esc()`를 거쳐야 합니다(셀렉터에는 `translateArticle`처럼 `CSS.escape()` 사용).
+- **스타일링:** `:root`의 기존 CSS 커스텀 속성(예: `--bg-card`, `--accent-blue`)과
+  확립된 다크 테마 팔레트를 사용하세요. 레이아웃은 1200/768/480px 분기점으로
+  반응형입니다.
+- **소스 주석**은 한국어로 작성하며 박스 드로잉 구분선(`═══`, `──`)을 사용합니다.
+  주변에 주석을 추가할 때 이 스타일을 유지하세요.
+- **카테고리는 고정 집합.** 카테고리를 추가하면 다음을 *모두* 갱신하세요:
+  `CATEGORY_KEYWORDS`, 요약 카드 마크업, 필터 `<select>`, `renderCharts`의 차트
+  레이블/색상, `computeStats` 통계 객체, `catBadges` 맵, `updateActiveCards`.
 
-## Git workflow
+## Git 워크플로
 
-- Active development branch for AI-assisted work: **`claude/claude-md-docs-4032wb`**
-  (do not push to `main` without explicit permission).
-- Push with `git push -u origin <branch-name>`.
-- Do **not** open a pull request unless the user explicitly asks.
+- AI 작업용 활성 개발 브랜치: **`claude/claude-md-docs-4032wb`**
+  (명시적 허가 없이 `main`에 푸시하지 마세요).
+- `git push -u origin <branch-name>`으로 푸시합니다.
+- 사용자가 명시적으로 요청하지 않는 한 풀 리퀘스트를 열지 **마세요**.
 
-## Gotchas
+## 주의 사항 (Gotchas)
 
-- The app depends on **public CORS proxies** and **Google News RSS** being
-  reachable; if no news loads, it's usually a proxy/network issue, not a code
-  bug (an empty state with a 📡 message is shown).
-- `encodeURIComponent` is used deliberately for queries; the original code
-  notes a double-encoding pitfall with `+` — prefer spaces in query strings.
-- There is no persistence — all state is in memory and reset on refresh.
+- 이 앱은 **공개 CORS 프록시**와 **Google News RSS**의 접근 가능성에
+  의존합니다. 뉴스가 로드되지 않으면 대개 코드 버그가 아니라 프록시/네트워크
+  문제입니다(📡 메시지와 함께 빈 상태가 표시됩니다).
+- 쿼리에는 `encodeURIComponent`를 의도적으로 사용합니다. 원본 코드는 `+`의
+  이중 인코딩 함정을 언급합니다 — 쿼리 문자열에서는 공백을 선호하세요.
+- 영속성이 없습니다 — 모든 상태는 메모리에 있으며 새로고침 시 초기화됩니다.
 </content>
-</invoke>
