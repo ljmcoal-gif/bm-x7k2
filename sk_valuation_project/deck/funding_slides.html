@@ -87,8 +87,12 @@
   .ent .row .rt{font-weight:700;font-size:25px;}
   .ent .row .rs{font-size:21px;color:var(--mute);margin-top:4px;line-height:1.34;}
   .ent .warn{background:#F1EADD;border-radius:5px;padding:15px 20px;font-size:20px;line-height:1.36;color:var(--ink);}
-  .nrbar{position:absolute;left:150px;right:150px;bottom:124px;background:var(--dark);border-radius:5px;padding:22px 34px;color:#fff;display:flex;align-items:baseline;gap:16px;}
-  .nrbar b{color:#86D6A6;font-size:29px;white-space:nowrap;} .nrbar span{color:var(--warm);font-size:23px;line-height:1.36;}
+  .nrbar{position:absolute;left:150px;right:150px;bottom:106px;background:var(--dark);border-radius:5px;padding:20px 32px;color:#fff;display:flex;flex-direction:column;gap:10px;}
+  .nrbar .ln{display:flex;align-items:baseline;gap:14px;}
+  .nrbar b{color:#86D6A6;font-size:26px;white-space:nowrap;} .nrbar span{color:var(--warm);font-size:21px;line-height:1.32;}
+  .chain{margin-top:30px;background:var(--dark);border-radius:5px;padding:22px 36px;color:#fff;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .chain .node{font-weight:700;font-size:28px;} .chain .node small{font-family:'IBM Plex Mono',monospace;font-size:19px;color:var(--warm);font-weight:400;margin-left:8px;letter-spacing:.5px;}
+  .chain .ar{color:var(--red);font-size:28px;font-weight:700;}
 
   /* ── 이유 ── */
   .reasons{margin-top:40px;display:flex;flex-direction:column;gap:20px;}
@@ -172,10 +176,14 @@
 <div class="slide" id="s3">
   <div class="pad">
     <div class="eyebrow"><span class="l">FUNDING BY ENTITY</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;03</span></div>
-    <div class="head"><h1>법인별 자금 구조</h1><span class="dek">HoldCo 우산 + 격벽</span></div>
+    <div class="head"><h1>법인별 자금 구조</h1><span class="dek">모자구조 · BA → OT 100%</span></div>
     <div class="hr"></div>
 
-    <div class="holdbar"><b>HoldCo 우산</b><span>통합조달(협상력↑·조달비용↓) — 위에서 묶고, 아래(SPV)에서 격리한다 · 하이브리드(B) 구조</span></div>
+    <div class="chain">
+      <span class="node">SK이노베이션</span><span class="ar">▶</span>
+      <span class="node">BA<small>중간지주 · 조달 주체 · 보조금 수령</small></span><span class="ar">▶</span>
+      <span class="node">OT<small>완전자회사 100% · DOE 격리</small></span>
+    </div>
 
     <div class="entities">
       <div class="ent">
@@ -185,22 +193,25 @@
           <div class="row"><div class="rn" style="color:var(--red)">①</div><div><div class="rt">보조금 (1순위)</div><div class="rs">MESC / 48C / 州 — 무상환·무희석·무CoC <span class="star">★</span></div></div></div>
           <div class="row"><div class="rn">②</div><div><div class="rt">비소구 자산부채</div><div class="rs">설비·재고·AMPC 수취권 담보 · 한도 내</div></div></div>
           <div class="row"><div class="rn" style="color:var(--mute2)">③</div><div><div class="rt">Equity (잔여)</div><div class="rs">CoC 20% 캡 내 · 밸류 플로어·anti-dilution</div></div></div>
-          <div class="warn">제약: 기존 차입 ~$5bn + SK이노 보증 → 신규 대출 회피·covenant 관리 <span class="star">★</span></div>
+          <div class="warn">제약: BA <b>단독</b> 차입 ~$5bn + SK이노 보증 → 신규 대출 회피·covenant 관리 <span class="star">★</span></div>
         </div>
       </div>
       <div class="ent">
-        <div class="bar red"><div class="nm">공장 2 — SKOT (테네시)</div><div class="sb">각형+파우치 29.7GWh · DOE 묶임</div></div>
+        <div class="bar red"><div class="nm">공장 2 — SKOT (테네시)</div><div class="sb">BA의 완전자회사 100% · 각형+파우치 29.7GWh</div></div>
         <div class="body">
           <div class="use">용도 = 기존 구조 유지 + AMPC 창 내 회수</div>
           <div class="row"><div class="rn">•</div><div><div class="rt">DOE $4bn ATVM</div><div class="rs">기존 선순위 담보 — 이자만(원금 0)</div></div></div>
           <div class="row"><div class="rn">•</div><div><div class="rt">AMPC 현금화</div><div class="rs">45X 수취권 유동화 → 미래현금 당겨옴</div></div></div>
           <div class="row"><div class="rn">•</div><div><div class="rt">메자닌 $1bn @7%</div><div class="rs">보조금 창(2029~32) 내 상환 · DSCR 1.3x</div></div></div>
-          <div class="warn">링펜스 5층 유지: 법인분리·Separateness·Intercreditor·담보·Non-recourse</div>
+          <div class="warn">모자 격리(bankruptcy-remote) · 링펜스 5층 유지: 법인분리·Separateness·Intercreditor·담보·Non-recourse</div>
         </div>
       </div>
     </div>
   </div>
-  <div class="nrbar"><b>Non-recourse 격벽</b><span>각 SPV 채무는 자기 자산에만 청구 — 모회사·타 공장·SK이노 보증에 무소구. 한 공장이 무너져도 다른 칸으로 전염되지 않는다.</span></div>
+  <div class="nrbar">
+    <div class="ln"><b>Non-recourse 격벽</b><span>OT의 DOE는 BA에 무소구 (BA 손실 = OT 지분가치 한도) · BA의 $5bn(단독)은 OT 미담보 — 양방향 격리</span></div>
+    <div class="ln"><b>연결납세 효과</b><span>OT 적자가 BA 과세소득을 상계 → 그룹 현금세금↓ (모자구조 업사이드 · 규모는 BA 과세소득이 작아 제한적) <span class="star">★</span></span></div>
+  </div>
   <div class="foot"><span>SK 전략팀 · Strictly Private &amp; Confidential</span><span>★ = 미검증</span></div>
 </div>
 
@@ -213,9 +224,9 @@
     <div class="reasons">
       <div class="reason"><div class="num">01</div><div><div class="t">Feasibility — OT는 한 우물, BA는 새 우물</div><div class="s">OT는 ATVM 수혜를 이미 받고 있어 신규 연방자금 여지가 작다. DOE/DOW 관점에서 BA측 funding feasibility가 더 높다.</div></div></div>
       <div class="reason hot"><div class="num">02</div><div><div class="t">보조금은 EBIT=0 자산에 유일하게 '깨끗한' 돈</div><div class="s">DC블록은 박리다매(EBIT≈0). 상업대출은 DSCR이 안 나와 원천적으로 안 붙는다. 보조금은 무상환·무DSCR·무희석·CoC 무관 → 구조적 최적.</div></div></div>
-      <div class="reason"><div class="num">03</div><div><div class="t">BA 대출 회피 — 이미 $5bn + SKI 보증</div><div class="s">BA는 기존 차입이 크고 SK이노 보증·확약이 걸려 있다. 추가 대출은 레버리지 한도·cross-default·보증 노출을 키운다 → 보조금/비소구로 우회.</div></div></div>
+      <div class="reason"><div class="num">03</div><div><div class="t">BA 대출 회피 — BA 단독 ~$5bn + SKI 보증</div><div class="s">BA는 단독(OT 제외)으로도 차입이 크고 SK이노 보증·확약이 걸려 있다. 추가 대출은 레버리지 한도·cross-default·보증 노출을 키운다 → 보조금/비소구로 우회.</div></div></div>
       <div class="reason"><div class="num">04</div><div><div class="t">Equity는 잔여·최후 — DOE Equity는 불가 가정</div><div class="s">BA 밸류에이션·지분희석·CoC(20% 캡)를 고려하면 Equity는 마지막. 게다가 DOE LPO/ATVM은 법령상 대출·보증이지 지분투자가 아니다 ★.</div></div></div>
-      <div class="reason hot"><div class="num">05</div><div><div class="t">OT 링펜스 유지 = SKI 보증의 방패</div><div class="s">링펜스는 비용이 아니라 보호다. OT가 2033년 이후 적자 회귀해도 Non-recourse가 BA·모회사·SKI 보증으로의 전염을 끊는다.</div></div></div>
+      <div class="reason hot"><div class="num">05</div><div><div class="t">OT는 BA의 완전자회사 — 그래도 링펜스 = SKI 방패</div><div class="s">OT가 BA의 100% 자회사라도 non-recourse로 격리한다. OT가 2033년 이후 적자 회귀해도 BA 손실은 OT 지분가치까지로 한정 → 모회사·SKI 보증으로의 전염을 끊는다.</div></div></div>
     </div>
   </div>
   <div class="foot"><span>SK 전략팀 · Strictly Private &amp; Confidential</span><span>★ = 미검증</span></div>
