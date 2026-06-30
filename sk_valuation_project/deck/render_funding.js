@@ -6,7 +6,7 @@ const groot = require('child_process').execSync('npm root -g').toString().trim()
 const { chromium } = require(groot + '/playwright');
 const pptxgen = require(groot + '/pptxgenjs');
 
-const SLIDES = ['s1','s2','s3','s4'];
+const SLIDES = ['s1','s2','s3','s4','s5'];
 const W = 1920, H = 1358, SCALE = 2;          // → 3840×2716 PNG (A4 가로 √2 비율)
 const HTML = 'file://' + path.join(__dirname, 'funding_slides.html');
 const OUTDIR = path.join(__dirname, '..', 'output');
