@@ -1,0 +1,9 @@
+# 산출물 (재생성 가능)
+output/*.xlsx
+output/*.pptx
+output/*.pdf
+# 임시
+*.jpg
+*.tmp
+__pycache__/
+.DS_Store
