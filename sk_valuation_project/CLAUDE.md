@@ -70,7 +70,8 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | 세율 | 23% (AMPC 비과세) |
 | SKBA 명판 / SKOT 명판 | 21.2 GWh / 29.7 GWh |
 | DOE loan | $4.0bn, 이자만 3.5%(또는 5%) |
-| 메자닌 | $1.0bn @7% |
+| 메자닌 | **제거** (OT 소요 $1bn은 BA 증자/equity-down) |
+| 순차입금 (BA연결) | $9.0bn = DOE $4bn + BA 단독 $5bn |
 | SKBA 기초 NOL ★ | $1.5bn (추정, DART/데이터룸 확인 필요) |
 | CapEx 그랜트 | capex의 10% (≈$142mm) |
 
