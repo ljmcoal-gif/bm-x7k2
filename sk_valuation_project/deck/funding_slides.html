@@ -15,22 +15,18 @@
   }
   .serif{font-family:'Noto Serif KR','IBM Plex Sans KR',serif;}
   .mono{font-family:'IBM Plex Mono',monospace;}
-  /* 공통 헤더 */
   .pad{position:absolute;inset:0;padding:110px 150px 96px;}
   .eyebrow{display:flex;justify-content:space-between;align-items:baseline;}
   .eyebrow .l{font-family:'IBM Plex Mono',monospace;color:var(--red);font-size:24px;letter-spacing:4px;font-weight:500;}
   .eyebrow .r{font-family:'IBM Plex Mono',monospace;color:var(--mute2);font-size:22px;letter-spacing:5px;}
   .head{display:flex;justify-content:space-between;align-items:flex-end;margin-top:26px;}
-  .head h1{font-family:'Noto Serif KR',serif;font-weight:800;font-size:92px;line-height:1.04;letter-spacing:-1px;}
+  .head h1{font-family:'Noto Serif KR',serif;font-weight:800;font-size:88px;line-height:1.04;letter-spacing:-1px;}
   .head .dek{font-size:30px;color:var(--mute);padding-bottom:14px;white-space:nowrap;}
-  .hr{height:3px;background:var(--ink);margin-top:30px;}
+  .hr{height:3px;background:var(--ink);margin-top:28px;}
   .foot{position:absolute;left:150px;right:150px;bottom:60px;font-family:'IBM Plex Mono',monospace;
         font-size:21px;color:var(--mute2);letter-spacing:1px;border-top:1.5px solid var(--rule);padding-top:20px;
         display:flex;justify-content:space-between;}
-
-  /* 카드/박스 공통 */
-  .darkbox{background:var(--dark);color:#fff;border-radius:4px;}
-  .card{background:#fff;border:1.5px solid var(--rule);border-radius:5px;}
+  .seclab{font-family:'IBM Plex Mono',monospace;color:var(--mute2);font-size:22px;letter-spacing:3px;margin-bottom:18px;}
 
   /* ── 표지 ── */
   .cover .brand{display:flex;align-items:center;gap:22px;}
@@ -56,88 +52,75 @@
   .cover .needs .tot .k{color:var(--ink);font-weight:700;}
   .cover .needs .tot .v{color:var(--red);font-weight:600;}
 
-  /* ── 요약 ── */
-  .thesis{margin-top:46px;background:var(--dark);border-radius:5px;padding:34px 42px;position:relative;overflow:hidden;}
-  .thesis::before{content:"";position:absolute;left:0;top:0;bottom:0;width:9px;background:var(--red);}
-  .thesis .lab{font-family:'IBM Plex Mono',monospace;color:var(--warm);font-size:21px;letter-spacing:3px;}
-  .thesis .txt{font-family:'Noto Serif KR',serif;font-weight:600;font-size:46px;line-height:1.34;color:#fff;margin-top:10px;}
-  .thesis .txt b.r{color:#FF8E84;} .thesis .txt b.g{color:#86D6A6;} .thesis .txt b.w{color:#fff;}
-  .sublab{font-family:'IBM Plex Mono',monospace;color:var(--mute2);font-size:22px;letter-spacing:3px;margin:40px 0 18px;}
-  .cards3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;}
-  .cards3 .card{padding:28px 30px;position:relative;}
-  .cards3 .card .top{height:6px;background:var(--red);position:absolute;left:0;right:0;top:0;border-radius:5px 5px 0 0;}
-  .cards3 .card .k{font-family:'IBM Plex Mono',monospace;color:var(--mute2);font-size:21px;letter-spacing:2px;}
-  .cards3 .card .v{font-family:'Noto Serif KR',serif;font-weight:700;font-size:48px;color:var(--red);margin:8px 0 12px;}
-  .cards3 .card .d{font-size:24px;color:var(--mute);line-height:1.45;}
-  .wf{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;position:relative;}
-  .wf .step{background:#fff;border:1.5px solid var(--rule);border-radius:5px;padding:26px 28px;position:relative;}
-  .wf .step.hot{background:var(--redsoft);border-color:var(--red);}
-  .wf .step .n{font-family:'Noto Serif KR',serif;font-weight:800;font-size:50px;line-height:1;}
-  .wf .step.hot .n{color:var(--red);} .wf .step .n.ink{color:var(--ink);} .wf .step .n.mut{color:var(--mute2);}
-  .wf .step .t{font-weight:700;font-size:28px;margin:6px 0 8px;}
-  .wf .step .s{font-size:21px;color:var(--mute);line-height:1.4;}
-  .wf .arrow{position:absolute;top:50%;transform:translateY(-50%);font-size:34px;color:var(--warm);}
-  .note{margin-top:30px;font-size:24px;color:var(--ink);}
+  /* ── 2단 레이아웃 ── */
+  .cols{display:grid;margin-top:34px;gap:54px;}
+  .cols.c2{grid-template-columns:1.08fr 0.92fr;}
 
-  /* ── 법인별 ── */
-  .holdbar{margin-top:30px;background:var(--dark);border-radius:5px;padding:24px 36px;color:#fff;display:flex;align-items:baseline;gap:18px;}
-  .holdbar b{font-size:32px;} .holdbar span{color:var(--warm);font-size:25px;}
-  .entities{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:24px;}
-  .ent{background:#fff;border:1.5px solid var(--rule);border-radius:6px;overflow:hidden;}
-  .ent .bar{padding:20px 30px;color:#fff;}
-  .ent .bar.ink{background:var(--ink);} .ent .bar.red{background:var(--red);}
-  .ent .bar .nm{font-weight:700;font-size:33px;}
-  .ent .bar .sb{font-family:'IBM Plex Mono',monospace;font-size:20px;color:var(--warm);letter-spacing:1px;margin-top:4px;}
-  .ent .body{padding:20px 30px 20px;}
-  .ent .use{font-weight:700;font-size:25px;margin-bottom:13px;}
-  .ent .row{display:flex;gap:18px;align-items:flex-start;background:var(--paper);border:1px solid var(--grid);border-radius:5px;padding:14px 18px;margin-bottom:11px;}
-  .ent .row .rn{font-family:'Noto Serif KR',serif;font-weight:800;font-size:36px;line-height:1;min-width:40px;}
-  .ent .row .rt{font-weight:700;font-size:25px;}
-  .ent .row .rs{font-size:21px;color:var(--mute);margin-top:4px;line-height:1.34;}
-  .ent .warn{background:#F1EADD;border-radius:5px;padding:15px 20px;font-size:20px;line-height:1.36;color:var(--ink);}
-  .nrbar{position:absolute;left:150px;right:150px;bottom:106px;background:var(--dark);border-radius:5px;padding:20px 32px;color:#fff;display:flex;flex-direction:column;gap:10px;}
-  .nrbar .ln{display:flex;align-items:baseline;gap:14px;}
-  .nrbar b{color:#86D6A6;font-size:26px;white-space:nowrap;} .nrbar span{color:var(--warm);font-size:21px;line-height:1.32;}
-  .chain{margin-top:30px;background:var(--dark);border-radius:5px;padding:22px 36px;color:#fff;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-  .chain .node{font-weight:700;font-size:28px;} .chain .node small{font-family:'IBM Plex Mono',monospace;font-size:19px;color:var(--warm);font-weight:400;margin-left:8px;letter-spacing:.5px;}
-  .chain .ar{color:var(--red);font-size:28px;font-weight:700;}
+  /* 재무 카드 */
+  .fin{background:#fff;border:1.5px solid var(--rule);border-radius:6px;overflow:hidden;margin-bottom:26px;}
+  .fin .fh{padding:16px 28px;color:#fff;display:flex;justify-content:space-between;align-items:baseline;}
+  .fin .fh.ink{background:var(--ink);} .fin .fh.red{background:var(--red);}
+  .fin .fh .nm{font-weight:700;font-size:28px;} .fin .fh .tag{font-family:'IBM Plex Mono',monospace;font-size:19px;color:var(--warm);letter-spacing:.5px;}
+  .fin .r{display:flex;justify-content:space-between;align-items:baseline;padding:13px 28px;border-bottom:1px solid var(--grid);}
+  .fin .r:last-child{border-bottom:none;}
+  .fin .r .k{color:var(--mute);font-size:23px;} .fin .r .v{font-family:'IBM Plex Mono',monospace;color:var(--ink);font-size:24px;font-weight:500;}
+  .fin .r .v.hl{color:var(--red);font-weight:600;} .fin .r .v.sm{font-family:'IBM Plex Sans KR';font-size:22px;font-weight:600;}
 
-  /* ── 이유 ── */
-  .reasons{margin-top:40px;display:flex;flex-direction:column;gap:20px;}
-  .reason{display:flex;gap:30px;align-items:center;background:#fff;border:1.5px solid var(--rule);border-radius:6px;padding:26px 34px;}
-  .reason.hot{background:var(--redsoft);border-color:var(--red);}
-  .reason .num{font-family:'Noto Serif KR',serif;font-weight:800;font-size:64px;color:var(--warm);min-width:96px;}
-  .reason.hot .num{color:var(--red);}
-  .reason .t{font-weight:700;font-size:32px;margin-bottom:7px;}
-  .reason.hot .t{color:var(--red);}
-  .reason .s{font-size:24px;color:var(--mute);line-height:1.4;}
+  /* 개조 금액 */
+  .capex{background:var(--dark);border-radius:6px;padding:24px 30px;}
+  .capex .row{display:flex;justify-content:space-between;align-items:baseline;margin:11px 0;}
+  .capex .row .k{color:var(--warm);font-size:25px;} .capex .row .v{font-family:'IBM Plex Mono',monospace;font-size:38px;font-weight:500;color:#fff;}
+  .capex .div{height:1.5px;background:#4a443d;margin:14px 0;}
+  .capex .tot .k{color:#fff;font-weight:700;font-size:27px;} .capex .tot .v{color:#FF8E84;font-weight:600;font-size:44px;}
 
-  /* ── Comm ── */
-  .commgrid{margin-top:40px;display:grid;grid-template-columns:1.05fr 0.95fr;gap:50px;}
-  .seqlab,.matchlab{font-family:'IBM Plex Mono',monospace;color:var(--mute2);font-size:22px;letter-spacing:3px;margin-bottom:18px;}
-  .step2{display:flex;gap:24px;align-items:center;border:1.5px solid var(--rule);border-radius:6px;padding:22px 28px;margin-bottom:18px;background:#fff;position:relative;}
+  /* 기대 효과 */
+  .effects{margin-top:8px;}
+  .effects .e{display:flex;gap:18px;align-items:flex-start;padding:15px 4px;border-bottom:1px solid var(--rule);}
+  .effects .e:last-child{border-bottom:none;}
+  .effects .e .d{color:var(--red);font-size:26px;line-height:1.1;}
+  .effects .e .t{font-size:24px;line-height:1.34;}
+  .effects .e .t b{font-family:'IBM Plex Mono',monospace;font-weight:600;}
+
+  /* OT 차입 조건 */
+  .terms{display:flex;flex-wrap:wrap;gap:16px;margin-top:6px;}
+  .term{background:#fff;border:1.5px solid var(--rule);border-radius:8px;padding:16px 24px;font-size:23px;color:var(--mute);}
+  .term b{font-family:'IBM Plex Mono',monospace;color:var(--ink);font-weight:600;}
+  .term.k{background:var(--redsoft);border-color:var(--red);} .term.k b{color:var(--red);}
+
+  /* 제안 카드 */
+  .props{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:8px;}
+  .prop{background:#fff;border:1.5px solid var(--rule);border-radius:8px;padding:30px 34px;position:relative;}
+  .prop.hot{background:var(--redsoft);border-color:var(--red);}
+  .prop .pn{font-family:'IBM Plex Mono',monospace;font-size:22px;letter-spacing:2px;color:var(--mute2);}
+  .prop .pt{font-family:'Noto Serif KR',serif;font-weight:700;font-size:38px;margin:8px 0 16px;}
+  .prop.hot .pt{color:var(--red);}
+  .prop .ps{font-size:24px;color:var(--mute);line-height:1.5;}
+  .prop .ps b{color:var(--ink);}
+
+  /* Comm */
+  .commgrid{margin-top:36px;display:grid;grid-template-columns:1.05fr 0.95fr;gap:50px;}
+  .step2{display:flex;gap:24px;align-items:center;border:1.5px solid var(--rule);border-radius:6px;padding:20px 28px;margin-bottom:17px;background:#fff;}
   .step2.hot{background:var(--dark);border-color:var(--dark);}
-  .step2 .circ{min-width:64px;height:64px;border-radius:50%;background:var(--warm);display:flex;align-items:center;justify-content:center;
-               font-family:'Noto Serif KR',serif;font-weight:800;font-size:32px;}
+  .step2 .circ{min-width:62px;height:62px;border-radius:50%;background:var(--warm);display:flex;align-items:center;justify-content:center;
+               font-family:'Noto Serif KR',serif;font-weight:800;font-size:31px;}
   .step2.hot .circ{background:var(--red);color:#fff;}
-  .step2 .st{font-weight:700;font-size:27px;} .step2.hot .st{color:#fff;}
-  .step2 .ss{font-size:21px;color:var(--mute);margin-top:3px;} .step2.hot .ss{color:var(--warm);}
+  .step2 .st{font-weight:700;font-size:26px;} .step2.hot .st{color:#fff;}
+  .step2 .ss{font-size:20px;color:var(--mute);margin-top:3px;} .step2.hot .ss{color:var(--warm);}
   .mtbl{border-top:2px solid var(--ink);}
-  .mrow{display:flex;align-items:center;padding:20px 6px;border-bottom:1px solid var(--rule);}
-  .mrow .mk{font-weight:700;font-size:25px;min-width:230px;}
-  .mrow .mv{font-size:23px;}
-  .mrow .mv.g{color:var(--green);} .mrow .mv.r{color:var(--red);}
-  .redlines{margin-top:30px;background:var(--dark);border-radius:6px;padding:28px 32px;color:#fff;}
-  .redlines .h{font-family:'Noto Serif KR',serif;font-weight:700;font-size:30px;margin-bottom:14px;}
-  .redlines ul{list-style:none;} .redlines li{font-size:24px;color:var(--warm);line-height:1.7;}
+  .mrow{display:flex;align-items:center;padding:19px 6px;border-bottom:1px solid var(--rule);}
+  .mrow .mk{font-weight:700;font-size:24px;min-width:220px;}
+  .mrow .mv{font-size:22px;} .mrow .mv.g{color:var(--green);} .mrow .mv.r{color:var(--red);}
+  .redlines{margin-top:28px;background:var(--dark);border-radius:6px;padding:26px 32px;color:#fff;}
+  .redlines .h{font-family:'Noto Serif KR',serif;font-weight:700;font-size:29px;margin-bottom:13px;}
+  .redlines ul{list-style:none;} .redlines li{font-size:23px;color:var(--warm);line-height:1.68;}
   .redlines li.x{color:#FF8E84;font-weight:600;}
-  .principle{position:absolute;left:150px;right:150px;bottom:148px;background:#F1EADD;border-radius:5px;padding:22px 30px;font-size:24px;}
+  .principle{position:absolute;left:150px;right:150px;bottom:146px;background:#F1EADD;border-radius:5px;padding:22px 30px;font-size:24px;}
   .principle b{color:var(--red);}
   .star{font-size:18px;color:var(--mute2);vertical-align:super;}
 </style></head>
 <body>
 
-<!-- ════ SLIDE 1 — 표지 ════ -->
+<!-- ════ P1 — 표지 ════ -->
 <div class="slide cover" id="s1">
   <div class="pad">
     <div class="brand"><span class="tab"></span><span class="nm">SK 전략팀</span></div>
@@ -157,112 +140,109 @@
   <div class="baseline"><span>2026년 6월</span><span class="mono">SK 전략팀 · Internal</span></div>
 </div>
 
-<!-- ════ SLIDE 2 — 요약 ════ -->
+<!-- ════ P2 — 현황 & 개조 ════ -->
 <div class="slide" id="s2">
   <div class="pad">
-    <div class="eyebrow"><span class="l">EXECUTIVE SUMMARY</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;02</span></div>
-    <div class="head"><h1>펀딩 구조 v2 — 요약</h1><span class="dek">재무팀 의견 반영</span></div>
+    <div class="eyebrow"><span class="l">CURRENT STATE &amp; RETROFIT</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;02</span></div>
+    <div class="head"><h1>현황 &amp; 개조 소요</h1><span class="dek">BA · OT 재무상태 → 개조</span></div>
     <div class="hr"></div>
-
-    <div class="thesis">
-      <div class="lab">핵심 명제</div>
-      <div class="txt"><b class="w">정부 앵커를 OT→BA로 이동</b>하되, BA는 <b class="r">보조금(grant) 우선</b> · Equity는 잔여·최후로 둔다. <b class="g">OT의 DOE 링펜스는 유지</b>한다.</div>
+    <div class="cols c2">
+      <!-- 좌: 주요 재무상태 -->
+      <div>
+        <div class="seclab">주요 재무상태 · KEY FINANCIALS</div>
+        <div class="fin">
+          <div class="fh ink"><span class="nm">공장 1 — SKBA (조지아)</span><span class="tag">파우치 · 모회사</span></div>
+          <div class="r"><span class="k">명판 / 가동(COD)</span><span class="v">21.2 GWh / 2027~28</span></div>
+          <div class="r"><span class="k">기존 차입 (단독)</span><span class="v hl">~$5.0bn + SKI 보증</span></div>
+          <div class="r"><span class="k">run-rate 매출</span><span class="v">~$2.2bn</span></div>
+          <div class="r"><span class="k">ex-AMPC EBITDA</span><span class="v">9% (목표)</span></div>
+          <div class="r"><span class="k">순자산 NAV <span class="star">★</span></span><span class="v">~$2.0bn</span></div>
+        </div>
+        <div class="fin">
+          <div class="fh red"><span class="nm">공장 2 — SKOT (테네시)</span><span class="tag">BA 완전자회사 100%</span></div>
+          <div class="r"><span class="k">명판 / 가동(COD)</span><span class="v">29.7 GWh / 2028</span></div>
+          <div class="r"><span class="k">기존 차입 (DOE)</span><span class="v hl">$4.0bn ATVM (이자만)</span></div>
+          <div class="r"><span class="k">run-rate 매출</span><span class="v">~$2.7bn</span></div>
+          <div class="r"><span class="k">ex-AMPC EBITDA</span><span class="v">9% (목표)</span></div>
+          <div class="r"><span class="k">순자산 NAV <span class="star">★</span></span><span class="v">~$3.0bn</span></div>
+        </div>
+      </div>
+      <!-- 우: 개조 금액 + 기대 효과 -->
+      <div>
+        <div class="seclab">개조 금액 · RETROFIT CAPEX</div>
+        <div class="capex">
+          <div class="row"><span class="k">BA (개조)</span><span class="v">$0.4bn</span></div>
+          <div class="row"><span class="k">OT</span><span class="v">$1.0bn</span></div>
+          <div class="div"></div>
+          <div class="row tot"><span class="k">합계 소요</span><span class="v">$1.4bn</span></div>
+        </div>
+        <div class="seclab" style="margin-top:36px">기대 효과 · EXPECTED EFFECT</div>
+        <div class="effects">
+          <div class="e"><span class="d">●</span><span class="t">DC블록 ASP <b>$155/kWh</b> 사업화 — 셀+모듈+컨테이너 통합 판매</span></div>
+          <div class="e"><span class="d">●</span><span class="t">ex-AMPC EBITDA <b>9%</b> 달성 → 메자닌 적격(DSCR ≥1.3x)</span></div>
+          <div class="e"><span class="d">●</span><span class="t">DCF EV ≈ <b>$3.45bn</b> (밴드 $3.0~4.0bn)</span></div>
+          <div class="e"><span class="d">●</span><span class="t">NAV(SOTP) ≈ <b>$5.0bn</b> <span class="star">★</span></span></div>
+        </div>
+      </div>
     </div>
-
-    <div class="sublab">V1 → V2  전환 포인트</div>
-    <div class="cards3">
-      <div class="card"><span class="top"></span><div class="k">정부자금 타깃</div><div class="v">OT → BA</div><div class="d">OT는 ATVM 이미 소진 → 신규 미정부자금은 BA측 feasibility ↑</div></div>
-      <div class="card"><span class="top"></span><div class="k">BA 조달 방식</div><div class="v">보조금 우선</div><div class="d">무상환·무DSCR·무희석·CoC 무관 → EBIT=0 자산에 유일하게 깨끗</div></div>
-      <div class="card"><span class="top"></span><div class="k">OT 구조</div><div class="v">링펜스 유지</div><div class="d">DOE 선순위·CoC·격벽 그대로 → SKI 보증을 전염에서 차단</div></div>
-    </div>
-
-    <div class="sublab">BA 펀딩 워터폴 — 조달 우선순위</div>
-    <div class="wf">
-      <div class="step hot"><div class="n">①</div><div class="t">보조금 (1순위)</div><div class="s">MESC·48C·州 인센티브 — 최대화 <span class="star">★</span></div><div class="arrow" style="right:-40px">▶</div></div>
-      <div class="step"><div class="n ink">②</div><div class="t">비소구 자산부채</div><div class="s">설비·AMPC 수취권 담보 · SKI 보증 미가산</div><div class="arrow" style="right:-40px">▶</div></div>
-      <div class="step"><div class="n mut">③</div><div class="t">Equity (잔여·최후)</div><div class="s">CoC 20% 캡 내 · DOE Equity 불가 가정 <span class="star">★</span></div></div>
-    </div>
-    <div class="note">상위 단계로 충당 가능한 금액은 하위로 내리지 않는다 — 희석·부채부담 최소화.</div>
   </div>
-  <div class="foot"><span>SK 전략팀 · Strictly Private &amp; Confidential</span><span>★ = 미검증 (약정서·법률 확인 필요)</span></div>
+  <div class="foot"><span>SK 전략팀 · Strictly Private &amp; Confidential</span><span>★ = 미검증 (약정서·데이터룸 확인 필요)</span></div>
 </div>
 
-<!-- ════ SLIDE 3 — 법인별 자금 구조 ════ -->
+<!-- ════ P3 — 펀딩 제안 ════ -->
 <div class="slide" id="s3">
   <div class="pad">
-    <div class="eyebrow"><span class="l">FUNDING BY ENTITY</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;03</span></div>
-    <div class="head"><h1>법인별 자금 구조</h1><span class="dek">모자구조 · BA → OT 100%</span></div>
+    <div class="eyebrow"><span class="l">FUNDING PROPOSAL</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;03</span></div>
+    <div class="head"><h1>펀딩 제안 — BA 중심</h1><span class="dek">그랜트 극대화 · OT 조건 기반</span></div>
     <div class="hr"></div>
 
-    <div class="chain">
-      <span class="node">SK이노베이션</span><span class="ar">▶</span>
-      <span class="node">BA<small>중간지주 · 조달 주체 · 보조금 수령</small></span><span class="ar">▶</span>
-      <span class="node">OT<small>완전자회사 100% · DOE 격리</small></span>
+    <div style="margin-top:34px"></div>
+    <div class="seclab">OT 차입금 조건 — DOE ATVM 대출</div>
+    <div class="terms">
+      <div class="term">규모 <b>$4.0bn</b></div>
+      <div class="term">상환 <b>이자만 · 원금 0</b></div>
+      <div class="term">금리 <b>3.5% (또는 5%)</b></div>
+      <div class="term k">선순위 <b>담보</b></div>
+      <div class="term k">Change-of-Control <b>코버넌트</b></div>
+      <div class="term">5층 <b>링펜스 · separateness</b></div>
+      <div class="term k">ATVM <b>이미 소진 → 신규 연방자금 여지↓</b></div>
     </div>
 
-    <div class="entities">
-      <div class="ent">
-        <div class="bar ink"><div class="nm">공장 1 — SKBA (조지아)</div><div class="sb">파우치 21.2GWh · DC블록 개조 대상</div></div>
-        <div class="body">
-          <div class="use">용도 = BA 개조(retrofit) 자금</div>
-          <div class="row"><div class="rn" style="color:var(--red)">①</div><div><div class="rt">보조금 (1순위)</div><div class="rs">MESC / 48C / 州 — 무상환·무희석·무CoC <span class="star">★</span></div></div></div>
-          <div class="row"><div class="rn">②</div><div><div class="rt">비소구 자산부채</div><div class="rs">설비·재고·AMPC 수취권 담보 · 한도 내</div></div></div>
-          <div class="row"><div class="rn" style="color:var(--mute2)">③</div><div><div class="rt">Equity (잔여)</div><div class="rs">CoC 20% 캡 내 · 밸류 플로어·anti-dilution</div></div></div>
-          <div class="warn">제약: BA <b>단독</b> 차입 ~$5bn + SK이노 보증 → 신규 대출 회피·covenant 관리 <span class="star">★</span></div>
-        </div>
+    <div class="seclab" style="margin-top:44px">제안 · PROPOSAL</div>
+    <div class="props">
+      <div class="prop hot">
+        <div class="pn">제안 ①</div>
+        <div class="pt">BA를 중심으로 조달</div>
+        <div class="ps">OT는 DOE·ATVM으로 이미 묶이고 한도 소진. 모자구조(<b>SK→BA→OT</b>)에서 <b>BA가 조달 주체</b>가 되는 것이 타당 — 신규 정부자금 feasibility도 BA가 높다.</div>
       </div>
-      <div class="ent">
-        <div class="bar red"><div class="nm">공장 2 — SKOT (테네시)</div><div class="sb">BA의 완전자회사 100% · 각형+파우치 29.7GWh</div></div>
-        <div class="body">
-          <div class="use">용도 = 기존 구조 유지 + AMPC 창 내 회수</div>
-          <div class="row"><div class="rn">•</div><div><div class="rt">DOE $4bn ATVM</div><div class="rs">기존 선순위 담보 — 이자만(원금 0)</div></div></div>
-          <div class="row"><div class="rn">•</div><div><div class="rt">AMPC 현금화</div><div class="rs">45X 수취권 유동화 → 미래현금 당겨옴</div></div></div>
-          <div class="row"><div class="rn">•</div><div><div class="rt">메자닌 $1bn @7%</div><div class="rs">보조금 창(2029~32) 내 상환 · DSCR 1.3x</div></div></div>
-          <div class="warn">모자 격리(bankruptcy-remote) · 링펜스 5층 유지: 법인분리·Separateness·Intercreditor·담보·Non-recourse</div>
-        </div>
+      <div class="prop hot">
+        <div class="pn">제안 ②</div>
+        <div class="pt">그랜트 극대화 요청</div>
+        <div class="ps">BA 개조비 <b>$0.4bn</b>을 정부 보조금(<b>MESC·48C</b>)으로 최대한 충당 요청. <b>무상환·무희석·무CoC</b> → EBIT=0 자산에 유일하게 깨끗한 자금.</div>
       </div>
     </div>
-  </div>
-  <div class="nrbar">
-    <div class="ln"><b>Non-recourse 격벽</b><span>OT의 DOE는 BA에 무소구 (BA 손실 = OT 지분가치 한도) · BA의 $5bn(단독)은 OT 미담보 — 양방향 격리</span></div>
-    <div class="ln"><b>연결납세 효과</b><span>OT 적자가 BA 과세소득을 상계 → 그룹 현금세금↓ (모자구조 업사이드 · 규모는 BA 과세소득이 작아 제한적) <span class="star">★</span></span></div>
+
+    <div class="principle" style="bottom:120px"><b>[결론]</b> OT는 정부부채로 포화 → 신규 펀딩은 <b>BA 중심</b>으로, 그 안에서 <b>그랜트를 최우선·최대화</b>하고 대출·Equity는 후순위로 둔다.</div>
   </div>
   <div class="foot"><span>SK 전략팀 · Strictly Private &amp; Confidential</span><span>★ = 미검증</span></div>
 </div>
 
-<!-- ════ SLIDE 4 — 이렇게 설정한 이유 ════ -->
+<!-- ════ P4 — 커뮤니케이션 (마무리) ════ -->
 <div class="slide" id="s4">
   <div class="pad">
-    <div class="eyebrow"><span class="l">RATIONALE</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;04</span></div>
-    <div class="head"><h1>이렇게 설정한 이유</h1><span class="dek">5가지 근거</span></div>
-    <div class="hr"></div>
-    <div class="reasons">
-      <div class="reason"><div class="num">01</div><div><div class="t">Feasibility — OT는 한 우물, BA는 새 우물</div><div class="s">OT는 ATVM 수혜를 이미 받고 있어 신규 연방자금 여지가 작다. DOE/DOW 관점에서 BA측 funding feasibility가 더 높다.</div></div></div>
-      <div class="reason hot"><div class="num">02</div><div><div class="t">보조금은 EBIT=0 자산에 유일하게 '깨끗한' 돈</div><div class="s">DC블록은 박리다매(EBIT≈0). 상업대출은 DSCR이 안 나와 원천적으로 안 붙는다. 보조금은 무상환·무DSCR·무희석·CoC 무관 → 구조적 최적.</div></div></div>
-      <div class="reason"><div class="num">03</div><div><div class="t">BA 대출 회피 — BA 단독 ~$5bn + SKI 보증</div><div class="s">BA는 단독(OT 제외)으로도 차입이 크고 SK이노 보증·확약이 걸려 있다. 추가 대출은 레버리지 한도·cross-default·보증 노출을 키운다 → 보조금/비소구로 우회.</div></div></div>
-      <div class="reason"><div class="num">04</div><div><div class="t">Equity는 잔여·최후 — DOE Equity는 불가 가정</div><div class="s">BA 밸류에이션·지분희석·CoC(20% 캡)를 고려하면 Equity는 마지막. 게다가 DOE LPO/ATVM은 법령상 대출·보증이지 지분투자가 아니다 ★.</div></div></div>
-      <div class="reason hot"><div class="num">05</div><div><div class="t">OT는 BA의 완전자회사 — 그래도 링펜스 = SKI 방패</div><div class="s">OT가 BA의 100% 자회사라도 non-recourse로 격리한다. OT가 2033년 이후 적자 회귀해도 BA 손실은 OT 지분가치까지로 한정 → 모회사·SKI 보증으로의 전염을 끊는다.</div></div></div>
-    </div>
-  </div>
-  <div class="foot"><span>SK 전략팀 · Strictly Private &amp; Confidential</span><span>★ = 미검증</span></div>
-</div>
-
-<!-- ════ SLIDE 5 — 정부와의 Comm ════ -->
-<div class="slide" id="s5">
-  <div class="pad">
-    <div class="eyebrow"><span class="l">GOVERNMENT ENGAGEMENT</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;05</span></div>
-    <div class="head"><h1>정부와의 Comm 방식</h1><span class="dek">재무 사전 정렬 우선</span></div>
+    <div class="eyebrow"><span class="l">CLOSING — GOVERNMENT ENGAGEMENT</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;04</span></div>
+    <div class="head"><h1>커뮤니케이션 방식</h1><span class="dek">재무 사전 정렬 우선</span></div>
     <div class="hr"></div>
     <div class="commgrid">
       <div>
-        <div class="seqlab">ENGAGEMENT SEQUENCE</div>
+        <div class="seclab">ENGAGEMENT SEQUENCE</div>
         <div class="step2 hot"><div class="circ">1</div><div><div class="st">내부 재무 사전 정렬 (선행·필수)</div><div class="ss">ask(grant/loan)·구조·레드라인을 재무와 먼저 합의</div></div></div>
         <div class="step2"><div class="circ">2</div><div><div class="st">ask 확정 → 카운터파트 매칭</div><div class="ss">무엇을 요청할지 정한 뒤 매칭 부서로</div></div></div>
         <div class="step2"><div class="circ">3</div><div><div class="st">DOE 부서 미팅</div><div class="ss">합의된 ask로만 — 부서별 단일 메시지</div></div></div>
         <div class="step2"><div class="circ">4</div><div><div class="st">DOW(국방) 트랙 — 방산·딥테크 별도</div><div class="ss">드론·로보틱스 슬리브로 분리 진행</div></div></div>
       </div>
       <div>
-        <div class="matchlab">ASK → DOE 카운터파트 매칭</div>
+        <div class="seclab">ASK → DOE 카운터파트 매칭</div>
         <div class="mtbl">
           <div class="mrow"><div class="mk">보조금 (BA)</div><div class="mv g">MESC — 제조·공급망</div></div>
           <div class="mrow"><div class="mk">대출</div><div class="mv">LPO (ATVM/Title 17) · OT 기존</div></div>
