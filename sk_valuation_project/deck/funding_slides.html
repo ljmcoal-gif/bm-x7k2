@@ -117,6 +117,31 @@
   .principle{position:absolute;left:150px;right:150px;bottom:146px;background:#F1EADD;border-radius:5px;padding:22px 30px;font-size:24px;}
   .principle b{color:var(--red);}
   .star{font-size:18px;color:var(--mute2);vertical-align:super;}
+
+  /* ── 펀딩 플로우 (지분구조 + 캐시 이동) ── */
+  .flow{margin-top:24px;}
+  .ent-box{width:380px;border-radius:9px;padding:18px 22px;text-align:center;color:#fff;margin-left:auto;}
+  .ent-box .en{font-weight:700;font-size:27px;} .ent-box .es{font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:18px;color:var(--warm);margin-top:4px;letter-spacing:.3px;}
+  .ent-box.sk{background:#4A443D;} .ent-box.ba{background:var(--ink);} .ent-box.ot{background:var(--red);}
+  .own{display:flex;justify-content:flex-end;align-items:center;gap:12px;padding-right:172px;margin:13px 0;}
+  .own .a{font-size:30px;color:var(--ink);line-height:1;} .own .p{font-family:'IBM Plex Mono',monospace;font-size:19px;color:var(--mute);}
+  .frow{display:flex;align-items:center;justify-content:flex-end;gap:18px;}
+  .cashin{display:flex;flex-direction:column;gap:12px;align-items:flex-end;flex:1;}
+  .pill{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--rule);border-radius:26px;padding:12px 22px;font-size:21px;color:var(--mute);white-space:nowrap;}
+  .pill .pv{font-family:'IBM Plex Mono',monospace;color:var(--ink);font-weight:600;}
+  .pill .into{color:var(--red);font-size:22px;}
+  .pill.grant{background:#E8F3EC;border-color:var(--green);color:var(--green);font-weight:600;} .pill.grant .pv{color:var(--green);}
+  .flowcap{margin-top:20px;font-size:20px;color:var(--mute);text-align:right;padding-right:6px;}
+
+  /* ── 가로 타임라인 (P4) ── */
+  .htl{display:grid;grid-template-columns:repeat(4,1fr);gap:48px;margin-top:18px;position:relative;}
+  .tstep{background:#fff;border:1.5px solid var(--rule);border-radius:9px;padding:26px 26px;position:relative;}
+  .tstep.hot{background:var(--dark);border-color:var(--dark);}
+  .tstep .tn{width:58px;height:58px;border-radius:50%;background:var(--warm);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-weight:800;font-size:29px;margin-bottom:18px;}
+  .tstep.hot .tn{background:var(--red);color:#fff;}
+  .tstep .tt{font-weight:700;font-size:25px;margin-bottom:9px;line-height:1.25;} .tstep.hot .tt{color:#fff;}
+  .tstep .ts{font-size:19px;color:var(--mute);line-height:1.4;} .tstep.hot .ts{color:var(--warm);}
+  .tstep .tarr{position:absolute;right:-34px;top:64px;font-size:26px;color:var(--red);}
 </style></head>
 <body>
 
@@ -130,13 +155,6 @@
   <div class="kick">FUNDING STRUCTURE v2</div>
   <h1 class="serif">펀딩 구조<br>전면 개편(안)</h1>
   <div class="sub">BA 보조금-우선 · OT 링펜스 유지 — 재무팀 의견 반영</div>
-  <div class="needs">
-    <div class="lab">조달 필요 · FUNDING NEED</div>
-    <div class="rown"><span class="k">BA (개조)</span><span class="v">$0.4bn</span></div>
-    <div class="rown"><span class="k">OT</span><span class="v">$1.0bn</span></div>
-    <div class="divn"></div>
-    <div class="rown tot"><span class="k">합계</span><span class="v">$1.4bn</span></div>
-  </div>
   <div class="baseline"><span>2026년 6월</span><span class="mono">SK 전략팀 · Internal</span></div>
 </div>
 
@@ -193,36 +211,50 @@
 <div class="slide" id="s3">
   <div class="pad">
     <div class="eyebrow"><span class="l">FUNDING PROPOSAL</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;03</span></div>
-    <div class="head"><h1>펀딩 제안 — BA 중심</h1><span class="dek">그랜트 극대화 · OT 조건 기반</span></div>
+    <div class="head"><h1>펀딩 제안 — BA 중심</h1><span class="dek">지분구조 · 캐시 플로우</span></div>
     <div class="hr"></div>
 
-    <div style="margin-top:34px"></div>
-    <div class="seclab">OT 차입금 조건 — DOE ATVM 대출</div>
-    <div class="terms">
-      <div class="term">규모 <b>$4.0bn</b></div>
-      <div class="term">상환 <b>이자만 · 원금 0</b></div>
-      <div class="term">금리 <b>3.5% (또는 5%)</b></div>
-      <div class="term k">선순위 <b>담보</b></div>
-      <div class="term k">Change-of-Control <b>코버넌트</b></div>
-      <div class="term">5층 <b>링펜스 · separateness</b></div>
-      <div class="term k">ATVM <b>이미 소진 → 신규 연방자금 여지↓</b></div>
+    <div class="cols" style="grid-template-columns:1.32fr 0.68fr">
+      <!-- 좌: 지분구조 + 캐시 플로우 -->
+      <div>
+        <div class="seclab">지분구조 &amp; 캐시 플로우 · STRUCTURE &amp; CASH</div>
+        <div class="flow">
+          <div class="frow"><div class="ent-box sk"><div class="en">SK이노베이션</div><div class="es">최상위 모회사</div></div></div>
+          <div class="own"><span class="a">▼</span><span class="p">100%</span></div>
+          <div class="frow">
+            <div class="cashin">
+              <div class="pill grant">보조금 MESC·48C <span class="pv">$0.4bn</span> <span class="into">▶</span></div>
+              <div class="pill">비소구 자산부채 <span class="into">▶</span></div>
+              <div class="pill">Equity ≤19.9% <span class="into">▶</span></div>
+            </div>
+            <div class="ent-box ba"><div class="en">BA — SKBA</div><div class="es">중간지주 · 조달 주체</div></div>
+          </div>
+          <div class="own"><span class="a">▼</span><span class="p">100% · 출자 downstream</span></div>
+          <div class="frow">
+            <div class="cashin">
+              <div class="pill">DOE ATVM <span class="pv">$4.0bn</span> · 선순위 <span class="into">▶</span></div>
+              <div class="pill">AMPC 현금화 · 메자닌 <span class="pv">$1bn</span> <span class="into">▶</span></div>
+            </div>
+            <div class="ent-box ot"><div class="en">OT — SKOT</div><div class="es">완전자회사 100%</div></div>
+          </div>
+        </div>
+        <div class="flowcap">캐시 유입은 <b style="color:var(--green)">보조금 우선</b> → 비소구부채 → Equity 순 · BA→OT는 모회사 정상 출자</div>
+      </div>
+      <!-- 우: 제안 -->
+      <div>
+        <div class="seclab">제안 · PROPOSAL</div>
+        <div class="prop hot" style="margin-bottom:26px">
+          <div class="pn">제안 ①</div><div class="pt">BA를 중심으로 조달</div>
+          <div class="ps">OT는 DOE·ATVM 포화 + 선순위 담보·CoC로 신규 묶기 어렵다. 모자구조에서 <b>BA가 조달 주체</b> — 신규 정부자금 feasibility도 BA가 높다.</div>
+        </div>
+        <div class="prop hot">
+          <div class="pn">제안 ②</div><div class="pt">그랜트 극대화 요청</div>
+          <div class="ps">BA 개조비 <b>$0.4bn</b>을 정부 보조금(<b>MESC·48C</b>)으로 최대한. <b>무상환·무희석·무CoC</b> → EBIT=0 자산에 깨끗한 자금.</div>
+        </div>
+      </div>
     </div>
 
-    <div class="seclab" style="margin-top:44px">제안 · PROPOSAL</div>
-    <div class="props">
-      <div class="prop hot">
-        <div class="pn">제안 ①</div>
-        <div class="pt">BA를 중심으로 조달</div>
-        <div class="ps">OT는 DOE·ATVM으로 이미 묶이고 한도 소진. 모자구조(<b>SK→BA→OT</b>)에서 <b>BA가 조달 주체</b>가 되는 것이 타당 — 신규 정부자금 feasibility도 BA가 높다.</div>
-      </div>
-      <div class="prop hot">
-        <div class="pn">제안 ②</div>
-        <div class="pt">그랜트 극대화 요청</div>
-        <div class="ps">BA 개조비 <b>$0.4bn</b>을 정부 보조금(<b>MESC·48C</b>)으로 최대한 충당 요청. <b>무상환·무희석·무CoC</b> → EBIT=0 자산에 유일하게 깨끗한 자금.</div>
-      </div>
-    </div>
-
-    <div class="principle" style="bottom:120px"><b>[결론]</b> OT는 정부부채로 포화 → 신규 펀딩은 <b>BA 중심</b>으로, 그 안에서 <b>그랜트를 최우선·최대화</b>하고 대출·Equity는 후순위로 둔다.</div>
+    <div class="principle" style="bottom:118px"><b>[결론]</b> OT는 정부부채로 포화 → 신규 펀딩은 <b>BA 중심</b>으로, 그 안에서 <b>그랜트를 최우선·최대화</b>하고 대출·Equity는 후순위로 둔다.</div>
   </div>
   <div class="foot"><span>SK 전략팀 · Strictly Private &amp; Confidential</span><span>★ = 미검증</span></div>
 </div>
@@ -233,14 +265,14 @@
     <div class="eyebrow"><span class="l">CLOSING — GOVERNMENT ENGAGEMENT</span><span class="r">SK FINANCING&nbsp;&nbsp;/&nbsp;&nbsp;04</span></div>
     <div class="head"><h1>커뮤니케이션 방식</h1><span class="dek">재무 사전 정렬 우선</span></div>
     <div class="hr"></div>
-    <div class="commgrid">
-      <div>
-        <div class="seclab">ENGAGEMENT SEQUENCE</div>
-        <div class="step2 hot"><div class="circ">1</div><div><div class="st">내부 재무 사전 정렬 (선행·필수)</div><div class="ss">ask(grant/loan)·구조·레드라인을 재무와 먼저 합의</div></div></div>
-        <div class="step2"><div class="circ">2</div><div><div class="st">ask 확정 → 카운터파트 매칭</div><div class="ss">무엇을 요청할지 정한 뒤 매칭 부서로</div></div></div>
-        <div class="step2"><div class="circ">3</div><div><div class="st">DOE 부서 미팅</div><div class="ss">합의된 ask로만 — 부서별 단일 메시지</div></div></div>
-        <div class="step2"><div class="circ">4</div><div><div class="st">DOW(국방) 트랙 — 방산·딥테크 별도</div><div class="ss">드론·로보틱스 슬리브로 분리 진행</div></div></div>
-      </div>
+    <div class="seclab" style="margin-top:30px">진행 순서 · ENGAGEMENT SEQUENCE</div>
+    <div class="htl">
+      <div class="tstep hot"><div class="tn">1</div><div class="tt">내부 재무 사전 정렬</div><div class="ts">ask·구조·레드라인을 재무와 먼저 합의 (선행·필수)</div><div class="tarr">▶</div></div>
+      <div class="tstep"><div class="tn">2</div><div class="tt">ask 확정 → 매칭</div><div class="ts">무엇을 요청할지 정한 뒤 카운터파트 부서로</div><div class="tarr">▶</div></div>
+      <div class="tstep"><div class="tn">3</div><div class="tt">DOE 부서 미팅</div><div class="ts">합의된 ask로만 — 부서별 단일 메시지</div><div class="tarr">▶</div></div>
+      <div class="tstep"><div class="tn">4</div><div class="tt">DOW(국방) 트랙</div><div class="ts">방산·딥테크 슬리브로 분리 진행</div></div>
+    </div>
+    <div class="cols c2" style="margin-top:48px;gap:50px;align-items:start">
       <div>
         <div class="seclab">ASK → DOE 카운터파트 매칭</div>
         <div class="mtbl">
@@ -249,8 +281,11 @@
           <div class="mrow"><div class="mk">Equity</div><div class="mv r">해당 부서 없음 — DOE 지분투자 ✗</div></div>
           <div class="mrow"><div class="mk">방산 앵글</div><div class="mv">DOW (국방) 별도 트랙</div></div>
         </div>
-        <div class="redlines">
-          <div class="h">레드라인 (미팅 전 재무 합의)</div>
+      </div>
+      <div>
+        <div class="seclab">레드라인 · RED LINES</div>
+        <div class="redlines" style="margin-top:0">
+          <div class="h">미팅 전 재무 합의 사항</div>
           <ul>
             <li>• SK이노 보증 확대 금지</li>
             <li>• BA 기존 covenant breach 금지</li>
