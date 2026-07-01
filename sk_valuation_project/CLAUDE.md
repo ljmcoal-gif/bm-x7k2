@@ -45,7 +45,7 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 - **Assumptions**: 모든 입력값(★ 표시 = 핵심 가정, 노란셀). ASP·마진·AMPC·WACC·자본구조·NOL·그랜트·가동률 등.
 - **SKBA / SKOT**: 공장별 P&L → NOPAT(NOL 반영) → FCFF. `plant_common()` 함수가 양쪽 공용.
 - **Consolidated**: 합산 → DCF(EV) + 공장별 FCFE 브리지 + NAV(SOTP) + EV/EBITDA 멀티플.
-- **Multiples** (덱 P5 연동): ① EBITDA 기준(run-rate $554mm / 2029E $455mm)·DCF 내재 멀티플(8.7x/10.6x) ② peer 컴프스(실측 입력) ③ 멀티플×EBITDA→EV→지분가치 ④ 역산 필요 멀티플(시나리오별, 두 기준) ⑤ 필요 EBITDA%(목표 멀티플 도달). 전부 Consolidated·Assumptions 참조 수식(입력=파란).
+- **Multiples** (덱 P5 연동): ① EBITDA 기준(run-rate $438mm / 2029E $346mm)·DCF 내재 멀티플(8.0x/10.1x) ② peer 컴프스(실측 입력) ③ 멀티플×EBITDA→EV→지분가치 ④ 역산 필요 멀티플(시나리오별, 두 기준) ⑤ 필요 EBITDA%(목표 멀티플 도달). 전부 Consolidated·Assumptions 참조 수식(입력=파란).
 
 ### 핵심 함수
 - `plant_common(ws, PROW, rev_row, ampc_gwh_keys, capex_key, head, nol_key)`: 공장 P&L·FCFF·NOL 생성.
@@ -74,8 +74,8 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | 세율 | 23% (AMPC 비과세, NOL/tax carryforward 반영) |
 | SKBA 명판 / SKOT 명판 | **11.0 GWh** (2.75×4 개조) / 29.7 GWh |
 | SOP(양산) | SKBA '27~28 / SKOT **'28 하반기(H2)** |
-| 개조 capex | BA $0.22bn (11GW) + OT $1.0bn = **$1.22bn** |
-| AMPC(45X) 밸류 기여 | PV ≈ $2.7bn = DCF EV의 **74%** (2033 소멸·멀티플 제외) |
+| 개조 capex | BA $0.4bn(개조비 유지) + OT $1.0bn = **$1.4bn** |
+| AMPC(45X) 밸류 기여 | PV ≈ $2.7bn = DCF EV의 **77%** (2033 소멸·멀티플 제외) |
 | BA 기존차입 | 5조원 ≈ $3.7bn · 금융기관 보증 (SKI 보증 없음) |
 | DOE loan (OT) | $4.0bn · 이자만~'30 → 이후 원리금 분할상환 ★ |
 | 메자닌 | **제거** (OT 소요 $1bn은 BA 증자/equity-down) |
@@ -83,9 +83,9 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | SKBA 기초 NOL ★ | $4.0bn (모델 입력; TCJA 80% 한도 적용) |
 | CapEx 그랜트 | capex의 10% (≈$142mm), 시나리오상 최대 20% |
 
-**결과 (BA 11GW)**: DCF EV ≈ $3.6bn, Equity(FCFE) ≈ +$1.3bn, NAV(SOTP) $5.0bn. **EV의 ~74%($2.7bn)는 한시 AMPC의 PV** → ex-AMPC 본질 EV ≈ $1.0bn (멀티플은 ex-AMPC만).
+**결과 (BA 11GW·개조비 $1.4bn 유지)**: DCF EV ≈ $3.5bn, Equity(FCFE) ≈ +$1.1bn, NAV(SOTP) $5.0bn. **EV의 ~77%($2.7bn)는 한시 AMPC의 PV** → ex-AMPC 본질 EV ≈ $0.8bn (멀티플은 ex-AMPC만).
 
-**역산 시나리오 (implied min EV/EBITDA, run-rate $438mm 기준)**: BASE(그랜트10/희석20) 18.8x → ① 그랜트20 17.4x → ② 희석30 17.4x → ③ 희석49 16.3x → 최대결합(그랜트20+희석49) 15.7x. **BA 11GW 축소로 EBITDA↓ → 필요멀티플이 정상화 peer(13~15x)를 초과**(2029E $346mm 분모면 19.9~23.8x). 각 시나리오 **필요 EBITDA%(→13x)**: 13.0/12.0/12.0/11.3/10.9% (현 9% 대비 전부 미달 → 마진 개선 관건). DCF 내재 8.3x는 여전히 할인. `model/scenarios.py`로 재현.
+**역산 시나리오 (implied min EV/EBITDA, run-rate $438mm 기준)**: BASE(그랜트10/희석20) 19.5x → ① 그랜트20 17.8x → ② 희석30 17.8x → ③ 희석49 16.6x → 최대결합(그랜트20+희석49) 15.9x. **BA 11GW 축소로 EBITDA↓ → 필요멀티플이 정상화 peer(13~15x)를 초과**(2029E $346mm 분모면 20.2~24.6x). 각 시나리오 **필요 EBITDA%(→13x)**: 13.5/12.4/12.4/11.5/11.0% (현 9% 대비 전부 미달 → 마진 개선 관건). DCF 내재 8.0x는 여전히 할인. `model/scenarios.py`로 재현.
 
 ---
 
@@ -134,7 +134,7 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 
 - **SKBA NOL $4.0bn은 모델 입력(추정)** — DART 연결주석 종속기업 명세 또는 데이터룸 세무신고서로 확정 필요. NOL/tax carryforward는 `plant_common`에서 반영(TCJA 80% 한도, 당기손실 이월가산). 단 과세소득이 작아 NOL을 키워도 EV 변화 거의 없음(구조적).
 - **SKBA 기저 EBITDA $0.2bn은 가정 (pre-SOP floor)** — 양산(SOP) 전 기존 사업이 매년 ~$0.2bn EBITDA를 낸다는 하한 전제(2026~). `R['ba_base_ebitda']` 입력, `plant_common`에서 `MAX(0, 기저−(gp+sga))`로 부족분만 보정 → 개조분이 기저를 넘는 run-rate 연도엔 미적용(run-rate 불변). 데이터룸으로 실제 기존 사업 EBITDA 확인 필요.
-- **Peer 멀티플 "8~13x"는 보수 가정** — 실측(2026.7): LGES forward EV/EBITDA 26x('25F)→19x('26F)→15x('27F), CATL ~13x, 삼성SDI·Fluence는 EBITDA 트로프로 n.m. 즉 현재 실측은 15~27x(다운사이클), 정상화 ~13~15x. 우리 run-rate 역산 필요 12.6~15.4x는 정상화 peer와 거의 일치(당초 "상단 초과"는 8~13x 보수가정 탓). 분모를 2029E($455mm)로 당기면 필요멀티플 15.3~18.8x·DCF내재 10.6x로 상승 — EBITDA 연도 기준이 결과를 좌우. peer EBITDA엔 보조금 포함(우리 ex-AMPC=보수적). 실데이터는 Bloomberg/FactSet로 확정 필요.
+- **Peer 멀티플 "8~13x"는 보수 가정** — 실측(2026.7): LGES forward EV/EBITDA 26x('25F)→19x('26F)→15x('27F), CATL ~13x, 삼성SDI·Fluence는 EBITDA 트로프로 n.m. 즉 현재 실측은 15~27x(다운사이클), 정상화 ~13~15x. 우리 run-rate(BA 11GW) 역산 필요 15.9~19.5x는 정상화 peer(13~15x)를 초과. 분모를 2029E($346mm)로 당기면 20.2~24.6x로 더 상승 — EBITDA 연도 기준이 결과를 좌우. peer EBITDA엔 보조금 포함(우리 ex-AMPC=보수적). 실데이터는 Bloomberg/FactSet로 확정 필요.
 - **2033년 AMPC 소멸 후 SKOT 적자 회귀** — 메자닌은 AMPC 창 안에서 회수하는 구조라 그 이후는 미해결. 근본 해법은 마진(EBIT) 개선.
 - **HTML 팩**(`sk_valuation_pack.html`)은 구버전(DC블록·9% 미반영). 필요시 갱신.
 - **v2 덱**은 핵심 10슬라이드만 — v1의 GTM·Crucible 상세 일부는 미이전.

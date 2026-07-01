@@ -74,13 +74,13 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   // 우: 개조 금액 (다크 박스)
   eb(s,colR,1.78,colRW,'개조 금액 · RETROFIT CAPEX');
   s.addShape(RR,{x:colR,y:2.06,w:colRW,h:1.5,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
-  const cap=[['BA (개조)','$0.2bn',PAPER],['OT','$1.0bn',PAPER]];
+  const cap=[['BA (개조)','$0.4bn',PAPER],['OT','$1.0bn',PAPER]];
   let cy=2.24;
   cap.forEach(c=>{ s.addText(c[0],{x:colR+0.3,y:cy,w:2,h:0.34,margin:0,fontFace:BODY,fontSize:11,color:WARM,valign:'middle'});
     s.addText(c[1],{x:colR+colRW-2.3,y:cy,w:2,h:0.34,margin:0,align:'right',fontFace:MONO,fontSize:20,bold:true,color:c[2],valign:'middle'}); cy+=0.42; });
   s.addShape(LINE,{x:colR+0.3,y:cy+0.02,w:colRW-0.6,h:0,line:{color:'4a443d',width:0.75}});
   s.addText('합계 소요',{x:colR+0.3,y:cy+0.1,w:2,h:0.38,margin:0,fontFace:BODY,bold:true,fontSize:12,color:PAPER,valign:'middle'});
-  s.addText('$1.2bn',{x:colR+colRW-2.5,y:cy+0.1,w:2.2,h:0.38,margin:0,align:'right',fontFace:MONO,fontSize:24,bold:true,color:REDLT,valign:'middle'});
+  s.addText('$1.4bn',{x:colR+colRW-2.5,y:cy+0.1,w:2.2,h:0.38,margin:0,align:'right',fontFace:MONO,fontSize:24,bold:true,color:REDLT,valign:'middle'});
   // 기대효과
   eb(s,colR,3.78,colRW,'기대 효과 · EXPECTED EFFECT');
   const eff=['DC센터 수요 확보 → 가동률 85% (BA)·82% (OT) run-rate','run-rate ex-AMPC EBITDA $438mm (BA 125 + OT 313, 9% 마진)'];
@@ -92,16 +92,16 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   s.addShape(RR,{x:ax,y:ay2,w:aw,h:ah,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
   s.addText([{text:'밸류에이션 분해 — AMPC(45X) 기여',options:{color:PAPER,bold:true}},{text:'   한시보조금·2033 소멸',options:{color:MUTE2}}],
     {x:ax+0.22,y:ay2+0.1,w:aw-0.4,h:0.24,margin:0,fontFace:BODY,fontSize:10.5,valign:'middle'});
-  // 스택 바: EV $4.8bn = ex-AMPC $1.2bn + AMPC $3.6bn
-  const barx=ax+0.22, barw=aw-0.44, bary=ay2+0.44, barh=0.24, exF=1.0/3.6;
+  // 스택 바: EV $4.8bn = ex-AMPC $1.2bn + AMPC $3.5bn
+  const barx=ax+0.22, barw=aw-0.44, bary=ay2+0.44, barh=0.24, exF=0.8/3.5;
   s.addShape(RECT,{x:barx,y:bary,w:barw*exF,h:barh,fill:{color:GREEN},line:{type:'none'}});
   s.addShape(RECT,{x:barx+barw*exF,y:bary,w:barw*(1-exF),h:barh,fill:{color:REDLT},line:{type:'none'}});
-  s.addText('ex-AMPC $1.0bn',{x:barx,y:bary,w:barw*exF,h:barh,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:PAPER,valign:'middle'});
-  s.addText('AMPC PV $2.7bn (74%)',{x:barx+barw*exF,y:bary,w:barw*(1-exF),h:barh,margin:0,align:'center',fontFace:MONO,fontSize:8,bold:true,color:DARK,valign:'middle'});
-  s.addText([{text:'DCF EV $3.6bn',options:{color:PAPER,bold:true}},{text:' 의 74%가 한시 AMPC → 멀티플엔 ex-AMPC만. WACC 10.5%·TGR 2%·Ke 13%',options:{color:WARM}}],
+  s.addText('ex-AMPC $0.8bn',{x:barx,y:bary,w:barw*exF,h:barh,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:PAPER,valign:'middle'});
+  s.addText('AMPC PV $2.7bn (77%)',{x:barx+barw*exF,y:bary,w:barw*(1-exF),h:barh,margin:0,align:'center',fontFace:MONO,fontSize:8,bold:true,color:DARK,valign:'middle'});
+  s.addText([{text:'DCF EV $3.5bn',options:{color:PAPER,bold:true}},{text:' 의 77%가 한시 AMPC → 멀티플엔 ex-AMPC만. WACC 10.5%·TGR 2%·Ke 13%',options:{color:WARM}}],
     {x:ax+0.22,y:ay2+0.74,w:aw-0.4,h:0.22,margin:0,fontFace:BODY,fontSize:8,valign:'middle'});
   // KPI 2x2 (Space Grotesk)
-  const kp=[['총 명판','40.7','GWh',INK],['run-rate EBITDA','438','$mm',GREEN],['개조 소요','1.2','bn',RED],['DCF EV','3.6','bn',RED]];
+  const kp=[['총 명판','40.7','GWh',INK],['run-rate EBITDA','438','$mm',GREEN],['개조 소요','1.4','bn',RED],['DCF EV','3.5','bn',RED]];
   const kw=(colRW-0.4)/2; let kx=colR, ky=6.0;
   kp.forEach((k,i)=>{ const x=colR+(i%2)*(kw+0.4), y=6.0+Math.floor(i/2)*1.02;
     s.addShape(LINE,{x,y,w:kw,h:0,line:{color:k[3]===RED?RED:INK,width:2}});
@@ -130,14 +130,14 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   entBox(2.06,'4A443D','SK이노베이션','최상위 모회사'); arrow(2.74,'100%');
   entBox(3.02,'5E5346','SK온 (SK On)','배터리 중간지주'); arrow(3.70,'100%');
   // BA + cash pills
-  entBox(4.10,INK,'BA — SKBA · 조달 주체','총 $1.22bn 일괄 조달');
-  pill(3.90,'보조금 (10%)','$0.12bn',GREENSOFT,GREEN,GREEN);
-  pill(4.42,'비소구부채 (60%)','$0.73bn');
+  entBox(4.10,INK,'BA — SKBA · 조달 주체','총 $1.42bn 일괄 조달');
+  pill(3.90,'보조금 (10%)','$0.14bn',GREENSOFT,GREEN,GREEN);
+  pill(4.42,'비소구부채 (60%)','$0.85bn');
   s.addText('▼',{x:boxX+boxW/2-0.3,y:4.86,w:0.6,h:0.24,margin:0,align:'center',fontFace:BODY,fontSize:13,color:RED,valign:'middle'});
   s.addText('$1.0bn 증자 (equity-down)',{x:boxX-2.4,y:4.86,w:2.35,h:0.24,margin:0,align:'right',fontFace:MONO,fontSize:8.5,color:RED,bold:true,valign:'middle'});
   entBox(5.22,RED,'OT — SKOT','완전자회사 100%');
   pill(5.30,'기존 DOE 융자','$4.0bn');
-  s.addText('조달 믹스 그랜트 10% · 지분 30% · 비소구부채 60% ($1.22bn) → 자체 $0.2bn + OT $1.0bn 증자',
+  s.addText('조달 믹스 그랜트 10% · 지분 30% · 비소구부채 60% ($1.42bn) → 자체 $0.4bn + OT $1.0bn 증자',
     {x:colL,y:6.06,w:colLW,h:0.3,margin:0,align:'center',fontFace:BODY,fontSize:9.5,color:MUTE,valign:'middle'});
   // 우: 제안
   eb(s,colR,1.78,colRW,'제안 · PROPOSAL');
@@ -145,11 +145,11 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
     s.addText(pn,{x:colR+0.26,y:y+0.16,w:colRW-0.5,h:0.26,margin:0,fontFace:MONO,fontSize:10,color:MUTE2,charSpacing:1.5,valign:'middle'});
     s.addText(pt,{x:colR+0.26,y:y+0.42,w:colRW-0.5,h:0.4,margin:0,fontFace:HEAD,bold:true,fontSize:17,color:RED,valign:'middle'});
     s.addText(ps,{x:colR+0.26,y:y+0.86,w:colRW-0.5,h:0.9,margin:0,fontFace:BODY,fontSize:10,color:MUTE,valign:'top',lineSpacingMultiple:1.15}); }
-  prop(2.06,'제안 ①','BA가 $1.22bn 일괄 조달','OT는 DOE·CoC로 신규 차입이 어렵다 → BA가 전액 조달해 OT엔 $1.0bn 증자(equity-down). 자회사 자금주입의 가장 깨끗한 경로 — 신규 OT 부채·DSCR 불요.');
-  prop(4.06,'제안 ②','그랜트 극대화 요청','BA 개조비 $0.2bn을 정부 보조금(MESC·48C)으로 최대한. 무상환·무희석·무CoC → EBIT=0 자산에 깨끗한 자금.');
+  prop(2.06,'제안 ①','BA가 $1.42bn 일괄 조달','OT는 DOE·CoC로 신규 차입이 어렵다 → BA가 전액 조달해 OT엔 $1.0bn 증자(equity-down). 자회사 자금주입의 가장 깨끗한 경로 — 신규 OT 부채·DSCR 불요.');
+  prop(4.06,'제안 ②','그랜트 극대화 요청','BA 개조비 $0.4bn을 정부 보조금(MESC·48C)으로 최대한. 무상환·무희석·무CoC → EBIT=0 자산에 깨끗한 자금.');
   // 결론 바
   s.addShape(RR,{x:MX,y:6.5,w:W-2*MX,h:0.72,rectRadius:0.05,fill:{color:SAND},line:{type:'none'}});
-  s.addText([{text:'[결론]  ',options:{bold:true,color:RED}},{text:'BA가 $1.22bn 일괄 조달 → 자체 $0.2bn + OT 증자 $1.0bn. 조달은 ',options:{color:INK}},{text:'그랜트 최우선',options:{bold:true,color:RED}},{text:', 부족분만 비소구부채·Equity. ($1.22bn이 BA에 집중 — 조달여력 확인 ★)',options:{color:INK}}],
+  s.addText([{text:'[결론]  ',options:{bold:true,color:RED}},{text:'BA가 $1.42bn 일괄 조달 → 자체 $0.4bn + OT 증자 $1.0bn. 조달은 ',options:{color:INK}},{text:'그랜트 최우선',options:{bold:true,color:RED}},{text:', 부족분만 비소구부채·Equity. ($1.42bn이 BA에 집중 — 조달여력 확인 ★)',options:{color:INK}}],
     {x:MX+0.25,y:6.5,w:W-2*MX-0.5,h:0.72,margin:0,fontFace:BODY,fontSize:10.5,valign:'middle',lineSpacingMultiple:1.1});
   footer(s);
 }
@@ -161,7 +161,7 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   const colL=MX, colLW=3.5, colR=MX+colLW+0.4, colRW=W-colR-MX;
   // 좌: 가정 + 역산식
   eb(s,colL,1.78,colLW,'주요 가정 · KEY ASSUMPTIONS');
-  const asm=[['DC블록 ASP','$155/kWh'],['가동률 (run-rate) ★','85%/82% DC수요',GREEN],['SKBA 기저 EBITDA ★','$0.2bn pre-SOP',GREEN],['run-rate ex-AMPC','$438mm',GREEN],['WACC / 영구성장 ★','10.5% / 2.0%',INK],['Cost of equity (Ke)','13.0%',INK],['신규 조달','$1.22bn'],['순차입금 (BA/OT)','$6.4bn'],['peer EV/EBITDA','8~13x 보수 (실측 p.5)']];
+  const asm=[['DC블록 ASP','$155/kWh'],['가동률 (run-rate) ★','85%/82% DC수요',GREEN],['SKBA 기저 EBITDA ★','$0.2bn pre-SOP',GREEN],['run-rate ex-AMPC','$438mm',GREEN],['WACC / 영구성장 ★','10.5% / 2.0%',INK],['Cost of equity (Ke)','13.0%',INK],['신규 조달','$1.42bn'],['순차입금 (BA/OT)','$6.4bn'],['peer EV/EBITDA','8~13x 보수 (실측 p.5)']];
   let ay=2.06;
   asm.forEach(a=>{ s.addText(a[0],{x:colL,y:ay,w:2.0,h:0.30,margin:0,fontFace:BODY,fontSize:9.5,color:MUTE,valign:'middle'});
     s.addText(a[1],{x:colL+1.6,y:ay,w:colLW-1.6,h:0.30,margin:0,align:'right',fontFace:MONO,fontSize:10,bold:true,color:a[2]||INK,valign:'middle'});
@@ -184,13 +184,13 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
       {text:ev,options:{...cC,fill:{color:fill}}},{text:mult,options:{...cM,color:mc,fill:{color:fill}}},{text:tag,options:{fontFace:MONO,fontSize:8,bold:true,color:tc,align:'center',valign:'middle',fill:{color:fill}}}];
   }
   const body4=[head4,
-    srow('BASE  (그랜트10/지분30)','10%','20%','$8.2bn','18.8x','13.0%',RED,RED,PAPER),
-    srow('① CoC 20% + 그랜트 20%','20%','20%','$7.6bn','17.4x','12.0%',RED,RED,PAPER),
-    srow('② CoC 해제 → 희석 30%','10%','30%','$7.6bn','17.4x','12.0%',RED,RED,PAPER),
-    srow('③ CoC 완화 → 희석 49%','10%','49%','$7.1bn','16.3x','11.3%',RED,RED,PAPER),
-    srow('최대결합 (그랜트20+희석49)','20%','49%','$6.9bn','15.7x','10.9%',RED,MUTE,GREENSOFT)];
+    srow('BASE  (그랜트10/지분30)','10%','20%','$8.5bn','19.5x','13.5%',RED,RED,PAPER),
+    srow('① CoC 20% + 그랜트 20%','20%','20%','$7.8bn','17.8x','12.4%',RED,RED,PAPER),
+    srow('② CoC 해제 → 희석 30%','10%','30%','$7.8bn','17.8x','12.4%',RED,RED,PAPER),
+    srow('③ CoC 완화 → 희석 49%','10%','49%','$7.3bn','16.6x','11.5%',RED,RED,PAPER),
+    srow('최대결합 (그랜트20+희석49)','20%','49%','$7.0bn','15.9x','11.0%',RED,MUTE,GREENSOFT)];
   s.addTable(body4,{x:colR,y:2.06,w:colRW,colW:[2.30,0.70,0.70,0.90,0.87,0.98],rowH:[0.40,0.44,0.44,0.44,0.44,0.44],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,5,2,5]});
-  s.addText('필요EBITDA% = 딜을 peer 하단(13x)에 맞추는 데 필요한 ex-AMPC 마진 · 현 9% 대비 전 시나리오 미달(10.9~13.0%) → 마진 개선 必',
+  s.addText('필요EBITDA% = 딜을 peer 하단(13x)에 맞추는 데 필요한 ex-AMPC 마진 · 현 9% 대비 전 시나리오 미달(11.0~13.5%) → 마진 개선 必',
     {x:colR,y:2.06+0.40+5*0.44+0.02,w:colRW,h:0.2,margin:0,fontFace:BODY,fontSize:7.5,italic:true,color:MUTE2,valign:'middle'});
   // peer 밴드 바
   eb(s,colR,4.9,colRW,'peer 밴드(보수 8~13x) 대비 — 전 시나리오 초과');
@@ -201,16 +201,16 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   s.addShape(RECT,{x:px(8),y:by-0.09,w:px(13)-px(8),h:0.18,fill:{color:GREENSOFT},line:{color:GREEN,width:0.75}});
   s.addText('peer 8~13x(보수)',{x:px(8),y:by-0.34,w:px(13)-px(8),h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:8,color:GREEN,valign:'middle'});
   // 개선 방향 화살표 (BASE 15.4 → 최대결합 12.6)
-  s.addShape(LINE,{x:px(15.7),y:by-0.24,w:px(18.8)-px(15.7),h:0,line:{color:REDLT,width:1.25,endArrowType:'triangle',beginArrowType:'none'}});
-  s.addText('조달 레버 −3.1x (여전 peer 초과)',{x:px(15.7)-0.5,y:by-0.44,w:px(18.8)-px(15.7)+1.0,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:REDLT,valign:'middle'});
-  [[18.8,'BASE',RED,1],[17.4,'①·②',RED,0],[16.3,'③','8A5A55',0],[15.7,'최대','8A5A55',1]].forEach(m=>{
+  s.addShape(LINE,{x:px(15.9),y:by-0.24,w:px(19.5)-px(15.9),h:0,line:{color:REDLT,width:1.25,endArrowType:'triangle',beginArrowType:'none'}});
+  s.addText('조달 레버 −3.6x (여전 peer 초과)',{x:px(15.9)-0.5,y:by-0.44,w:px(19.5)-px(15.9)+1.0,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:REDLT,valign:'middle'});
+  [[19.5,'BASE',RED,1],[17.8,'①·②',RED,0],[16.6,'③','8A5A55',0],[15.9,'최대','8A5A55',1]].forEach(m=>{
     s.addShape(OVAL,{x:px(m[0])-0.05,y:by-0.05,w:0.1,h:0.1,fill:{color:m[2]},line:{type:'none'}});
     if(m[3]){ s.addText(m[1]+' '+m[0]+'x',{x:px(m[0])-0.7,y:by+0.10,w:1.4,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:m[2],valign:'middle'}); } });
   [8,11,13,15,18,20].forEach(t=>s.addText(t+'x',{x:px(t)-0.3,y:by+0.28,w:0.6,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:MUTE2,valign:'middle'}));
   // 결론 콜아웃 (다크)
   s.addShape(RR,{x:MX,y:6.34,w:W-2*MX,h:1.28,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
   s.addText('결론 — BA 11GW 축소로 필요멀티플이 peer를 넘어선다',{x:MX+0.3,y:6.44,w:W-2*MX-0.6,h:0.3,margin:0,fontFace:HEAD,bold:true,fontSize:13,color:REDLT,valign:'middle'});
-  s.addText([{text:'BA를 11GW로 축소하면 run-rate ex-AMPC EBITDA가 ',options:{color:WARM}},{text:'$554→$438mm',options:{color:REDLT,bold:true}},{text:'로 줄어 역산 필요 멀티플이 ',options:{color:WARM}},{text:'BASE 18.8x → 최대결합 15.7x',options:{color:REDLT,bold:true}},{text:'로 상승. 그랜트20·희석49를 다 써도 ',options:{color:WARM}},{text:'정상화 peer(13~15x)를 초과',options:{color:REDLT,bold:true}},{text:'(2029E 분모면 19.9~23.8x). DCF 내재 ',options:{color:WARM}},{text:'8.3x는 여전히 할인',options:{color:GREENLT,bold:true}},{text:'. 규모 축소가 지분조달 여력 악화 → 마진 개선(',options:{color:WARM}},{text:'필요 EBITDA% 10.9~13.0%',options:{color:GREENLT,bold:true}},{text:')이 관건. WACC10.5%·TGR2%·순차입 $6.4bn ★',options:{color:WARM}}],
+  s.addText([{text:'BA를 11GW로 축소하면 run-rate ex-AMPC EBITDA가 ',options:{color:WARM}},{text:'$554→$438mm',options:{color:REDLT,bold:true}},{text:'로 줄어 역산 필요 멀티플이 ',options:{color:WARM}},{text:'BASE 19.5x → 최대결합 15.9x',options:{color:REDLT,bold:true}},{text:'로 상승. 그랜트20·희석49를 다 써도 ',options:{color:WARM}},{text:'정상화 peer(13~15x)를 초과',options:{color:REDLT,bold:true}},{text:'(2029E 분모면 20.2~24.6x). DCF 내재 ',options:{color:WARM}},{text:'8.0x는 여전히 할인',options:{color:GREENLT,bold:true}},{text:'. 규모 축소가 지분조달 여력 악화 → 마진 개선(',options:{color:WARM}},{text:'필요 EBITDA% 11.0~13.5%',options:{color:GREENLT,bold:true}},{text:')이 관건. WACC10.5%·TGR2%·순차입 $6.4bn ★',options:{color:WARM}}],
     {x:MX+0.3,y:6.78,w:W-2*MX-0.6,h:0.78,margin:0,fontFace:BODY,fontSize:9.5,valign:'top',lineSpacingMultiple:1.15});
   footer(s);
 }
@@ -255,8 +255,8 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
     {text:req,options:{...av,bold:true,color:RED,fill:{color:fill}}} ]; }
   const btbl=[
     [{text:'EBITDA 기준',options:{...ah,align:'left'}},{text:'금액',options:ah},{text:'DCF 내재',options:ah},{text:'역산 필요\n(BASE→최대)',options:ah}],
-    brow('run-rate 30~32','$438mm','8.3x','15.7~18.8x',GREENSOFT),
-    brow('2029E forward','$346mm','10.5x','19.9~23.8x',PAPER),
+    brow('run-rate 30~32','$438mm','8.0x','15.9~19.5x',GREENSOFT),
+    brow('2029E forward','$346mm','10.1x','20.2~24.6x',PAPER),
   ];
   s.addTable(btbl,{x:colR,y:2.06,w:colRW,colW:[1.55,0.95,1.0,1.55],rowH:[0.5,0.62,0.62],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,5,2,5]});
   // 정상화 13x 적용 박스 (다크)
@@ -276,18 +276,18 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   s.addShape(RECT,{x:fp(5.69),y:fby-0.10,w:fp(6.57)-fp(5.69),h:0.20,fill:{color:GREENSOFT},line:{color:GREEN,width:0.75}});
   s.addText('정상화 13~15x  $5.7~6.6bn',{x:fp(5.69)-0.3,y:fby-0.34,w:fp(6.57)-fp(5.69)+0.9,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:GREEN,valign:'middle'});
   // 역산 필요 12.6~15.4x → 7.0~8.5 (red bracket 위)
-  s.addShape(LINE,{x:fp(6.88),y:fby-0.30,w:fp(8.24)-fp(6.88),h:0,line:{color:RED,width:2.5}});
-  s.addText('역산 필요 15.7~18.8x',{x:fp(6.88)-0.3,y:fby-0.52,w:fp(8.24)-fp(6.88)+0.9,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:RED,valign:'middle'});
+  s.addShape(LINE,{x:fp(6.96),y:fby-0.30,w:fp(8.54)-fp(6.96),h:0,line:{color:RED,width:2.5}});
+  s.addText('역산 필요 15.9~19.5x',{x:fp(6.96)-0.3,y:fby-0.52,w:fp(8.54)-fp(6.96)+0.9,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:RED,valign:'middle'});
   // 순차입금 손익분기선 6.4
   s.addShape(LINE,{x:fp(6.4),y:fby-0.16,w:0,h:0.32,line:{color:INK,width:1.25,dashType:'dash'}});
   s.addText('순차입 $6.4bn',{x:fp(6.4)-0.8,y:fby+0.30,w:1.6,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,bold:true,color:INK,valign:'middle'});
   // DCF EV 마커 4.84
-  s.addShape(OVAL,{x:fp(3.65)-0.06,y:fby-0.06,w:0.12,h:0.12,fill:{color:GREEN},line:{type:'none'}});
-  s.addText('DCF $3.6bn·8.3x',{x:fp(3.65)-0.85,y:fby-0.34,w:1.7,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:GREEN,valign:'middle'});
+  s.addShape(OVAL,{x:fp(3.49)-0.06,y:fby-0.06,w:0.12,h:0.12,fill:{color:GREEN},line:{type:'none'}});
+  s.addText('DCF $3.5bn·8.0x',{x:fp(3.49)-0.85,y:fby-0.34,w:1.7,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:GREEN,valign:'middle'});
   [3,4,5,6,7,8,9].forEach(t=>s.addText('$'+t+'bn',{x:fp(t)-0.3,y:fby+0.44,w:0.6,h:0.16,margin:0,align:'center',fontFace:MONO,fontSize:6.5,color:MUTE2,valign:'middle'}));
   // 결론 콜아웃
   s.addShape(RR,{x:MX,y:6.78,w:W-2*MX,h:0.9,rectRadius:0.06,fill:{color:SAND},line:{type:'none'}});
-  s.addText([{text:'[핵심]  ',options:{bold:true,color:RED}},{text:'BA 11GW 축소로 run-rate ex-AMPC EBITDA ',options:{color:INK}},{text:'$554→$438mm',options:{color:RED,bold:true}},{text:'. 역산 필요 ',options:{color:INK}},{text:'15.7~18.8x는 정상화 peer(13~15x)를 초과',options:{color:RED,bold:true}},{text:'(2029E 분모면 19.9~23.8x). DCF 내재 ',options:{color:INK}},{text:'8.3x는 여전히 할인',options:{color:GREEN,bold:true}},{text:'이나, 규모 축소가 지분조달 여력을 악화 → 마진 개선(',options:{color:INK}},{text:'필요 EBITDA% 10.9~13.0%',options:{color:RED,bold:true}},{text:')·프리미엄 멀티플이 관건. peer는 자체보조금 포함(우리 ex-AMPC, 보수적).',options:{color:INK}}],
+  s.addText([{text:'[핵심]  ',options:{bold:true,color:RED}},{text:'BA 11GW 축소로 run-rate ex-AMPC EBITDA ',options:{color:INK}},{text:'$554→$438mm',options:{color:RED,bold:true}},{text:'. 역산 필요 ',options:{color:INK}},{text:'15.9~19.5x는 정상화 peer(13~15x)를 초과',options:{color:RED,bold:true}},{text:'(2029E 분모면 20.2~24.6x). DCF 내재 ',options:{color:INK}},{text:'8.0x는 여전히 할인',options:{color:GREEN,bold:true}},{text:'이나, 규모 축소가 지분조달 여력을 악화 → 마진 개선(',options:{color:INK}},{text:'필요 EBITDA% 11.0~13.5%',options:{color:RED,bold:true}},{text:')·프리미엄 멀티플이 관건. peer는 자체보조금 포함(우리 ex-AMPC, 보수적).',options:{color:INK}}],
     {x:MX+0.25,y:6.78,w:W-2*MX-0.5,h:0.9,margin:0,fontFace:BODY,fontSize:9,valign:'middle',lineSpacingMultiple:1.12});
   footer(s);
 }

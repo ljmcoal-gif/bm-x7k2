@@ -206,11 +206,11 @@ lbl(A,r,"1-2동 COGS ($/kWh)","전극 외부구매로 원가↑"); R['ba12_cogs'
 for i in range(len(YEARS)): form(A,r,i,f"={col(i)}{R['ba_asp']}*(1-{col(i)}{R['ba12_gm']}-{col(i)}{R['gm_prem_eff']})",USD)
 r+=1
 lbl(A,r,"Retrofit capex — 1-1동 ($mm) ★","전극공정 포함"); R['ba11_capex']=r
-ba11cap={2026:104,2027:62,2028:0,2029:0,2030:0,2031:0,2032:0,2033:0,2034:0,2035:0}
+ba11cap={2026:200,2027:120,2028:0,2029:0,2030:0,2031:0,2032:0,2033:0,2034:0,2035:0}
 for i,y in enumerate(YEARS): blue(A,r,i,ba11cap[y],USD)
 r+=1
 lbl(A,r,"Retrofit capex — 1-2동 ($mm) ★","전극 외부구매→경량 capex"); R['ba12_capex']=r
-ba12cap={2026:0,2027:31,2028:21,2029:0,2030:0,2031:0,2032:0,2033:0,2034:0,2035:0}
+ba12cap={2026:0,2027:60,2028:40,2029:0,2030:0,2031:0,2032:0,2033:0,2034:0,2035:0}
 for i,y in enumerate(YEARS): blue(A,r,i,ba12cap[y],USD)
 r+=1
 lbl(A,r,"SKBA capex 합계 ($mm)","",bold=True); R['ba_capex']=r
@@ -301,7 +301,7 @@ R['hc_mezz']=kv(r,"HoldCo · 인프라 크레딧/메자닌 ($mm) ★",0,USD,"그
 R['hc_rate']=kv(r,"HoldCo · 크레딧 비용률 ★",0.09,PCT,"통합조달 → 단독보다 저렴"); r+=1
 # --- SKBA SPV (DOE-clean) ---
 A.cell(r,2,"  ▸ SKBA SPV (DOE-clean · 외부지분 ≤19.9%)").font=fnt(9,True,P1C); r+=1
-R['ba_debt']=kv(r,"신규 비소구부채 ($mm) ★",731,USD,"그랜트우선: growth capex $1.22bn × 60% (BA 11GW·OT 개조)"); r+=1
+R['ba_debt']=kv(r,"신규 비소구부채 ($mm) ★",852,USD,"그랜트우선: growth capex $1.42bn × 60% (개조비 유지)"); r+=1
 R['ba_rate']=kv(r,"비소구부채 이자율 ★",0.065,PCT,"비소구 → 소폭 가산"); r+=1
 R['ba_hc']=kv(r,"SKBA · HoldCo 후순위 출자 ($mm) ★",0,USD,"그랜트우선 구조: 제거"); r+=1
 # --- SKOT SPV (ring-fenced) ---
@@ -671,7 +671,7 @@ for mult in [8.0,10.5,13.0,15.0,19.0]:
     mV(r,6,f"=C{r}*$D${FWr}",USD); mV(r,7,f"=F{r}-$D${NDr}",USD,color=(GREEN if mult>=15 else RED)); r+=1
 r+=1
 msect(r,"4 · 역산 필요 멀티플 (조달 시나리오)"); r+=1
-mL(r,"조달총액 ($mm)"); mV(r,4,1218,USD,blue=True); RAISEr=r; r+=1
+mL(r,"조달총액 ($mm)"); mV(r,4,1420,USD,blue=True); RAISEr=r; r+=1
 mL(r,"부채비중 (%)"); mV(r,4,0.60,PCT,blue=True); DPr=r; r+=1
 mH(r,["그랜트","희석캡","외부지분","최소지분","최소EV","필요멀티플(run)","필요(2029E)"]); ms.cell(r,2,"시나리오").font=fnt(9,True,NAVY); ms.cell(r,2).border=b_tb; r+=1
 scstart=r

@@ -17,7 +17,7 @@ RRE = cs.cell(findrow("Run-rate EBITDA ex-AMPC"), 4).value  # $mm
 EV_dcf = cs.cell(findrow("Enterprise Value (EV)"), 4).value
 
 # --- 고정 파라미터 ---
-RAISE   = 1218.0   # 신규 growth capex 조달총액 ($mm) = BA 일괄조달
+RAISE   = 1420.0   # 신규 growth capex 조달총액 ($mm) = BA 일괄조달
 NETDEBT = 6400.0   # BA/OT 합산 순차입금 (고정)
 DEBT_PCT = 0.60    # 비소구부채 비중(고정) — 그랜트↑ 시 지분(equity)이 그만큼 감소
 PEER_LO, PEER_HI = 8.0, 13.0
