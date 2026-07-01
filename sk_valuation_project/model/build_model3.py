@@ -193,11 +193,11 @@ r+=1
 lbl(A,r,"ASP — 파우치 ($/kWh)","관세하한 도출 ASP 링크"); R['ba_asp']=r
 for i in range(len(YEARS)): form(A,r,i,f"={col(i)}{R['asp_derived']}",USD,color=POUCH)
 r+=1
-lbl(A,r,"  1-1동 gross margin (%) ★","자체 전극·ex-AMPC EBITDA 9% (지분 수익률 기준)"); R['ba11_gm']=r
-for i,y in enumerate(YEARS): blue(A,r,i,(0 if y<2027 else 0.16),PCT)
+lbl(A,r,"  1-1동 gross margin (%) ★","자체 전극·ex-AMPC EBITDA 13% (마진 개선)"); R['ba11_gm']=r
+for i,y in enumerate(YEARS): blue(A,r,i,(0 if y<2027 else 0.20),PCT)
 r+=1
-lbl(A,r,"  1-2동 gross margin (%) ★","전극 외부구매·통합마진 반영(ex-AMPC EBITDA 9%)"); R['ba12_gm']=r
-for i,y in enumerate(YEARS): blue(A,r,i,(0 if y<2028 else 0.14),PCT)
+lbl(A,r,"  1-2동 gross margin (%) ★","전극 외부구매·통합마진 반영(ex-AMPC EBITDA 13%)"); R['ba12_gm']=r
+for i,y in enumerate(YEARS): blue(A,r,i,(0 if y<2028 else 0.18),PCT)
 r+=1
 lbl(A,r,"1-1동 COGS ($/kWh)","ASP×(1−1-1마진)"); R['ba11_cogs']=r
 for i in range(len(YEARS)): form(A,r,i,f"={col(i)}{R['ba_asp']}*(1-{col(i)}{R['ba11_gm']}-{col(i)}{R['gm_prem_eff']})",USD)
@@ -251,7 +251,7 @@ lbl(A,r,"ASP — 각형 ($/kWh)","도출ASP×(1−할인)"); R['ot_pr_asp']=r
 for i in range(len(YEARS)): form(A,r,i,f"={col(i)}{R['asp_derived']}*(1-{col(i)}{R['ot_pr_disc']})",USD,color=PRIS)
 r+=1
 lbl(A,r,"  목표 각형 gross margin (%) ★",""); R['ot_pr_gm']=r
-for i,y in enumerate(YEARS): blue(A,r,i,(0 if y<2028 else 0.15),PCT)
+for i,y in enumerate(YEARS): blue(A,r,i,(0 if y<2028 else 0.19),PCT)
 r+=1
 lbl(A,r,"COGS — 각형 ($/kWh)","ASP×(1−마진)"); R['ot_pr_cogs']=r
 for i in range(len(YEARS)): form(A,r,i,f"={col(i)}{R['ot_pr_asp']}*(1-{col(i)}{R['ot_pr_gm']}-{col(i)}{R['gm_prem_eff']})",USD)
@@ -260,7 +260,7 @@ lbl(A,r,"ASP — 파우치 ($/kWh)","도출ASP 링크(SKBA 동일)"); R['ot_po_a
 for i in range(len(YEARS)): form(A,r,i,f"={col(i)}{R['asp_derived']}",USD,color=POUCH)
 r+=1
 lbl(A,r,"  목표 파우치 gross margin (%) ★",""); R['ot_po_gm']=r
-for i,y in enumerate(YEARS): blue(A,r,i,(0 if y<2028 else 0.15),PCT)
+for i,y in enumerate(YEARS): blue(A,r,i,(0 if y<2028 else 0.19),PCT)
 r+=1
 lbl(A,r,"COGS — 파우치 ($/kWh)","ASP×(1−마진)"); R['ot_po_cogs']=r
 for i in range(len(YEARS)): form(A,r,i,f"={col(i)}{R['ot_po_asp']}*(1-{col(i)}{R['ot_po_gm']}-{col(i)}{R['gm_prem_eff']})",USD)

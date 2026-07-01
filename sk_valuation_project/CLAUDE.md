@@ -45,7 +45,7 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 - **Assumptions**: 모든 입력값(★ 표시 = 핵심 가정, 노란셀). ASP·마진·AMPC·WACC·자본구조·NOL·그랜트·가동률 등.
 - **SKBA / SKOT**: 공장별 P&L → NOPAT(NOL 반영) → FCFF. `plant_common()` 함수가 양쪽 공용.
 - **Consolidated**: 합산 → DCF(EV) + 공장별 FCFE 브리지 + NAV(SOTP) + EV/EBITDA 멀티플.
-- **Multiples** (덱 P5 연동): ① EBITDA 기준(run-rate $518mm / 2029E $421mm)·DCF 내재 멀티플(8.5x/10.5x) ② peer 컴프스(실측 입력) ③ 멀티플×EBITDA→EV→지분가치 ④ 역산 필요 멀티플(시나리오별, 두 기준) ⑤ 필요 EBITDA%(목표 멀티플 도달). 전부 Consolidated·Assumptions 참조 수식(입력=파란).
+- **Multiples** (덱 P5 연동): ① EBITDA 기준(run-rate $748mm / 2029E $607mm)·DCF 내재 멀티플(8.1x/9.9x) ② peer 컴프스(실측 입력) ③ 멀티플×EBITDA→EV→지분가치 ④ 역산 필요 멀티플(시나리오별, 두 기준) ⑤ 필요 EBITDA%(목표 멀티플 도달). 전부 Consolidated·Assumptions 참조 수식(입력=파란).
 
 ### 핵심 함수
 - `plant_common(ws, PROW, rev_row, ampc_gwh_keys, capex_key, head, nol_key)`: 공장 P&L·FCFF·NOL 생성.
@@ -66,16 +66,16 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 |---|---|
 | DC블록 ASP | $155/kWh |
 | AMPC (45X 셀+모듈) | $45/kWh → 0 (2033, 법정 phase-out) |
-| ex-AMPC EBITDA (개조분) | 9.0% (gross margin 14~16%에서 역산) |
+| ex-AMPC EBITDA (개조분) | 13.0% (gross margin 18~20%에서 역산) |
 | 가동률 (run-rate) ★ | BA 85% / OT 82% (DC센터 수요 확보; eff 토글=1.0) |
 | SKBA 기저 EBITDA (pre-SOP floor) ★ | $0.2bn/yr, **2026~28만**(양산 전 하한; run-rate엔 미적용) |
-| run-rate ex-AMPC EBITDA | **$518mm** (BA 205 + OT 313, 9% 마진) |
+| run-rate ex-AMPC EBITDA | **$748mm** (BA 295 + OT 452, 13% 마진) |
 | WACC / Ke / TGR | 10.5% / 13% / 2% |
 | 세율 | 23% (AMPC 비과세, NOL/tax carryforward 반영) |
 | SKBA 명판 / SKOT 명판 | **18.0 GWh** (4.5×4 개조) / 29.7 GWh |
 | SOP(양산) | SKBA '27~28 / SKOT **'28 하반기(H2)** |
 | 개조 capex | BA $0.4bn(개조비 유지) + OT $1.0bn = **$1.4bn** |
-| AMPC(45X) 밸류 기여 | PV ≈ $3.3bn = DCF EV의 **76%** (2033 소멸·멀티플 제외) |
+| AMPC(45X) 밸류 기여 | PV ≈ $3.3bn = DCF EV의 **55%** (2033 소멸·멀티플 제외) |
 | BA 기존차입 | 5조원 ≈ $3.7bn · 금융기관 보증 (SKI 보증 없음) |
 | DOE loan (OT) | $4.0bn · 이자만~'30 → 이후 원리금 분할상환 ★ |
 | 메자닌 | **제거** (OT 소요 $1bn은 BA 증자/equity-down) |
@@ -83,9 +83,9 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | SKBA 기초 NOL ★ | $4.0bn (모델 입력; TCJA 80% 한도 적용) |
 | CapEx 그랜트 | capex의 10% (≈$142mm), 시나리오상 최대 20% |
 
-**결과 (BA 18GW·개조비 $1.4bn)**: DCF EV ≈ $4.4bn, Equity(FCFE) ≈ +$1.9bn, NAV(SOTP) $5.0bn. **EV의 ~76%($3.3bn)는 한시 AMPC의 PV** → ex-AMPC 본질 EV ≈ $1.1bn (멀티플은 ex-AMPC만).
+**결과 (BA 18GW·개조비 $1.4bn·ex-AMPC 13% 마진)**: DCF EV ≈ $6.0bn, Equity(FCFE) ≈ +$3.1bn, NAV(SOTP) $5.0bn. **EV의 ~55%($3.3bn)는 한시 AMPC의 PV** → ex-AMPC 본질 EV ≈ $2.7bn (멀티플은 ex-AMPC만).
 
-**역산 시나리오 (implied min EV/EBITDA, run-rate $518mm 기준)**: BASE(그랜트10/희석20) 16.5x → ① 그랜트20 15.1x → ② 희석30 15.1x → ③ 희석49 14.0x → 최대결합(그랜트20+희석49) 13.5x. **BA 18GW 기준 — 최대결합(13.5x)만 정상화 peer(13~15x) 하단 진입, BASE(16.5x)는 초과**(2029E $421mm 분모면 16.6~20.3x). 각 시나리오 **필요 EBITDA%(→13x)**: 11.4/10.5/10.5/9.7/9.3% (현 9% 대비 미달 → 마진 개선 관건). DCF 내재 8.5x는 여전히 할인. `model/scenarios.py`로 재현.
+**역산 시나리오 (implied min EV/EBITDA, run-rate $748mm 기준)**: BASE(그랜트10/희석20) 11.4x → ① 그랜트20 10.5x → ② 희석30 10.5x → ③ 희석49 9.7x → 최대결합(그랜트20+희석49) 9.3x. **BA 18GW·13% 마진 기준 — 전 시나리오(9.3~11.4x)가 보수 peer 밴드(8~13x) 내**(2029E $607mm 분모면 11.5~14.0x). 각 시나리오 **필요 EBITDA%(→13x)**: 11.4/10.5/10.5/9.7/9.3% (현 13% 마진이 이를 상회 → 전부 성립). DCF 내재 8.1x는 여전히 할인. `model/scenarios.py`로 재현.
 
 ---
 
@@ -134,7 +134,7 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 
 - **SKBA NOL $4.0bn은 모델 입력(추정)** — DART 연결주석 종속기업 명세 또는 데이터룸 세무신고서로 확정 필요. NOL/tax carryforward는 `plant_common`에서 반영(TCJA 80% 한도, 당기손실 이월가산). 단 과세소득이 작아 NOL을 키워도 EV 변화 거의 없음(구조적).
 - **SKBA 기저 EBITDA $0.2bn은 가정 (pre-SOP floor)** — 양산(SOP) 전 기존 사업이 매년 ~$0.2bn EBITDA를 낸다는 하한 전제(2026~). `R['ba_base_ebitda']` 입력, `plant_common`에서 `MAX(0, 기저−(gp+sga))`로 부족분만 보정 → 개조분이 기저를 넘는 run-rate 연도엔 미적용(run-rate 불변). 데이터룸으로 실제 기존 사업 EBITDA 확인 필요.
-- **Peer 멀티플 "8~13x"는 보수 가정** — 실측(2026.7): LGES forward EV/EBITDA 26x('25F)→19x('26F)→15x('27F), CATL ~13x, 삼성SDI·Fluence는 EBITDA 트로프로 n.m. 즉 현재 실측은 15~27x(다운사이클), 정상화 ~13~15x. 우리 run-rate(BA 18GW) 역산 필요 13.5~16.5x — 최대결합만 정상화 peer(13~15x) 하단 진입, BASE는 초과. 분모를 2029E($421mm)로 당기면 16.6~20.3x로 상승 — EBITDA 연도 기준이 결과를 좌우. peer EBITDA엔 보조금 포함(우리 ex-AMPC=보수적). 실데이터는 Bloomberg/FactSet로 확정 필요.
+- **Peer 멀티플 "8~13x"는 보수 가정** — 실측(2026.7): LGES forward EV/EBITDA 26x('25F)→19x('26F)→15x('27F), CATL ~13x, 삼성SDI·Fluence는 EBITDA 트로프로 n.m. 즉 현재 실측은 15~27x(다운사이클), 정상화 ~13~15x. 우리 run-rate(BA 18GW·13% 마진) 역산 필요 9.3~11.4x — 전 시나리오가 보수 peer(8~13x) 밴드 내. 분모를 2029E($607mm)로 당기면 11.5~14.0x — EBITDA 연도 기준이 결과를 좌우. peer EBITDA엔 보조금 포함(우리 ex-AMPC=보수적). 실데이터는 Bloomberg/FactSet로 확정 필요.
 - **2033년 AMPC 소멸 후 SKOT 적자 회귀** — 메자닌은 AMPC 창 안에서 회수하는 구조라 그 이후는 미해결. 근본 해법은 마진(EBIT) 개선.
 - **HTML 팩**(`sk_valuation_pack.html`)은 구버전(DC블록·9% 미반영). 필요시 갱신.
 - **v2 덱**은 핵심 10슬라이드만 — v1의 GTM·Crucible 상세 일부는 미이전.
