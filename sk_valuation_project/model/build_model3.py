@@ -52,8 +52,8 @@ A.cell(r,2,"GLOBAL TOGGLE").font=fnt(10,True,"FFFFFF")
 for cc in range(2,C0+len(YEARS)): A.cell(r,cc).fill=fred
 r+=1
 A.cell(r,2,"Effective production factor (명판 대비) ★").font=fnt(10,True)
-tg=A.cell(r,3,0.80); tg.font=fnt(11,True,BLUE); tg.number_format=PCT; tg.alignment=center; tg.fill=fyel
-A.cell(r,4,"← 토글: 명판×이 값 = 실제 생산").font=fnt(8,False,"8C8473",it=True)
+tg=A.cell(r,3,1.00); tg.font=fnt(11,True,BLUE); tg.number_format=PCT; tg.alignment=center; tg.fill=fyel
+A.cell(r,4,"← 토글: 명판×이 값 = 실제 생산 (1.0 → util곡선=실효 가동률)").font=fnt(8,False,"8C8473",it=True)
 R['eff']=r; r+=1
 A.cell(r,2,"ASP 방식 토글 ★  (1=관세하한 셀 / 2=DC블록 $155)").font=fnt(10,True)
 tg2=A.cell(r,3,2); tg2.font=fnt(11,True,BLUE); tg2.number_format='0'; tg2.alignment=center; tg2.fill=fyel
@@ -158,8 +158,9 @@ def line_rows(start_r, plant_tag, lines, tint, placeholder=False):
     return rr,out
 
 # default util curves
-ba_util_27={2027:.55,2028:.70,2029:.80,2030:.88,2031:.90,2032:.90,2033:.90,2034:.90,2035:.90}
-ba_util_28={2028:.55,2029:.70,2030:.82,2031:.88,2032:.90,2033:.90,2034:.90,2035:.90}
+# eff=1.0 이므로 아래 곡선이 곧 실효 가동률(명판 대비 출하). DC센터 수요 확보 → run-rate 85% 안착
+ba_util_27={2027:.55,2028:.72,2029:.82,2030:.85,2031:.85,2032:.85,2033:.85,2034:.85,2035:.85}
+ba_util_28={2028:.55,2029:.72,2030:.83,2031:.85,2032:.85,2033:.85,2034:.85,2035:.85}
 
 sect(A,r,"1 · SKBA (공장1) — LFP 파우치 · 1-1동(5.3×2, 자체전극) + 1-2동(전극 외부구매)",fp1); r+=1
 yhead(A,r); r+=1
@@ -221,7 +222,7 @@ sect(A,r,"2 · SKOT (공장2) — 각형 13.5×2 + 파우치 2.7 = 29.7 GWh · '
 A.cell(r,2,"라인당 캐파 입력값 (각형 13.5GW×2, 파우치 2.7GW) · COD 2028 가정").font=fnt(8.5,True,P2C,it=True); r+=1
 yhead(A,r); r+=1
 A.cell(r,2,"  ▸ 각형 라인 (prismatic) · 라인당 13.5GW").font=fnt(9,True,P2C); r+=1
-ot_util_28={2028:.35,2029:.55,2030:.70,2031:.80,2032:.85,2033:.85,2034:.85,2035:.85}
+ot_util_28={2028:.35,2029:.58,2030:.75,2031:.85,2032:.85,2033:.85,2034:.85,2035:.85}
 r,OT=line_rows(r,"ot",[
     {'name':"각형 L1",'key':'opr1','cap':13.5,'cod':2028,'util':ot_util_28,'form':"각형"},
     {'name':"각형 L2",'key':'opr2','cap':13.5,'cod':2028,'util':ot_util_28,'form':"각형"},

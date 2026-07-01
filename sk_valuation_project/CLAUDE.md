@@ -66,8 +66,9 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | DC블록 ASP | $155/kWh |
 | AMPC (45X 셀+모듈) | $45/kWh → 0 (2033, 법정 phase-out) |
 | ex-AMPC EBITDA (개조분) | 9.0% (gross margin 14~16%에서 역산) |
+| 가동률 (run-rate) ★ | BA 85% / OT 82% (DC센터 수요 확보; eff 토글=1.0) |
 | SKBA 기저 EBITDA (pre-SOP floor) ★ | $0.2bn/yr, 2026~ (양산 전 기존 사업 하한; 개조분>기저면 미적용) |
-| run-rate ex-AMPC EBITDA | $442mm (개조분; pre-SOP 기저는 조기현금만, run-rate 불변) |
+| run-rate ex-AMPC EBITDA | $554mm (BA 241 + OT 313, 9% 마진) |
 | WACC / Ke / TGR | 10.5% / 13% / 2% |
 | 세율 | 23% (AMPC 비과세, NOL/tax carryforward 반영) |
 | SKBA 명판 / SKOT 명판 | 21.2 GWh / 29.7 GWh |
@@ -77,9 +78,9 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | SKBA 기초 NOL ★ | $4.0bn (모델 입력; TCJA 80% 한도 적용) |
 | CapEx 그랜트 | capex의 10% (≈$142mm), 시나리오상 최대 20% |
 
-**결과**: DCF EV ≈ $4.0bn (pre-SOP 기저 조기현금 + NOL 반영), Equity(FCFE) ≈ +$1.5bn, NAV(SOTP) $5.0bn.
+**결과**: DCF EV ≈ $5.0bn (가동률 85% + pre-SOP 기저 + NOL 반영), Equity(FCFE) ≈ +$2.4bn, NAV(SOTP) $5.0bn.
 
-**역산 시나리오 (implied min EV/EBITDA, run-rate $442mm 기준)**: BASE(그랜트10/희석20) 19.3x → ① 그랜트20 17.7x → ② 희석30 17.7x → ①+② 16.6x. 조달 레버는 갭을 좁히나 peer 8~13x 밴드까진 못 미침 — 잔여 갭은 마진(ex-AMPC EBITDA ~22%)이 결정. `model/scenarios.py`로 재현.
+**역산 시나리오 (implied min EV/EBITDA, run-rate $554mm 기준)**: BASE(그랜트10/희석20) 15.4x → ① 그랜트20 14.1x → ② 희석30 14.1x → ①+② 13.3x(peer 상단 사실상 안착, 잔여 +0.3x). 가동률 85%가 분모를 키워 BASE를 19.3→15.4x로 내리고, 조달 레버가 peer 밴드까지 마무리. `model/scenarios.py`로 재현.
 
 ---
 
@@ -127,7 +128,7 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 ## 알려진 한계·미해결 (다음 작업 후보)
 
 - **SKBA NOL $4.0bn은 모델 입력(추정)** — DART 연결주석 종속기업 명세 또는 데이터룸 세무신고서로 확정 필요. NOL/tax carryforward는 `plant_common`에서 반영(TCJA 80% 한도, 당기손실 이월가산). 단 과세소득이 작아 NOL을 키워도 EV 변화 거의 없음(구조적).
-- **SKBA 기저 EBITDA $0.2bn은 가정 (pre-SOP floor)** — 양산(SOP) 전 기존 사업이 매년 ~$0.2bn EBITDA를 낸다는 하한 전제(2026~). `R['ba_base_ebitda']` 입력, `plant_common`에서 `MAX(0, 기저−(gp+sga))`로 부족분만 보정 → 개조분이 기저를 넘는 run-rate 연도엔 미적용(run-rate $442mm 불변). 데이터룸으로 실제 기존 사업 EBITDA 확인 필요.
+- **SKBA 기저 EBITDA $0.2bn은 가정 (pre-SOP floor)** — 양산(SOP) 전 기존 사업이 매년 ~$0.2bn EBITDA를 낸다는 하한 전제(2026~). `R['ba_base_ebitda']` 입력, `plant_common`에서 `MAX(0, 기저−(gp+sga))`로 부족분만 보정 → 개조분이 기저를 넘는 run-rate 연도엔 미적용(run-rate 불변). 데이터룸으로 실제 기존 사업 EBITDA 확인 필요.
 - **2033년 AMPC 소멸 후 SKOT 적자 회귀** — 메자닌은 AMPC 창 안에서 회수하는 구조라 그 이후는 미해결. 근본 해법은 마진(EBIT) 개선.
 - **HTML 팩**(`sk_valuation_pack.html`)은 구버전(DC블록·9% 미반영). 필요시 갱신.
 - **v2 덱**은 핵심 10슬라이드만 — v1의 GTM·Crucible 상세 일부는 미이전.
