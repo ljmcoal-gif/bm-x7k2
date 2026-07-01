@@ -68,13 +68,14 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | AMPC (45X 셀+모듈) | $45/kWh → 0 (2033, 법정 phase-out) |
 | ex-AMPC EBITDA (개조분) | 9.0% (gross margin 14~16%에서 역산) |
 | 가동률 (run-rate) ★ | BA 85% / OT 82% (DC센터 수요 확보; eff 토글=1.0) |
-| SKBA 기저 EBITDA (pre-SOP floor) ★ | $0.2bn/yr, 2026~ (양산 전 기존 사업 하한; 개조분>기저면 미적용) |
-| run-rate ex-AMPC EBITDA | $554mm (BA 241 + OT 313, 9% 마진) |
+| SKBA 기저 EBITDA (pre-SOP floor) ★ | $0.2bn/yr, **2026~28만**(양산 전 하한; run-rate엔 미적용) |
+| run-rate ex-AMPC EBITDA | **$438mm** (BA 125 + OT 313, 9% 마진) |
 | WACC / Ke / TGR | 10.5% / 13% / 2% |
 | 세율 | 23% (AMPC 비과세, NOL/tax carryforward 반영) |
-| SKBA 명판 / SKOT 명판 | 21.2 GWh / 29.7 GWh |
+| SKBA 명판 / SKOT 명판 | **11.0 GWh** (2.75×4 개조) / 29.7 GWh |
 | SOP(양산) | SKBA '27~28 / SKOT **'28 하반기(H2)** |
-| AMPC(45X) 밸류 기여 | PV ≈ $3.6bn = DCF EV의 **75%** (2033 소멸·멀티플 제외) |
+| 개조 capex | BA $0.22bn (11GW) + OT $1.0bn = **$1.22bn** |
+| AMPC(45X) 밸류 기여 | PV ≈ $2.7bn = DCF EV의 **74%** (2033 소멸·멀티플 제외) |
 | BA 기존차입 | 5조원 ≈ $3.7bn · 금융기관 보증 (SKI 보증 없음) |
 | DOE loan (OT) | $4.0bn · 이자만~'30 → 이후 원리금 분할상환 ★ |
 | 메자닌 | **제거** (OT 소요 $1bn은 BA 증자/equity-down) |
@@ -82,9 +83,9 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | SKBA 기초 NOL ★ | $4.0bn (모델 입력; TCJA 80% 한도 적용) |
 | CapEx 그랜트 | capex의 10% (≈$142mm), 시나리오상 최대 20% |
 
-**결과**: DCF EV ≈ $4.8bn (가동률 85% + OT SOP '28H2 + NOL 반영), Equity(FCFE) ≈ +$2.2bn, NAV(SOTP) $5.0bn. **EV의 ~75%($3.6bn)는 한시 AMPC의 PV** → ex-AMPC 본질 EV ≈ $1.2bn (멀티플은 ex-AMPC만).
+**결과 (BA 11GW)**: DCF EV ≈ $3.6bn, Equity(FCFE) ≈ +$1.3bn, NAV(SOTP) $5.0bn. **EV의 ~74%($2.7bn)는 한시 AMPC의 PV** → ex-AMPC 본질 EV ≈ $1.0bn (멀티플은 ex-AMPC만).
 
-**역산 시나리오 (implied min EV/EBITDA, run-rate $554mm 기준)**: BASE(그랜트10/희석20) 15.4x → ① 그랜트20 14.1x → ② 희석30 14.1x → ③ 희석49 13.1x → 최대결합(그랜트20+희석49) 12.6x(peer 밴드 진입). 각 시나리오의 **필요 EBITDA%(→13x)**: 10.7/9.8/9.8/9.1/8.7% (현 9% 대비 — 최대결합만 이미 충족). 희석 캡 49%는 지배력 약화 트레이드오프(협상 상한). DCF는 WACC 10.5%·TGR 2%·Ke 13% 기준 EV $4.8bn. `model/scenarios.py`로 재현.
+**역산 시나리오 (implied min EV/EBITDA, run-rate $438mm 기준)**: BASE(그랜트10/희석20) 18.8x → ① 그랜트20 17.4x → ② 희석30 17.4x → ③ 희석49 16.3x → 최대결합(그랜트20+희석49) 15.7x. **BA 11GW 축소로 EBITDA↓ → 필요멀티플이 정상화 peer(13~15x)를 초과**(2029E $346mm 분모면 19.9~23.8x). 각 시나리오 **필요 EBITDA%(→13x)**: 13.0/12.0/12.0/11.3/10.9% (현 9% 대비 전부 미달 → 마진 개선 관건). DCF 내재 8.3x는 여전히 할인. `model/scenarios.py`로 재현.
 
 ---
 

@@ -162,17 +162,17 @@ def line_rows(start_r, plant_tag, lines, tint, placeholder=False):
 ba_util_27={2027:.55,2028:.72,2029:.82,2030:.85,2031:.85,2032:.85,2033:.85,2034:.85,2035:.85}
 ba_util_28={2028:.55,2029:.72,2030:.83,2031:.85,2032:.85,2033:.85,2034:.85,2035:.85}
 
-sect(A,r,"1 · SKBA (공장1) — LFP 파우치 · 1-1동(5.3×2, 자체전극) + 1-2동(전극 외부구매)",fp1); r+=1
+sect(A,r,"1 · SKBA (공장1) — LFP 파우치 · 4라인 2.75×4 = 11 GWh 개조 (1-1동 자체전극 + 1-2동 외부전극)",fp1); r+=1
 yhead(A,r); r+=1
-A.cell(r,2,"  ▸ 공장1-1동 (파우치, '27, 라인당 5.3GW · 자체 전극)").font=fnt(9,True,P1C); r+=1
+A.cell(r,2,"  ▸ 공장1-1동 (파우치, '27, 라인당 2.75GW · 자체 전극)").font=fnt(9,True,P1C); r+=1
 r,BA=line_rows(r,"ba",[
-    {'name':"L1-1A",'key':'l11a','cap':5.3,'cod':2027,'util':ba_util_27,'form':"파우치"},
-    {'name':"L1-1B",'key':'l11b','cap':5.3,'cod':2027,'util':ba_util_27,'form':"파우치"},
+    {'name':"L1-1A",'key':'l11a','cap':2.75,'cod':2027,'util':ba_util_27,'form':"파우치"},
+    {'name':"L1-1B",'key':'l11b','cap':2.75,'cod':2027,'util':ba_util_27,'form':"파우치"},
 ], BAtint)
-A.cell(r,2,"  ▸ 공장1-2동 (파우치, '28, 전극 외부구매)").font=fnt(9,True,P1C); r+=1
+A.cell(r,2,"  ▸ 공장1-2동 (파우치, '28, 전극 외부구매 · 2.75×2)").font=fnt(9,True,P1C); r+=1
 r,BA2=line_rows(r,"ba",[
-    {'name':"L1-2C",'key':'l12c','cap':5.3,'cod':2028,'util':ba_util_28,'form':"파우치"},
-    {'name':"L1-2D",'key':'l12d','cap':5.3,'cod':2028,'util':ba_util_28,'form':"파우치"},
+    {'name':"L1-2C",'key':'l12c','cap':2.75,'cod':2028,'util':ba_util_28,'form':"파우치"},
+    {'name':"L1-2D",'key':'l12d','cap':2.75,'cod':2028,'util':ba_util_28,'form':"파우치"},
 ], BAtint)
 BA.update(BA2)
 # shipped by 동 (전극 sourcing 다름)
@@ -206,11 +206,11 @@ lbl(A,r,"1-2동 COGS ($/kWh)","전극 외부구매로 원가↑"); R['ba12_cogs'
 for i in range(len(YEARS)): form(A,r,i,f"={col(i)}{R['ba_asp']}*(1-{col(i)}{R['ba12_gm']}-{col(i)}{R['gm_prem_eff']})",USD)
 r+=1
 lbl(A,r,"Retrofit capex — 1-1동 ($mm) ★","전극공정 포함"); R['ba11_capex']=r
-ba11cap={2026:200,2027:120,2028:0,2029:0,2030:0,2031:0,2032:0,2033:0,2034:0,2035:0}
+ba11cap={2026:104,2027:62,2028:0,2029:0,2030:0,2031:0,2032:0,2033:0,2034:0,2035:0}
 for i,y in enumerate(YEARS): blue(A,r,i,ba11cap[y],USD)
 r+=1
 lbl(A,r,"Retrofit capex — 1-2동 ($mm) ★","전극 외부구매→경량 capex"); R['ba12_capex']=r
-ba12cap={2026:0,2027:60,2028:40,2029:0,2030:0,2031:0,2032:0,2033:0,2034:0,2035:0}
+ba12cap={2026:0,2027:31,2028:21,2029:0,2030:0,2031:0,2032:0,2033:0,2034:0,2035:0}
 for i,y in enumerate(YEARS): blue(A,r,i,ba12cap[y],USD)
 r+=1
 lbl(A,r,"SKBA capex 합계 ($mm)","",bold=True); R['ba_capex']=r
@@ -301,7 +301,7 @@ R['hc_mezz']=kv(r,"HoldCo · 인프라 크레딧/메자닌 ($mm) ★",0,USD,"그
 R['hc_rate']=kv(r,"HoldCo · 크레딧 비용률 ★",0.09,PCT,"통합조달 → 단독보다 저렴"); r+=1
 # --- SKBA SPV (DOE-clean) ---
 A.cell(r,2,"  ▸ SKBA SPV (DOE-clean · 외부지분 ≤19.9%)").font=fnt(9,True,P1C); r+=1
-R['ba_debt']=kv(r,"신규 비소구부채 ($mm) ★",852,USD,"그랜트우선: growth capex $1.42bn × 60% (BA 일괄조달)"); r+=1
+R['ba_debt']=kv(r,"신규 비소구부채 ($mm) ★",731,USD,"그랜트우선: growth capex $1.22bn × 60% (BA 11GW·OT 개조)"); r+=1
 R['ba_rate']=kv(r,"비소구부채 이자율 ★",0.065,PCT,"비소구 → 소폭 가산"); r+=1
 R['ba_hc']=kv(r,"SKBA · HoldCo 후순위 출자 ($mm) ★",0,USD,"그랜트우선 구조: 제거"); r+=1
 # --- SKOT SPV (ring-fenced) ---
@@ -359,9 +359,9 @@ def plant_common(ws,PROW,rev_row,ampc_gwh_keys,capex_key,head,nol_key,base_key=N
     r+=1
     L(r,"D&A","da",lambda i:f"=-{col(i)}{PROW['ppe']}*{AR('dep')}"); r+=1
     if base_key:
-        # pre-SOP floor: ex-AMPC EBITDA(=gp+sga)가 기저치 미만이면 그 차액만 보정 → run-rate(개조분>기저)엔 영향 0
-        L(r,"기저 EBITDA floor 보정 (pre-SOP)","base",
-          lambda i:f"=MAX(0,{AR(base_key)}-({col(i)}{PROW['gp']}+{col(i)}{PROW['sga']}))"); r+=1
+        # pre-SOP floor: 2026~28(양산 전·램프)만 기저 $0.2bn 하한 보정. 2029+ run-rate는 개조분만(floor OFF).
+        L(r,"기저 EBITDA floor 보정 (pre-SOP ≤'28)","base",
+          lambda i:(f"=MAX(0,{AR(base_key)}-({col(i)}{PROW['gp']}+{col(i)}{PROW['sga']}))" if YEARS[i]<=2028 else "=0")); r+=1
     base_term=(lambda i:f"+{col(i)}{PROW['base']}") if base_key else (lambda i:"")
     L(r,"EBIT (pre-AMPC)","ebitpre",lambda i:f"={col(i)}{PROW['gp']}+{col(i)}{PROW['sga']}+{col(i)}{PROW['da']}{base_term(i)}",bold=True,top=True); r+=1
     L(r,"  margin pre-AMPC","ebitprem",lambda i:f"=IF({col(i)}{PROW['rev']}=0,0,{col(i)}{PROW['ebitpre']}/{col(i)}{PROW['rev']})",pct=True); r+=1
@@ -671,7 +671,7 @@ for mult in [8.0,10.5,13.0,15.0,19.0]:
     mV(r,6,f"=C{r}*$D${FWr}",USD); mV(r,7,f"=F{r}-$D${NDr}",USD,color=(GREEN if mult>=15 else RED)); r+=1
 r+=1
 msect(r,"4 · 역산 필요 멀티플 (조달 시나리오)"); r+=1
-mL(r,"조달총액 ($mm)"); mV(r,4,1420,USD,blue=True); RAISEr=r; r+=1
+mL(r,"조달총액 ($mm)"); mV(r,4,1218,USD,blue=True); RAISEr=r; r+=1
 mL(r,"부채비중 (%)"); mV(r,4,0.60,PCT,blue=True); DPr=r; r+=1
 mH(r,["그랜트","희석캡","외부지분","최소지분","최소EV","필요멀티플(run)","필요(2029E)"]); ms.cell(r,2,"시나리오").font=fnt(9,True,NAVY); ms.cell(r,2).border=b_tb; r+=1
 scstart=r
