@@ -22,7 +22,7 @@ const RR = pres.shapes.ROUNDED_RECTANGLE, RECT = pres.shapes.RECTANGLE, LINE = p
 function base(s){ s.background = { color: BG }; }
 function header(s, eyebrow, page, title, dek){
   s.addText(eyebrow, { x:MX, y:TOP, w:7.5, h:0.26, margin:0, fontFace:MONO, fontSize:9, color:RED, charSpacing:2, valign:'middle' });
-  s.addText('SK Innovation · IR  /  '+page, { x:W-4.5-MX, y:TOP, w:4.5, h:0.26, margin:0, align:'right', fontFace:MONO, fontSize:9, color:MUTE2, charSpacing:1.5, valign:'middle' });
+  s.addText('SK 전략팀 · Confidential  /  '+page, { x:W-4.5-MX, y:TOP, w:4.5, h:0.26, margin:0, align:'right', fontFace:MONO, fontSize:9, color:MUTE2, charSpacing:1.5, valign:'middle' });
   s.addText(title, { x:MX, y:TOP+0.34, w:W-2*MX-2.6, h:0.62, margin:0, fontFace:HEAD, fontSize:26, bold:true, color:INK, valign:'middle' });
   if(dek) s.addText(dek, { x:W-MX-3.0, y:TOP+0.5, w:3.0, h:0.42, margin:0, align:'right', fontFace:BODY, fontSize:9.5, color:MUTE, valign:'bottom' });
   s.addShape(LINE, { x:MX, y:TOP+1.04, w:W-2*MX, h:0, line:{ color:INK, width:1.5 } });
@@ -68,9 +68,9 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
     s.addTable(body,{x:colL,y:y+0.42,w:colLW,colW:[3.0,colLW-3.0],rowH:0.365,border:{type:'solid',color:GRID,pt:0.5},margin:[2,8,2,8],fill:{color:PAPER}});
   }
   finTbl(2.06,'공장 1 — SKBA (조지아)',INK,'파우치 · 모회사',
-    [['명판 / 가동률(run-rate)','21.2 GWh / 85%',GREEN],['기존 차입 (단독)','~$5.0bn + SKI 보증',RED],['run-rate 매출','~$2.7bn'],['개조 ex-AMPC EBITDA','9% (목표)'],['기저 EBITDA (pre-SOP) ★','$0.2bn (2026~)',GREEN],['순자산 NAV ★','~$2.0bn']]);
+    [['명판 / 가동률(run-rate)','21.2 GWh / 85%',GREEN],['기존 차입 (금융기관보증)','5조원 ≈ $3.7bn',RED],['run-rate 매출','~$2.7bn'],['개조 ex-AMPC EBITDA','9% (목표)'],['기저 EBITDA (pre-SOP) ★','$0.2bn (2026~)',GREEN],['순자산 NAV (BS) ★','~$2.0bn']]);
   finTbl(4.82,'공장 2 — SKOT (테네시)',RED,'BA 100% · SOP ′28 하반기',
-    [['명판 / 가동률(run-rate)','29.7 GWh / 82%',GREEN],['기존 차입 (DOE)','$4.0bn ATVM (이자만)',RED],['run-rate 매출','~$3.5bn'],['ex-AMPC EBITDA','9% (목표)'],['순자산 NAV ★','~$3.0bn']]);
+    [['명판 / 가동률(run-rate)','29.7 GWh / 82%',GREEN],['기존 차입 (DOE 융자)','$4.0bn',RED],['  └ 상환','이자만~\'30 → 이후분할 ★',MUTE],['run-rate 매출','~$3.5bn'],['ex-AMPC EBITDA','9% (목표)'],['순자산 NAV (BS) ★','~$3.0bn']]);
   // 우: 개조 금액 (다크 박스)
   eb(s,colR,1.78,colRW,'개조 금액 · RETROFIT CAPEX');
   s.addShape(RR,{x:colR,y:2.06,w:colRW,h:1.5,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
@@ -136,7 +136,7 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   s.addText('▼',{x:boxX+boxW/2-0.3,y:4.86,w:0.6,h:0.24,margin:0,align:'center',fontFace:BODY,fontSize:13,color:RED,valign:'middle'});
   s.addText('$1.0bn 증자 (equity-down)',{x:boxX-2.4,y:4.86,w:2.35,h:0.24,margin:0,align:'right',fontFace:MONO,fontSize:8.5,color:RED,bold:true,valign:'middle'});
   entBox(5.22,RED,'OT — SKOT','완전자회사 100%');
-  pill(5.30,'기존 DOE ATVM','$4.0bn');
+  pill(5.30,'기존 DOE 융자','$4.0bn');
   s.addText('조달 믹스 그랜트 10% · 지분 30% · 비소구부채 60% ($1.4bn) → 자체 $0.4bn + OT $1.0bn 증자',
     {x:colL,y:6.06,w:colLW,h:0.3,margin:0,align:'center',fontFace:BODY,fontSize:9.5,color:MUTE,valign:'middle'});
   // 우: 제안
@@ -235,7 +235,7 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   eb(s,colL,3.6,colLW,'ASK → DOE 카운터파트 매칭');
   const mk={fontFace:BODY,fontSize:10,bold:true,color:INK,valign:'middle'};
   const mrows=[[{text:'보조금 (BA)',options:mk},{text:'MESC — 제조·공급망',options:{fontFace:BODY,fontSize:9.5,color:GREEN,valign:'middle'}}],
-    [{text:'대출',options:mk},{text:'LPO (ATVM/Title 17) · OT 기존',options:{fontFace:BODY,fontSize:9.5,color:INK,valign:'middle'}}],
+    [{text:'대출',options:mk},{text:'DOE LPO 융자 · OT 기존 (론명 변경 ★)',options:{fontFace:BODY,fontSize:9.5,color:INK,valign:'middle'}}],
     [{text:'Equity',options:mk},{text:'해당 부서 없음 — DOE 지분투자 ✗',options:{fontFace:BODY,fontSize:9.5,color:RED,valign:'middle'}}],
     [{text:'방산 앵글',options:mk},{text:'DOW (국방) 별도 트랙',options:{fontFace:BODY,fontSize:9.5,color:INK,valign:'middle'}}]];
   s.addTable(mrows,{x:colL,y:3.9,w:colLW,colW:[1.7,colLW-1.7],rowH:0.52,border:{type:'solid',color:RULE,pt:0.5},margin:[3,6,3,6]});

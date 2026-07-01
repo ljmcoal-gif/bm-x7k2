@@ -74,7 +74,8 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | SKBA 명판 / SKOT 명판 | 21.2 GWh / 29.7 GWh |
 | SOP(양산) | SKBA '27~28 / SKOT **'28 하반기(H2)** |
 | AMPC(45X) 밸류 기여 | PV ≈ $3.6bn = DCF EV의 **75%** (2033 소멸·멀티플 제외) |
-| DOE loan | $4.0bn, 이자만 3.5%(또는 5%) |
+| BA 기존차입 | 5조원 ≈ $3.7bn · 금융기관 보증 (SKI 보증 없음) |
+| DOE loan (OT) | $4.0bn · 이자만~'30 → 이후 원리금 분할상환 ★ |
 | 메자닌 | **제거** (OT 소요 $1bn은 BA 증자/equity-down) |
 | 순차입금 | $6.4bn = BA 3.7 + OT 2.6 (합산) |
 | SKBA 기초 NOL ★ | $4.0bn (모델 입력; TCJA 80% 한도 적용) |
