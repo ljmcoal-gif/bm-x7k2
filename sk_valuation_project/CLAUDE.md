@@ -132,6 +132,7 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 
 - **SKBA NOL $4.0bn은 모델 입력(추정)** — DART 연결주석 종속기업 명세 또는 데이터룸 세무신고서로 확정 필요. NOL/tax carryforward는 `plant_common`에서 반영(TCJA 80% 한도, 당기손실 이월가산). 단 과세소득이 작아 NOL을 키워도 EV 변화 거의 없음(구조적).
 - **SKBA 기저 EBITDA $0.2bn은 가정 (pre-SOP floor)** — 양산(SOP) 전 기존 사업이 매년 ~$0.2bn EBITDA를 낸다는 하한 전제(2026~). `R['ba_base_ebitda']` 입력, `plant_common`에서 `MAX(0, 기저−(gp+sga))`로 부족분만 보정 → 개조분이 기저를 넘는 run-rate 연도엔 미적용(run-rate 불변). 데이터룸으로 실제 기존 사업 EBITDA 확인 필요.
+- **Peer 멀티플 "8~13x"는 보수 가정** — 실측(2026.7): LGES forward EV/EBITDA 26x('25F)→19x('26F)→15x('27F), CATL ~13x, 삼성SDI·Fluence는 EBITDA 트로프로 n.m. 즉 현재 실측은 15~27x(다운사이클), 정상화 ~13~15x. 우리 run-rate 역산 필요 12.6~15.4x는 정상화 peer와 거의 일치(당초 "상단 초과"는 8~13x 보수가정 탓). 분모를 2029E($455mm)로 당기면 필요멀티플 15.3~18.8x·DCF내재 10.6x로 상승 — EBITDA 연도 기준이 결과를 좌우. peer EBITDA엔 보조금 포함(우리 ex-AMPC=보수적). 실데이터는 Bloomberg/FactSet로 확정 필요.
 - **2033년 AMPC 소멸 후 SKOT 적자 회귀** — 메자닌은 AMPC 창 안에서 회수하는 구조라 그 이후는 미해결. 근본 해법은 마진(EBIT) 개선.
 - **HTML 팩**(`sk_valuation_pack.html`)은 구버전(DC블록·9% 미반영). 필요시 갱신.
 - **v2 덱**은 핵심 10슬라이드만 — v1의 GTM·Crucible 상세 일부는 미이전.
