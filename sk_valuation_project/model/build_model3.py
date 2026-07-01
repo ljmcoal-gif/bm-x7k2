@@ -162,17 +162,17 @@ def line_rows(start_r, plant_tag, lines, tint, placeholder=False):
 ba_util_27={2027:.55,2028:.72,2029:.82,2030:.85,2031:.85,2032:.85,2033:.85,2034:.85,2035:.85}
 ba_util_28={2028:.55,2029:.72,2030:.83,2031:.85,2032:.85,2033:.85,2034:.85,2035:.85}
 
-sect(A,r,"1 · SKBA (공장1) — LFP 파우치 · 4라인 2.75×4 = 11 GWh 개조 (1-1동 자체전극 + 1-2동 외부전극)",fp1); r+=1
+sect(A,r,"1 · SKBA (공장1) — LFP 파우치 · 4라인 4.5×4 = 18 GWh 개조 (1-1동 자체전극 + 1-2동 외부전극)",fp1); r+=1
 yhead(A,r); r+=1
-A.cell(r,2,"  ▸ 공장1-1동 (파우치, '27, 라인당 2.75GW · 자체 전극)").font=fnt(9,True,P1C); r+=1
+A.cell(r,2,"  ▸ 공장1-1동 (파우치, '27, 라인당 4.5GW · 자체 전극)").font=fnt(9,True,P1C); r+=1
 r,BA=line_rows(r,"ba",[
-    {'name':"L1-1A",'key':'l11a','cap':2.75,'cod':2027,'util':ba_util_27,'form':"파우치"},
-    {'name':"L1-1B",'key':'l11b','cap':2.75,'cod':2027,'util':ba_util_27,'form':"파우치"},
+    {'name':"L1-1A",'key':'l11a','cap':4.5,'cod':2027,'util':ba_util_27,'form':"파우치"},
+    {'name':"L1-1B",'key':'l11b','cap':4.5,'cod':2027,'util':ba_util_27,'form':"파우치"},
 ], BAtint)
-A.cell(r,2,"  ▸ 공장1-2동 (파우치, '28, 전극 외부구매 · 2.75×2)").font=fnt(9,True,P1C); r+=1
+A.cell(r,2,"  ▸ 공장1-2동 (파우치, '28, 전극 외부구매 · 4.5×2)").font=fnt(9,True,P1C); r+=1
 r,BA2=line_rows(r,"ba",[
-    {'name':"L1-2C",'key':'l12c','cap':2.75,'cod':2028,'util':ba_util_28,'form':"파우치"},
-    {'name':"L1-2D",'key':'l12d','cap':2.75,'cod':2028,'util':ba_util_28,'form':"파우치"},
+    {'name':"L1-2C",'key':'l12c','cap':4.5,'cod':2028,'util':ba_util_28,'form':"파우치"},
+    {'name':"L1-2D",'key':'l12d','cap':4.5,'cod':2028,'util':ba_util_28,'form':"파우치"},
 ], BAtint)
 BA.update(BA2)
 # shipped by 동 (전극 sourcing 다름)
