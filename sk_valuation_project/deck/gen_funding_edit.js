@@ -69,7 +69,7 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   }
   finTbl(2.06,'공장 1 — SKBA (조지아)',INK,'파우치 · 모회사',
     [['명판 / 가동률(run-rate)','21.2 GWh / 85%',GREEN],['기존 차입 (단독)','~$5.0bn + SKI 보증',RED],['run-rate 매출','~$2.7bn'],['개조 ex-AMPC EBITDA','9% (목표)'],['기저 EBITDA (pre-SOP) ★','$0.2bn (2026~)',GREEN],['순자산 NAV ★','~$2.0bn']]);
-  finTbl(4.82,'공장 2 — SKOT (테네시)',RED,'BA 완전자회사 100%',
+  finTbl(4.82,'공장 2 — SKOT (테네시)',RED,'BA 100% · SOP ′28 하반기',
     [['명판 / 가동률(run-rate)','29.7 GWh / 82%',GREEN],['기존 차입 (DOE)','$4.0bn ATVM (이자만)',RED],['run-rate 매출','~$3.5bn'],['ex-AMPC EBITDA','9% (목표)'],['순자산 NAV ★','~$3.0bn']]);
   // 우: 개조 금액 (다크 박스)
   eb(s,colR,1.78,colRW,'개조 금액 · RETROFIT CAPEX');
@@ -83,12 +83,25 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   s.addText('$1.4bn',{x:colR+colRW-2.5,y:cy+0.1,w:2.2,h:0.38,margin:0,align:'right',fontFace:MONO,fontSize:24,bold:true,color:REDLT,valign:'middle'});
   // 기대효과
   eb(s,colR,3.78,colRW,'기대 효과 · EXPECTED EFFECT');
-  const eff=['DC센터 수요 확보 → 가동률 85% (BA)·82% (OT) run-rate','run-rate ex-AMPC EBITDA $554mm (BA 241 + OT 313, 9% 마진)','DCF EV ≈ $5.0bn · WACC 10.5% / 영구성장(TGR) 2.0% / Ke 13%','NAV(SOTP) ≈ $5.0bn ★'];
-  let ey=4.08;
+  const eff=['DC센터 수요 확보 → 가동률 85% (BA)·82% (OT) run-rate','run-rate ex-AMPC EBITDA $554mm (BA 241 + OT 313, 9% 마진)'];
+  let ey=4.06;
   eff.forEach(t=>{ s.addText('●',{x:colR,y:ey,w:0.25,h:0.3,margin:0,fontFace:BODY,fontSize:11,color:RED,valign:'top'});
-    s.addText(t,{x:colR+0.28,y:ey,w:colRW-0.28,h:0.4,margin:0,fontFace:BODY,fontSize:10.5,color:INK,valign:'top'}); ey+=0.44; });
+    s.addText(t,{x:colR+0.28,y:ey,w:colRW-0.28,h:0.4,margin:0,fontFace:BODY,fontSize:10.5,color:INK,valign:'top'}); ey+=0.42; });
+  // AMPC 밸류 분해 박스 (별도 표시)
+  const ax=colR, ay2=4.95, aw=colRW, ah=1.0;
+  s.addShape(RR,{x:ax,y:ay2,w:aw,h:ah,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
+  s.addText([{text:'밸류에이션 분해 — AMPC(45X) 기여',options:{color:PAPER,bold:true}},{text:'   한시보조금·2033 소멸',options:{color:MUTE2}}],
+    {x:ax+0.22,y:ay2+0.1,w:aw-0.4,h:0.24,margin:0,fontFace:BODY,fontSize:10.5,valign:'middle'});
+  // 스택 바: EV $4.8bn = ex-AMPC $1.2bn + AMPC $3.6bn
+  const barx=ax+0.22, barw=aw-0.44, bary=ay2+0.44, barh=0.24, exF=1.2/4.8;
+  s.addShape(RECT,{x:barx,y:bary,w:barw*exF,h:barh,fill:{color:GREEN},line:{type:'none'}});
+  s.addShape(RECT,{x:barx+barw*exF,y:bary,w:barw*(1-exF),h:barh,fill:{color:REDLT},line:{type:'none'}});
+  s.addText('ex-AMPC $1.2bn',{x:barx,y:bary,w:barw*exF,h:barh,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:PAPER,valign:'middle'});
+  s.addText('AMPC PV $3.6bn (75%)',{x:barx+barw*exF,y:bary,w:barw*(1-exF),h:barh,margin:0,align:'center',fontFace:MONO,fontSize:8,bold:true,color:DARK,valign:'middle'});
+  s.addText([{text:'DCF EV $4.8bn',options:{color:PAPER,bold:true}},{text:' 의 75%가 한시 AMPC → 멀티플엔 ex-AMPC만. WACC 10.5%·TGR 2%·Ke 13%',options:{color:WARM}}],
+    {x:ax+0.22,y:ay2+0.74,w:aw-0.4,h:0.22,margin:0,fontFace:BODY,fontSize:8,valign:'middle'});
   // KPI 2x2 (Space Grotesk)
-  const kp=[['총 명판','50.9','GWh',INK],['run-rate EBITDA','554','$mm',GREEN],['개조 소요','1.4','bn',RED],['DCF EV','5.0','bn',RED]];
+  const kp=[['총 명판','50.9','GWh',INK],['run-rate EBITDA','554','$mm',GREEN],['개조 소요','1.4','bn',RED],['DCF EV','4.8','bn',RED]];
   const kw=(colRW-0.4)/2; let kx=colR, ky=6.0;
   kp.forEach((k,i)=>{ const x=colR+(i%2)*(kw+0.4), y=6.0+Math.floor(i/2)*1.02;
     s.addShape(LINE,{x,y,w:kw,h:0,line:{color:k[3]===RED?RED:INK,width:2}});
@@ -162,7 +175,7 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   eb(s,colR,1.78,colRW,'조달 시나리오 — implied min EV/EBITDA · SCENARIOS');
   const hd={fontFace:BODY,fontSize:9,bold:true,color:PAPER,align:'center',valign:'middle',fill:{color:INK}};
   const hdl={...hd,align:'left'};
-  const head4=[{text:'시나리오',options:hdl},{text:'그랜트',options:hd},{text:'희석캡',options:hd},{text:'최소 EV',options:hd},{text:'멀티플',options:hd},{text:'peer초과',options:hd}];
+  const head4=[{text:'시나리오',options:hdl},{text:'그랜트',options:hd},{text:'희석캡',options:hd},{text:'최소 EV',options:hd},{text:'멀티플\n(9%)',options:hd},{text:'필요EBITDA%\n(→13x)',options:hd}];
   const cL={fontFace:BODY,fontSize:9.5,color:INK,valign:'middle'};
   const cC={fontFace:MONO,fontSize:9.5,color:INK,align:'center',valign:'middle'};
   const cM={fontFace:SG,fontSize:12,bold:true,align:'center',valign:'middle'};
@@ -171,12 +184,14 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
       {text:ev,options:{...cC,fill:{color:fill}}},{text:mult,options:{...cM,color:mc,fill:{color:fill}}},{text:tag,options:{fontFace:MONO,fontSize:8,bold:true,color:tc,align:'center',valign:'middle',fill:{color:fill}}}];
   }
   const body4=[head4,
-    srow('BASE  (그랜트10/지분30)','10%','20%','$8.6bn','15.4x','+2.4x',RED,RED,PAPER),
-    srow('① CoC 20% + 그랜트 20%','20%','20%','$7.8bn','14.1x','+1.1x',RED,MUTE,PAPER),
-    srow('② CoC 해제 → 희석 30%','10%','30%','$7.8bn','14.1x','+1.1x',RED,MUTE,PAPER),
-    srow('③ CoC 완화 → 희석 49%','10%','49%','$7.3bn','13.1x','+0.1x',RED,MUTE,GREENSOFT),
-    srow('최대결합 (그랜트20+희석49)','20%','49%','$7.0bn','12.6x','−0.4x',GREEN,GREEN,GREENSOFT)];
-  s.addTable(body4,{x:colR,y:2.06,w:colRW,colW:[2.35,0.72,0.72,0.95,0.85,0.86],rowH:[0.32,0.47,0.47,0.47,0.47,0.47],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,5,2,5]});
+    srow('BASE  (그랜트10/지분30)','10%','20%','$8.6bn','15.4x','10.7%',RED,RED,PAPER),
+    srow('① CoC 20% + 그랜트 20%','20%','20%','$7.8bn','14.1x','9.8%',RED,RED,PAPER),
+    srow('② CoC 해제 → 희석 30%','10%','30%','$7.8bn','14.1x','9.8%',RED,RED,PAPER),
+    srow('③ CoC 완화 → 희석 49%','10%','49%','$7.3bn','13.1x','9.1%',RED,RED,GREENSOFT),
+    srow('최대결합 (그랜트20+희석49)','20%','49%','$7.0bn','12.6x','8.7%',GREEN,GREEN,GREENSOFT)];
+  s.addTable(body4,{x:colR,y:2.06,w:colRW,colW:[2.30,0.70,0.70,0.90,0.87,0.98],rowH:[0.40,0.44,0.44,0.44,0.44,0.44],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,5,2,5]});
+  s.addText('필요EBITDA% = 현 9%에서 딜을 peer 상단(13x)에 맞추는 데 필요한 ex-AMPC 마진 · 8.7% ≤ 현 9%면 이미 충족',
+    {x:colR,y:2.06+0.40+5*0.44+0.02,w:colRW,h:0.2,margin:0,fontFace:BODY,fontSize:7.5,italic:true,color:MUTE2,valign:'middle'});
   // peer 밴드 바
   eb(s,colR,4.9,colRW,'peer 밴드 대비 위치 · 조달 레버는 갭을 좁힌다');
   const bx=colR+0.05, bw=colRW-0.7, by=5.55, lo=8, hi=16;
@@ -196,7 +211,7 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   // 결론 콜아웃 (다크)
   s.addShape(RR,{x:MX,y:6.34,w:W-2*MX,h:1.28,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
   s.addText('결론 — 희석 캡을 49%까지 열면 밴드 안으로 들어온다',{x:MX+0.3,y:6.44,w:W-2*MX-0.6,h:0.3,margin:0,fontFace:HEAD,bold:true,fontSize:13,color:REDLT,valign:'middle'});
-  s.addText([{text:'가동률 85%/82%로 run-rate EBITDA ',options:{color:WARM}},{text:'$554mm',options:{color:GREENLT,bold:true}},{text:' → BASE ',options:{color:WARM}},{text:'15.4x',options:{color:REDLT,bold:true}},{text:'. 그랜트 20%나 희석 30%로 14.1x, 희석을 ',options:{color:WARM}},{text:'49%(③)',options:{color:GREENLT,bold:true}},{text:'까지 열면 13.1x, ',options:{color:WARM}},{text:'그랜트20+희석49 결합 시 12.6x — peer 밴드(8~13x) 진입',options:{color:GREENLT,bold:true}},{text:'. DCF는 ',options:{color:WARM}},{text:'WACC 10.5%·영구성장 2.0%',options:{color:GREENLT,bold:true}},{text:' 기준 EV $5.0bn. 단 49% 희석은 지배력 약화(경영권·연결 이슈) 트레이드오프 — 협상 상한으로만. ★ 순차입금 $6.4bn·부채비중 60% 고정',options:{color:WARM}}],
+  s.addText([{text:'가동률 85%/82%로 run-rate EBITDA ',options:{color:WARM}},{text:'$554mm',options:{color:GREENLT,bold:true}},{text:' → BASE ',options:{color:WARM}},{text:'15.4x',options:{color:REDLT,bold:true}},{text:'. 그랜트 20%나 희석 30%로 14.1x, 희석을 ',options:{color:WARM}},{text:'49%(③)',options:{color:GREENLT,bold:true}},{text:'까지 열면 13.1x, ',options:{color:WARM}},{text:'그랜트20+희석49 결합 시 12.6x — peer 밴드(8~13x) 진입',options:{color:GREENLT,bold:true}},{text:'. DCF는 ',options:{color:WARM}},{text:'WACC 10.5%·영구성장 2.0%',options:{color:GREENLT,bold:true}},{text:' 기준 EV $4.8bn(그중 AMPC PV $3.6bn·75%). OT SOP ′28 하반기. 단 49% 희석은 지배력 약화 트레이드오프 — 협상 상한으로만. ★ 순차입금 $6.4bn·부채비중 60% 고정',options:{color:WARM}}],
     {x:MX+0.3,y:6.78,w:W-2*MX-0.6,h:0.78,margin:0,fontFace:BODY,fontSize:9.5,valign:'top',lineSpacingMultiple:1.15});
   footer(s);
 }

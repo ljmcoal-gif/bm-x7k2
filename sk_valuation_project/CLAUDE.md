@@ -72,15 +72,17 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 | WACC / Ke / TGR | 10.5% / 13% / 2% |
 | 세율 | 23% (AMPC 비과세, NOL/tax carryforward 반영) |
 | SKBA 명판 / SKOT 명판 | 21.2 GWh / 29.7 GWh |
+| SOP(양산) | SKBA '27~28 / SKOT **'28 하반기(H2)** |
+| AMPC(45X) 밸류 기여 | PV ≈ $3.6bn = DCF EV의 **75%** (2033 소멸·멀티플 제외) |
 | DOE loan | $4.0bn, 이자만 3.5%(또는 5%) |
 | 메자닌 | **제거** (OT 소요 $1bn은 BA 증자/equity-down) |
 | 순차입금 | $6.4bn = BA 3.7 + OT 2.6 (합산) |
 | SKBA 기초 NOL ★ | $4.0bn (모델 입력; TCJA 80% 한도 적용) |
 | CapEx 그랜트 | capex의 10% (≈$142mm), 시나리오상 최대 20% |
 
-**결과**: DCF EV ≈ $5.0bn (가동률 85% + pre-SOP 기저 + NOL 반영), Equity(FCFE) ≈ +$2.4bn, NAV(SOTP) $5.0bn.
+**결과**: DCF EV ≈ $4.8bn (가동률 85% + OT SOP '28H2 + NOL 반영), Equity(FCFE) ≈ +$2.2bn, NAV(SOTP) $5.0bn. **EV의 ~75%($3.6bn)는 한시 AMPC의 PV** → ex-AMPC 본질 EV ≈ $1.2bn (멀티플은 ex-AMPC만).
 
-**역산 시나리오 (implied min EV/EBITDA, run-rate $554mm 기준)**: BASE(그랜트10/희석20) 15.4x → ① 그랜트20 14.1x → ② 희석30 14.1x → ③ 희석49 13.1x → 최대결합(그랜트20+희석49) 12.6x(peer 밴드 진입). 희석 캡을 49%까지 열면 peer 8~13x 안으로 들어오나 지배력 약화 트레이드오프(협상 상한). DCF는 WACC 10.5%·TGR 2%·Ke 13% 기준 EV $5.0bn. `model/scenarios.py`로 재현.
+**역산 시나리오 (implied min EV/EBITDA, run-rate $554mm 기준)**: BASE(그랜트10/희석20) 15.4x → ① 그랜트20 14.1x → ② 희석30 14.1x → ③ 희석49 13.1x → 최대결합(그랜트20+희석49) 12.6x(peer 밴드 진입). 각 시나리오의 **필요 EBITDA%(→13x)**: 10.7/9.8/9.8/9.1/8.7% (현 9% 대비 — 최대결합만 이미 충족). 희석 캡 49%는 지배력 약화 트레이드오프(협상 상한). DCF는 WACC 10.5%·TGR 2%·Ke 13% 기준 EV $4.8bn. `model/scenarios.py`로 재현.
 
 ---
 
