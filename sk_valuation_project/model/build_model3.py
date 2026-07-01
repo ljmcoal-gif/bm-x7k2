@@ -279,6 +279,7 @@ R['sga']=kv(r,"SG&A (% of revenue) ★",0.06); r+=1
 R['dep']=kv(r,"D&A (% of gross PP&E) ★",0.0667,PCT,"≈15y"); r+=1
 R['mcapex']=kv(r,"Maintenance capex (% rev) ★",0.03); r+=1
 R['capex_grant']=kv(r,"CapEx 정부 그랜트 (% of growth capex) ★",0.10,PCT,"설비보조금→SK 출자 경감"); r+=1
+R['ba_base_ebitda']=kv(r,"SKBA 기저 EBITDA floor (pre-SOP, $mm/yr) ★",200,USD,"양산 전(2026~) 기존 사업 하한 · 개조분이 이보다 크면 미적용(run-rate 유지)"); r+=1
 R['nwc']=kv(r,"Net working capital (% rev) ★",0.15); r+=1
 R['tax']=kv(r,"Cash tax rate ★",0.23,PCT,"AMPC 비과세"); r+=1
 R['nol_ba']=kv(r,"SKBA 기초 NOL (누적결손) ★",4000,USD,"SK온 출자분 중 누적손실(추정·DART 확인要)"); r+=1
@@ -333,7 +334,7 @@ def Srow(ws,r,t,fill):
     ws.cell(r,2,t).font=fnt(10,True,"FFFFFF")
     for cc in range(2,C0+len(YEARS)): ws.cell(r,cc).fill=PatternFill("solid",fgColor=fill)
 
-def plant_common(ws,PROW,rev_row,ampc_gwh_keys,capex_key,head,nol_key):
+def plant_common(ws,PROW,rev_row,ampc_gwh_keys,capex_key,head,nol_key,base_key=None):
     """build cost->EBIT->FCFF given a revenue row already placed; ampc on total shipped"""
     r=PROW['after_rev']
     Srow(ws,r,"COST & EBIT",head); r+=1; H(ws,r); r+=1
@@ -355,7 +356,12 @@ def plant_common(ws,PROW,rev_row,ampc_gwh_keys,capex_key,head,nol_key):
         c=ws.cell(r,C0+i,f); c.font=fnt(10); c.number_format=USD; c.alignment=right
     r+=1
     L(r,"D&A","da",lambda i:f"=-{col(i)}{PROW['ppe']}*{AR('dep')}"); r+=1
-    L(r,"EBIT (pre-AMPC)","ebitpre",lambda i:f"={col(i)}{PROW['gp']}+{col(i)}{PROW['sga']}+{col(i)}{PROW['da']}",bold=True,top=True); r+=1
+    if base_key:
+        # pre-SOP floor: ex-AMPC EBITDA(=gp+sga)가 기저치 미만이면 그 차액만 보정 → run-rate(개조분>기저)엔 영향 0
+        L(r,"기저 EBITDA floor 보정 (pre-SOP)","base",
+          lambda i:f"=MAX(0,{AR(base_key)}-({col(i)}{PROW['gp']}+{col(i)}{PROW['sga']}))"); r+=1
+    base_term=(lambda i:f"+{col(i)}{PROW['base']}") if base_key else (lambda i:"")
+    L(r,"EBIT (pre-AMPC)","ebitpre",lambda i:f"={col(i)}{PROW['gp']}+{col(i)}{PROW['sga']}+{col(i)}{PROW['da']}{base_term(i)}",bold=True,top=True); r+=1
     L(r,"  margin pre-AMPC","ebitprem",lambda i:f"=IF({col(i)}{PROW['rev']}=0,0,{col(i)}{PROW['ebitpre']}/{col(i)}{PROW['rev']})",pct=True); r+=1
     # AMPC on total shipped (sum of given gwh refs)
     L(r,"Plus: AMPC 45X","ampc",lambda i:"=("+"+".join(ampc_gwh_keys(i))+f")*{AR('ampc',i)}"); r+=1
@@ -408,7 +414,7 @@ for i in range(len(YEARS)):
     c=ba.cell(r,C0+i,f); c.font=fnt(10); c.number_format=USD; c.alignment=right
 r+=1
 PB['after_rev']=r
-plant_common(ba,PB,PB['rev'], lambda i:[AR('ba_gwh',i)], 'ba_capex', P1C, 'nol_ba')
+plant_common(ba,PB,PB['rev'], lambda i:[AR('ba_gwh',i)], 'ba_capex', P1C, 'nol_ba', base_key='ba_base_ebitda')
 
 # ---- SKOT sheet (dual formfactor: prismatic + pouch) ----
 ot=wb.create_sheet("SKOT"); ot.sheet_view.showGridLines=False

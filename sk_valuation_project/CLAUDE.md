@@ -65,17 +65,21 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 |---|---|
 | DC블록 ASP | $155/kWh |
 | AMPC (45X 셀+모듈) | $45/kWh → 0 (2033, 법정 phase-out) |
-| ex-AMPC EBITDA | 9.0% (gross margin 14~16%에서 역산) |
+| ex-AMPC EBITDA (개조분) | 9.0% (gross margin 14~16%에서 역산) |
+| SKBA 기저 EBITDA (pre-SOP floor) ★ | $0.2bn/yr, 2026~ (양산 전 기존 사업 하한; 개조분>기저면 미적용) |
+| run-rate ex-AMPC EBITDA | $442mm (개조분; pre-SOP 기저는 조기현금만, run-rate 불변) |
 | WACC / Ke / TGR | 10.5% / 13% / 2% |
-| 세율 | 23% (AMPC 비과세) |
+| 세율 | 23% (AMPC 비과세, NOL/tax carryforward 반영) |
 | SKBA 명판 / SKOT 명판 | 21.2 GWh / 29.7 GWh |
 | DOE loan | $4.0bn, 이자만 3.5%(또는 5%) |
 | 메자닌 | **제거** (OT 소요 $1bn은 BA 증자/equity-down) |
 | 순차입금 | $6.4bn = BA 3.7 + OT 2.6 (합산) |
-| SKBA 기초 NOL ★ | $1.5bn (추정, DART/데이터룸 확인 필요) |
-| CapEx 그랜트 | capex의 10% (≈$142mm) |
+| SKBA 기초 NOL ★ | $4.0bn (모델 입력; TCJA 80% 한도 적용) |
+| CapEx 그랜트 | capex의 10% (≈$142mm), 시나리오상 최대 20% |
 
-**결과**: DCF EV ≈ $3.45bn (NOL 반영), 결론 밴드 $3.0~4.0bn, NAV(SOTP) $5.0bn.
+**결과**: DCF EV ≈ $4.0bn (pre-SOP 기저 조기현금 + NOL 반영), Equity(FCFE) ≈ +$1.5bn, NAV(SOTP) $5.0bn.
+
+**역산 시나리오 (implied min EV/EBITDA, run-rate $442mm 기준)**: BASE(그랜트10/희석20) 19.3x → ① 그랜트20 17.7x → ② 희석30 17.7x → ①+② 16.6x. 조달 레버는 갭을 좁히나 peer 8~13x 밴드까진 못 미침 — 잔여 갭은 마진(ex-AMPC EBITDA ~22%)이 결정. `model/scenarios.py`로 재현.
 
 ---
 
@@ -103,6 +107,9 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 - **"ex-AMPC EBITDA를 11%로"** → gross margin 4곳(1-1동/1-2동/각형/파우치) 각 +2%p → ex-AMPC EBITDA가 정확히 11%인지 Consolidated에서 확인.
 - **"풋볼필드가 모델이랑 달라"** → Excel에서 EV·EBITDA·NAV 실제값 추출 → `deck/gen.js`의 rows·결론선·민감도 갱신 → PDF로 시각 검증.
 - **민감도 스윕** → `build_model3.py`를 복제해 입력만 바꿔가며 배치 실행, EV/DSCR 추출(과거 `/tmp/*sweep*.py` 패턴 참조).
+- **모델 재계산 + 핵심값 추출** → `python3 model/extract.py` (LibreOffice 재계산 후 run-rate ex-AMPC EBITDA·EV·Equity·total_errors 출력).
+- **조달 시나리오(그랜트/희석 → implied 멀티플)** → `python3 model/scenarios.py` (재계산된 xlsx의 run-rate EBITDA를 읽어 명명 시나리오 + 3×3 민감도 매트릭스 출력).
+- **"SKBA 기저 EBITDA 바꿔"** → `R['ba_base_ebitda']` 수정 → 재생성 → `extract.py`로 run-rate 확인 → 덱 S2/S4 숫자 갱신.
 
 ---
 
@@ -119,7 +126,8 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 
 ## 알려진 한계·미해결 (다음 작업 후보)
 
-- **SKBA NOL $1.5bn은 추정치** — DART 연결주석 종속기업 명세 또는 데이터룸 세무신고서로 확정 필요. 단 과세소득이 작아 NOL을 키워도 EV 변화 거의 없음(구조적).
+- **SKBA NOL $4.0bn은 모델 입력(추정)** — DART 연결주석 종속기업 명세 또는 데이터룸 세무신고서로 확정 필요. NOL/tax carryforward는 `plant_common`에서 반영(TCJA 80% 한도, 당기손실 이월가산). 단 과세소득이 작아 NOL을 키워도 EV 변화 거의 없음(구조적).
+- **SKBA 기저 EBITDA $0.2bn은 가정 (pre-SOP floor)** — 양산(SOP) 전 기존 사업이 매년 ~$0.2bn EBITDA를 낸다는 하한 전제(2026~). `R['ba_base_ebitda']` 입력, `plant_common`에서 `MAX(0, 기저−(gp+sga))`로 부족분만 보정 → 개조분이 기저를 넘는 run-rate 연도엔 미적용(run-rate $442mm 불변). 데이터룸으로 실제 기존 사업 EBITDA 확인 필요.
 - **2033년 AMPC 소멸 후 SKOT 적자 회귀** — 메자닌은 AMPC 창 안에서 회수하는 구조라 그 이후는 미해결. 근본 해법은 마진(EBIT) 개선.
 - **HTML 팩**(`sk_valuation_pack.html`)은 구버전(DC블록·9% 미반영). 필요시 갱신.
 - **v2 덱**은 핵심 10슬라이드만 — v1의 GTM·Crucible 상세 일부는 미이전.

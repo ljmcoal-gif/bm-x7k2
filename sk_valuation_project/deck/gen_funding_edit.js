@@ -68,8 +68,8 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
     s.addTable(body,{x:colL,y:y+0.42,w:colLW,colW:[3.0,colLW-3.0],rowH:0.365,border:{type:'solid',color:GRID,pt:0.5},margin:[2,8,2,8],fill:{color:PAPER}});
   }
   finTbl(2.06,'공장 1 — SKBA (조지아)',INK,'파우치 · 모회사',
-    [['명판 / 가동(COD)','21.2 GWh / 2027~28'],['기존 차입 (단독)','~$5.0bn + SKI 보증',RED],['run-rate 매출','~$2.2bn'],['ex-AMPC EBITDA','9% (목표)'],['순자산 NAV ★','~$2.0bn']]);
-  finTbl(4.28,'공장 2 — SKOT (테네시)',RED,'BA 완전자회사 100%',
+    [['명판 / 가동(COD)','21.2 GWh / 2027~28'],['기존 차입 (단독)','~$5.0bn + SKI 보증',RED],['run-rate 매출','~$2.2bn'],['개조 ex-AMPC EBITDA','9% (목표)'],['기저 EBITDA (pre-SOP) ★','$0.2bn (2026~)',GREEN],['순자산 NAV ★','~$2.0bn']]);
+  finTbl(4.82,'공장 2 — SKOT (테네시)',RED,'BA 완전자회사 100%',
     [['명판 / 가동(COD)','29.7 GWh / 2028'],['기존 차입 (DOE)','$4.0bn ATVM (이자만)',RED],['run-rate 매출','~$2.7bn'],['ex-AMPC EBITDA','9% (목표)'],['순자산 NAV ★','~$3.0bn']]);
   // 우: 개조 금액 (다크 박스)
   eb(s,colR,1.78,colRW,'개조 금액 · RETROFIT CAPEX');
@@ -83,12 +83,12 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   s.addText('$1.4bn',{x:colR+colRW-2.5,y:cy+0.1,w:2.2,h:0.38,margin:0,align:'right',fontFace:MONO,fontSize:24,bold:true,color:REDLT,valign:'middle'});
   // 기대효과
   eb(s,colR,3.78,colRW,'기대 효과 · EXPECTED EFFECT');
-  const eff=['DC블록 ASP $155/kWh 사업화 — 셀+모듈+컨테이너','ex-AMPC EBITDA 9% → 지분 수익률(FCFE) 충족','DCF EV ≈ $3.6bn (밴드 $3.0~4.0bn)','NAV(SOTP) ≈ $5.0bn ★'];
+  const eff=['DC블록 ASP $155/kWh 사업화 — 셀+모듈+컨테이너','SKBA pre-SOP 기저 $0.2bn(2026~) · run-rate ex-AMPC $442mm 유지','DCF EV ≈ $4.0bn (기저 조기현금 반영·밴드 $3.5~4.5bn)','NAV(SOTP) ≈ $5.0bn ★'];
   let ey=4.08;
   eff.forEach(t=>{ s.addText('●',{x:colR,y:ey,w:0.25,h:0.3,margin:0,fontFace:BODY,fontSize:11,color:RED,valign:'top'});
     s.addText(t,{x:colR+0.28,y:ey,w:colRW-0.28,h:0.4,margin:0,fontFace:BODY,fontSize:10.5,color:INK,valign:'top'}); ey+=0.44; });
   // KPI 2x2 (Space Grotesk)
-  const kp=[['총 명판','50.9','GWh',INK],['기존 차입','9.0','bn',INK],['개조 소요','1.4','bn',RED],['ASP','155','$/kWh',INK]];
+  const kp=[['총 명판','50.9','GWh',INK],['run-rate EBITDA','442','$mm',GREEN],['개조 소요','1.4','bn',RED],['DCF EV','4.0','bn',RED]];
   const kw=(colRW-0.4)/2; let kx=colR, ky=6.0;
   kp.forEach((k,i)=>{ const x=colR+(i%2)*(kw+0.4), y=6.0+Math.floor(i/2)*1.02;
     s.addShape(LINE,{x,y,w:kw,h:0,line:{color:k[3]===RED?RED:INK,width:2}});
@@ -141,44 +141,62 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   footer(s);
 }
 
-// ════════ S4 · 지분 성립 조건 (역산) ════════
+// ════════ S4 · 지분 성립 조건 (조달 시나리오) ════════
 {
   const s=pres.addSlide(); base(s);
-  header(s,'VALUATION — REQUIRED THRESHOLD','04','지분 성립 조건 — 역산','20% 희석 한도 기준');
-  const colL=MX, colLW=4.2, colR=MX+colLW+0.5, colRW=W-colR-MX;
+  header(s,'VALUATION — FUNDING SCENARIOS','04','지분 성립 조건 — 조달 시나리오','희석·그랜트 레버 → implied 멀티플');
+  const colL=MX, colLW=3.5, colR=MX+colLW+0.4, colRW=W-colR-MX;
+  // 좌: 가정 + 역산식
   eb(s,colL,1.78,colLW,'주요 가정 · KEY ASSUMPTIONS');
-  const asm=[['DC블록 ASP','$155 /kWh'],['공급 셀 (개조 후)','파우치 + 각형'],['신규 조달','$1.4bn (10/30/60)'],['외부 지분 (30%)','$0.43bn'],['순차입금 (BA/OT)','$6.4bn (BA3.7+OT2.6)'],['EBITDA ex-AMPC (9%)','$441mm run-rate'],['peer EV/EBITDA','8~13x']];
-  let ay=2.1;
-  asm.forEach(a=>{ s.addText(a[0],{x:colL,y:ay,w:2.2,h:0.42,margin:0,fontFace:BODY,fontSize:10,color:MUTE,valign:'middle'});
-    s.addText(a[1],{x:colL+2.1,y:ay,w:colLW-2.1,h:0.42,margin:0,align:'right',fontFace:MONO,fontSize:10.5,bold:true,color:INK,valign:'middle'});
-    s.addShape(LINE,{x:colL,y:ay+0.44,w:colLW,h:0,line:{color:RULE,width:0.5}}); ay+=0.475; });
-  // 우: 역산 체인
-  eb(s,colR,1.78,colRW,'역산 — 20% 희석 한도를 지키려면 · THE BAR');
-  const steps=[['1','최소 지분가치','외부 지분 $0.43bn ÷ 20% 희석','$2.1','bn',INK,false],
-    ['2','→ 최소 EV','지분 $2.1 + 순차입금 $6.4 (BA3.7+OT2.6)','$8.6','bn',INK,false],
-    ['3','→ 최소 implied 멀티플','현 EBITDA $441mm · peer 8~13x 초과','~19','x',RED,false],
-    ['4','→ DCF 환산: 필요 ex-AMPC EBITDA','현 9%의 약 2.5배 (모델 sweep)','~22','%',RED,true]];
-  let sy=2.1;
-  steps.forEach(st=>{ const hl=st[6];
-    s.addShape(RR,{x:colR,y:sy,w:colRW,h:0.82,rectRadius:0.06,fill:{color:hl?REDSOFT:PAPER},line:{color:hl?RED:RULE,width:hl?1.5:1}});
-    s.addShape(OVAL,{x:colR+0.2,y:sy+0.24,w:0.34,h:0.34,fill:{color:hl?RED:WARM},line:{type:'none'}});
-    s.addText(st[0],{x:colR+0.2,y:sy+0.24,w:0.34,h:0.34,margin:0,align:'center',fontFace:HEAD,bold:true,fontSize:14,color:hl?PAPER:INK,valign:'middle'});
-    s.addText(st[1],{x:colR+0.68,y:sy+0.12,w:colRW-2.5,h:0.34,margin:0,fontFace:BODY,bold:true,fontSize:12.5,color:hl?RED:INK,valign:'middle'});
-    s.addText(st[2],{x:colR+0.68,y:sy+0.45,w:colRW-2.5,h:0.28,margin:0,fontFace:BODY,fontSize:9,color:MUTE,valign:'middle'});
-    s.addText([{text:st[3],options:{fontSize:26}},{text:st[4],options:{fontSize:14}}],{x:colR+colRW-1.9,y:sy+0.14,w:1.7,h:0.55,margin:0,align:'right',fontFace:SG,bold:true,color:st[5],valign:'middle'}); sy+=0.92; });
-  // 게이지
-  s.addShape(RR,{x:MX,y:5.95,w:W-2*MX,h:0.72,rectRadius:0.05,fill:{color:DARK},line:{type:'none'}});
-  s.addText('필요 마진 갭 — 9% → ~22%',{x:MX+0.3,y:5.95,w:2.7,h:0.72,margin:0,fontFace:HEAD,bold:true,fontSize:12,color:REDLT,valign:'middle'});
-  const gx=MX+3.3, gw=W-MX-gx-0.3, gy=6.31;
-  s.addShape(LINE,{x:gx,y:gy,w:gw,h:0,line:{color:'3a342e',width:3}});
-  s.addShape(LINE,{x:gx+gw*0.36,y:gy,w:gw*0.54,h:0,line:{color:RED,width:3}});
-  s.addText('현 9%',{x:gx+gw*0.36-0.5,y:gy-0.32,w:1,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:9,color:WARM,valign:'middle'});
-  s.addText('필요 ~22%',{x:gx+gw*0.90-0.7,y:gy-0.32,w:1.4,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:9,bold:true,color:REDLT,valign:'middle'});
-  // 결론 콜아웃
-  s.addShape(RR,{x:MX,y:6.82,w:W-2*MX,h:0.86,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
-  s.addText('결론 — 마진이 딜의 성패를 가른다',{x:MX+0.3,y:6.92,w:6,h:0.28,margin:0,fontFace:HEAD,bold:true,fontSize:13,color:REDLT,valign:'middle'});
-  s.addText([{text:'현 9% 마진으로는 20% 희석 한도 내 지분조달 불가. 길은 둘 — 시장이 ',options:{color:WARM}},{text:'~19x(peer 상단 초과)',options:{color:REDLT,bold:true}},{text:'를 주거나, ',options:{color:WARM}},{text:'ex-AMPC EBITDA를 ~22%로',options:{color:GREENLT,bold:true}},{text:' 올려 정상 멀티플(≈8x)에서 $8.6bn EV를 정당화하거나. ★ 순차입금 $6.4bn · 모델 sweep',options:{color:WARM}}],
-    {x:MX+0.3,y:7.2,w:W-2*MX-0.6,h:0.42,margin:0,fontFace:BODY,fontSize:9.5,valign:'top',lineSpacingMultiple:1.1});
+  const asm=[['DC블록 ASP','$155/kWh'],['공급 셀 (개조 후)','파우치+각형'],['SKBA 기저 EBITDA ★','$0.2bn pre-SOP',GREEN],['run-rate ex-AMPC','$442mm',INK],['신규 조달','$1.42bn'],['순차입금 (BA/OT)','$6.4bn'],['peer EV/EBITDA','8~13x']];
+  let ay=2.08;
+  asm.forEach(a=>{ s.addText(a[0],{x:colL,y:ay,w:2.0,h:0.36,margin:0,fontFace:BODY,fontSize:9.5,color:MUTE,valign:'middle'});
+    s.addText(a[1],{x:colL+1.7,y:ay,w:colLW-1.7,h:0.36,margin:0,align:'right',fontFace:MONO,fontSize:10,bold:true,color:a[2]||INK,valign:'middle'});
+    s.addShape(LINE,{x:colL,y:ay+0.37,w:colLW,h:0,line:{color:RULE,width:0.5}}); ay+=0.40; });
+  // 역산식 박스
+  s.addShape(RR,{x:colL,y:ay+0.06,w:colLW,h:1.28,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
+  s.addText('역산 논리 · THE MECHANISM',{x:colL+0.22,y:ay+0.16,w:colLW-0.4,h:0.24,margin:0,fontFace:MONO,fontSize:8,color:WARM,charSpacing:1,valign:'middle'});
+  s.addText([{text:'최소지분',options:{color:REDLT,bold:true}},{text:' = 외부지분 ÷ 희석캡\n',options:{color:WARM}},{text:'최소EV',options:{color:REDLT,bold:true}},{text:' = 최소지분 + 순차입금\n',options:{color:WARM}},{text:'멀티플',options:{color:REDLT,bold:true}},{text:' = 최소EV ÷ run-rate EBITDA',options:{color:WARM}}],
+    {x:colL+0.22,y:ay+0.42,w:colLW-0.4,h:0.86,margin:0,fontFace:BODY,fontSize:9.5,valign:'top',lineSpacingMultiple:1.25});
+  // 우: 시나리오 표 (editable)
+  eb(s,colR,1.78,colRW,'조달 시나리오 — implied min EV/EBITDA · SCENARIOS');
+  const hd={fontFace:BODY,fontSize:9,bold:true,color:PAPER,align:'center',valign:'middle',fill:{color:INK}};
+  const hdl={...hd,align:'left'};
+  const head4=[{text:'시나리오',options:hdl},{text:'그랜트',options:hd},{text:'희석캡',options:hd},{text:'최소 EV',options:hd},{text:'멀티플',options:hd},{text:'peer초과',options:hd}];
+  const cL={fontFace:BODY,fontSize:9.5,color:INK,valign:'middle'};
+  const cC={fontFace:MONO,fontSize:9.5,color:INK,align:'center',valign:'middle'};
+  const cM={fontFace:SG,fontSize:12,bold:true,align:'center',valign:'middle'};
+  function srow(nm,g,d,ev,mult,tag,mc,tc,fill){
+    return [{text:nm,options:{...cL,fill:{color:fill}}},{text:g,options:{...cC,fill:{color:fill}}},{text:d,options:{...cC,fill:{color:fill}}},
+      {text:ev,options:{...cC,fill:{color:fill}}},{text:mult,options:{...cM,color:mc,fill:{color:fill}}},{text:tag,options:{fontFace:MONO,fontSize:8,bold:true,color:tc,align:'center',valign:'middle',fill:{color:fill}}}];
+  }
+  const body4=[head4,
+    srow('BASE  (그랜트10/지분30)','10%','20%','$8.6bn','19.3x','+6.3x',RED,RED,PAPER),
+    srow('① CoC 20% + 그랜트 20%','20%','20%','$7.8bn','17.7x','+4.7x',RED,MUTE,GREENSOFT),
+    srow('② CoC 해제 → 희석 30%','10%','30%','$7.8bn','17.7x','+4.7x',RED,MUTE,GREENSOFT),
+    srow('①+② 결합','20%','30%','$7.3bn','16.6x','+3.6x',RED,MUTE,GREENSOFT)];
+  s.addTable(body4,{x:colR,y:2.08,w:colRW,colW:[2.35,0.72,0.72,0.95,0.85,0.86],rowH:[0.34,0.56,0.56,0.56,0.56],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,5,2,5]});
+  // peer 밴드 바
+  eb(s,colR,4.9,colRW,'peer 밴드 대비 위치 · 조달 레버는 갭을 좁힌다');
+  const bx=colR+0.05, bw=colRW-0.7, by=5.55, lo=8, hi=20;
+  const px=v=>bx+bw*(v-lo)/(hi-lo);
+  s.addShape(LINE,{x:bx,y:by,w:bw,h:0,line:{color:WARM,width:3}});
+  // peer band 8~13 (green tint segment)
+  s.addShape(RECT,{x:px(8),y:by-0.09,w:px(13)-px(8),h:0.18,fill:{color:GREENSOFT},line:{color:GREEN,width:0.75}});
+  s.addText('peer 8~13x',{x:px(8),y:by-0.34,w:px(13)-px(8),h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:8,color:GREEN,valign:'middle'});
+  // 개선 방향 화살표 (BASE 19.3 → ①+② 16.6)
+  s.addShape(LINE,{x:px(16.6),y:by-0.24,w:px(19.3)-px(16.6),h:0,line:{color:REDLT,width:1.25,endArrowType:'triangle',beginArrowType:'none'}});
+  s.addText('조달 레버 −2.7x',{x:px(16.6)-0.3,y:by-0.44,w:px(19.3)-px(16.6)+0.6,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:REDLT,valign:'middle'});
+  [[19.3,'BASE',RED],[17.7,'①·②','8A5A55'],[16.6,'①+②','8A5A55']].forEach(m=>{
+    s.addShape(OVAL,{x:px(m[0])-0.05,y:by-0.05,w:0.1,h:0.1,fill:{color:m[2]},line:{type:'none'}});
+    s.addText(m[1],{x:px(m[0])-0.5,y:by+0.1,w:1.0,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:m[2],valign:'middle'});
+    s.addText(m[0]+'x',{x:px(m[0])-0.5,y:by-0.02,w:1.0,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:8,bold:true,color:m[2],valign:'top'}); });
+  [8,13,16,20].forEach(t=>s.addText(t+'x',{x:px(t)-0.3,y:by+0.28,w:0.6,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:MUTE2,valign:'middle'}));
+  // 결론 콜아웃 (다크)
+  s.addShape(RR,{x:MX,y:6.34,w:W-2*MX,h:1.28,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
+  s.addText('결론 — 조달 레버는 갭을 좁히지만, 밴드 진입은 마진이 결정한다',{x:MX+0.3,y:6.44,w:W-2*MX-0.6,h:0.3,margin:0,fontFace:HEAD,bold:true,fontSize:13,color:REDLT,valign:'middle'});
+  s.addText([{text:'run-rate ex-AMPC EBITDA ',options:{color:WARM}},{text:'$442mm 유지',options:{color:GREENLT,bold:true}},{text:' 기준(기저 $0.2bn은 pre-SOP 조기현금·EV 방어용, run-rate 불변). ',options:{color:WARM}},{text:'그랜트 20%(①)',options:{color:GREENLT,bold:true}},{text:'·',options:{color:WARM}},{text:'CoC 해제 30% 희석(②)',options:{color:GREENLT,bold:true}},{text:'은 각각 implied 멀티플을 ',options:{color:WARM}},{text:'19.3x→17.7x',options:{color:REDLT,bold:true}},{text:', 둘 다면 ',options:{color:WARM}},{text:'16.6x',options:{color:REDLT,bold:true}},{text:'로 낮춰 peer(8~13x)에 근접시키나 밴드까진 못 미친다. 잔여 갭(~3.6x)은 ',options:{color:WARM}},{text:'ex-AMPC EBITDA를 ~22%로',options:{color:GREENLT,bold:true}},{text:' 올리거나 시장이 프리미엄 멀티플을 줄 때 닫힌다. ★ 순차입금 $6.4bn·부채비중 60% 고정',options:{color:WARM}}],
+    {x:MX+0.3,y:6.78,w:W-2*MX-0.6,h:0.78,margin:0,fontFace:BODY,fontSize:9.5,valign:'top',lineSpacingMultiple:1.15});
   footer(s);
 }
 
