@@ -83,7 +83,7 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   s.addText('$1.4bn',{x:colR+colRW-2.5,y:cy+0.1,w:2.2,h:0.38,margin:0,align:'right',fontFace:MONO,fontSize:24,bold:true,color:REDLT,valign:'middle'});
   // 기대효과
   eb(s,colR,3.78,colRW,'기대 효과 · EXPECTED EFFECT');
-  const eff=['DC센터 수요 확보 → 가동률 85% (BA)·82% (OT) run-rate','run-rate ex-AMPC EBITDA $554mm (BA 241 + OT 313, 9% 마진)','DCF EV ≈ $5.0bn (가동률 상향 반영·pre-SOP 기저 $0.2bn 포함)','NAV(SOTP) ≈ $5.0bn ★'];
+  const eff=['DC센터 수요 확보 → 가동률 85% (BA)·82% (OT) run-rate','run-rate ex-AMPC EBITDA $554mm (BA 241 + OT 313, 9% 마진)','DCF EV ≈ $5.0bn · WACC 10.5% / 영구성장(TGR) 2.0% / Ke 13%','NAV(SOTP) ≈ $5.0bn ★'];
   let ey=4.08;
   eff.forEach(t=>{ s.addText('●',{x:colR,y:ey,w:0.25,h:0.3,margin:0,fontFace:BODY,fontSize:11,color:RED,valign:'top'});
     s.addText(t,{x:colR+0.28,y:ey,w:colRW-0.28,h:0.4,margin:0,fontFace:BODY,fontSize:10.5,color:INK,valign:'top'}); ey+=0.44; });
@@ -148,16 +148,16 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   const colL=MX, colLW=3.5, colR=MX+colLW+0.4, colRW=W-colR-MX;
   // 좌: 가정 + 역산식
   eb(s,colL,1.78,colLW,'주요 가정 · KEY ASSUMPTIONS');
-  const asm=[['DC블록 ASP','$155/kWh'],['가동률 (run-rate) ★','85%/82% DC수요',GREEN],['SKBA 기저 EBITDA ★','$0.2bn pre-SOP',GREEN],['run-rate ex-AMPC','$554mm',GREEN],['신규 조달','$1.42bn'],['순차입금 (BA/OT)','$6.4bn'],['peer EV/EBITDA','8~13x']];
-  let ay=2.08;
-  asm.forEach(a=>{ s.addText(a[0],{x:colL,y:ay,w:2.0,h:0.36,margin:0,fontFace:BODY,fontSize:9.5,color:MUTE,valign:'middle'});
-    s.addText(a[1],{x:colL+1.7,y:ay,w:colLW-1.7,h:0.36,margin:0,align:'right',fontFace:MONO,fontSize:10,bold:true,color:a[2]||INK,valign:'middle'});
-    s.addShape(LINE,{x:colL,y:ay+0.37,w:colLW,h:0,line:{color:RULE,width:0.5}}); ay+=0.40; });
+  const asm=[['DC블록 ASP','$155/kWh'],['가동률 (run-rate) ★','85%/82% DC수요',GREEN],['SKBA 기저 EBITDA ★','$0.2bn pre-SOP',GREEN],['run-rate ex-AMPC','$554mm',GREEN],['WACC / 영구성장 ★','10.5% / 2.0%',INK],['Cost of equity (Ke)','13.0%',INK],['신규 조달','$1.42bn'],['순차입금 (BA/OT)','$6.4bn'],['peer EV/EBITDA','8~13x']];
+  let ay=2.06;
+  asm.forEach(a=>{ s.addText(a[0],{x:colL,y:ay,w:2.0,h:0.30,margin:0,fontFace:BODY,fontSize:9.5,color:MUTE,valign:'middle'});
+    s.addText(a[1],{x:colL+1.6,y:ay,w:colLW-1.6,h:0.30,margin:0,align:'right',fontFace:MONO,fontSize:10,bold:true,color:a[2]||INK,valign:'middle'});
+    s.addShape(LINE,{x:colL,y:ay+0.31,w:colLW,h:0,line:{color:RULE,width:0.5}}); ay+=0.335; });
   // 역산식 박스
-  s.addShape(RR,{x:colL,y:ay+0.06,w:colLW,h:1.28,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
-  s.addText('역산 논리 · THE MECHANISM',{x:colL+0.22,y:ay+0.16,w:colLW-0.4,h:0.24,margin:0,fontFace:MONO,fontSize:8,color:WARM,charSpacing:1,valign:'middle'});
+  s.addShape(RR,{x:colL,y:ay+0.04,w:colLW,h:1.14,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
+  s.addText('역산 논리 · THE MECHANISM',{x:colL+0.22,y:ay+0.12,w:colLW-0.4,h:0.22,margin:0,fontFace:MONO,fontSize:8,color:WARM,charSpacing:1,valign:'middle'});
   s.addText([{text:'최소지분',options:{color:REDLT,bold:true}},{text:' = 외부지분 ÷ 희석캡\n',options:{color:WARM}},{text:'최소EV',options:{color:REDLT,bold:true}},{text:' = 최소지분 + 순차입금\n',options:{color:WARM}},{text:'멀티플',options:{color:REDLT,bold:true}},{text:' = 최소EV ÷ run-rate EBITDA',options:{color:WARM}}],
-    {x:colL+0.22,y:ay+0.42,w:colLW-0.4,h:0.86,margin:0,fontFace:BODY,fontSize:9.5,valign:'top',lineSpacingMultiple:1.25});
+    {x:colL+0.22,y:ay+0.36,w:colLW-0.4,h:0.78,margin:0,fontFace:BODY,fontSize:9,valign:'top',lineSpacingMultiple:1.2});
   // 우: 시나리오 표 (editable)
   eb(s,colR,1.78,colRW,'조달 시나리오 — implied min EV/EBITDA · SCENARIOS');
   const hd={fontFace:BODY,fontSize:9,bold:true,color:PAPER,align:'center',valign:'middle',fill:{color:INK}};
@@ -172,30 +172,31 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   }
   const body4=[head4,
     srow('BASE  (그랜트10/지분30)','10%','20%','$8.6bn','15.4x','+2.4x',RED,RED,PAPER),
-    srow('① CoC 20% + 그랜트 20%','20%','20%','$7.8bn','14.1x','+1.1x',RED,MUTE,GREENSOFT),
-    srow('② CoC 해제 → 희석 30%','10%','30%','$7.8bn','14.1x','+1.1x',RED,MUTE,GREENSOFT),
-    srow('①+② 결합','20%','30%','$7.3bn','13.3x','+0.3x',GREEN,GREEN,GREENSOFT)];
-  s.addTable(body4,{x:colR,y:2.08,w:colRW,colW:[2.35,0.72,0.72,0.95,0.85,0.86],rowH:[0.34,0.56,0.56,0.56,0.56],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,5,2,5]});
+    srow('① CoC 20% + 그랜트 20%','20%','20%','$7.8bn','14.1x','+1.1x',RED,MUTE,PAPER),
+    srow('② CoC 해제 → 희석 30%','10%','30%','$7.8bn','14.1x','+1.1x',RED,MUTE,PAPER),
+    srow('③ CoC 완화 → 희석 49%','10%','49%','$7.3bn','13.1x','+0.1x',RED,MUTE,GREENSOFT),
+    srow('최대결합 (그랜트20+희석49)','20%','49%','$7.0bn','12.6x','−0.4x',GREEN,GREEN,GREENSOFT)];
+  s.addTable(body4,{x:colR,y:2.06,w:colRW,colW:[2.35,0.72,0.72,0.95,0.85,0.86],rowH:[0.32,0.47,0.47,0.47,0.47,0.47],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,5,2,5]});
   // peer 밴드 바
   eb(s,colR,4.9,colRW,'peer 밴드 대비 위치 · 조달 레버는 갭을 좁힌다');
-  const bx=colR+0.05, bw=colRW-0.7, by=5.55, lo=8, hi=17;
+  const bx=colR+0.05, bw=colRW-0.7, by=5.55, lo=8, hi=16;
   const px=v=>bx+bw*(v-lo)/(hi-lo);
   s.addShape(LINE,{x:bx,y:by,w:bw,h:0,line:{color:WARM,width:3}});
   // peer band 8~13 (green tint segment)
   s.addShape(RECT,{x:px(8),y:by-0.09,w:px(13)-px(8),h:0.18,fill:{color:GREENSOFT},line:{color:GREEN,width:0.75}});
   s.addText('peer 8~13x',{x:px(8),y:by-0.34,w:px(13)-px(8),h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:8,color:GREEN,valign:'middle'});
-  // 개선 방향 화살표 (BASE 15.4 → ①+② 13.3)
-  s.addShape(LINE,{x:px(13.3),y:by-0.24,w:px(15.4)-px(13.3),h:0,line:{color:REDLT,width:1.25,endArrowType:'triangle',beginArrowType:'none'}});
-  s.addText('조달 레버 −2.1x',{x:px(13.3)-0.3,y:by-0.44,w:px(15.4)-px(13.3)+0.6,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:REDLT,valign:'middle'});
-  [[15.4,'BASE',RED],[14.1,'①·②','8A5A55'],[13.3,'①+②',GREEN]].forEach(m=>{
+  // 개선 방향 화살표 (BASE 15.4 → 최대결합 12.6)
+  s.addShape(LINE,{x:px(12.6),y:by-0.24,w:px(15.4)-px(12.6),h:0,line:{color:REDLT,width:1.25,endArrowType:'triangle',beginArrowType:'none'}});
+  s.addText('조달 레버 −2.8x → 밴드 진입',{x:px(12.6)-0.4,y:by-0.44,w:px(15.4)-px(12.6)+0.8,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:REDLT,valign:'middle'});
+  [[15.4,'BASE',RED],[14.1,'①·②','8A5A55'],[13.1,'③','8A5A55'],[12.6,'최대',GREEN]].forEach(m=>{
     s.addShape(OVAL,{x:px(m[0])-0.05,y:by-0.05,w:0.1,h:0.1,fill:{color:m[2]},line:{type:'none'}});
     s.addText(m[1],{x:px(m[0])-0.5,y:by+0.1,w:1.0,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:m[2],valign:'middle'});
     s.addText(m[0]+'x',{x:px(m[0])-0.5,y:by-0.02,w:1.0,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:8,bold:true,color:m[2],valign:'top'}); });
-  [8,11,13,15,17].forEach(t=>s.addText(t+'x',{x:px(t)-0.3,y:by+0.28,w:0.6,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:MUTE2,valign:'middle'}));
+  [8,11,13,14,16].forEach(t=>s.addText(t+'x',{x:px(t)-0.3,y:by+0.28,w:0.6,h:0.18,margin:0,align:'center',fontFace:MONO,fontSize:7,color:MUTE2,valign:'middle'}));
   // 결론 콜아웃 (다크)
   s.addShape(RR,{x:MX,y:6.34,w:W-2*MX,h:1.28,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
-  s.addText('결론 — 가동률 85%가 멀티플을 peer 상단까지 끌어내린다',{x:MX+0.3,y:6.44,w:W-2*MX-0.6,h:0.3,margin:0,fontFace:HEAD,bold:true,fontSize:13,color:REDLT,valign:'middle'});
-  s.addText([{text:'DC센터 수요로 ',options:{color:WARM}},{text:'가동률 85%/82%',options:{color:GREENLT,bold:true}},{text:' 확보 시 run-rate ex-AMPC EBITDA가 ',options:{color:WARM}},{text:'$442→$554mm',options:{color:GREENLT,bold:true}},{text:'로 올라 BASE 멀티플이 ',options:{color:WARM}},{text:'19.3x→15.4x',options:{color:REDLT,bold:true}},{text:'. 여기에 ',options:{color:WARM}},{text:'그랜트 20%(①)',options:{color:GREENLT,bold:true}},{text:' 또는 ',options:{color:WARM}},{text:'CoC 해제 30% 희석(②)',options:{color:GREENLT,bold:true}},{text:'은 각각 14.1x, 둘 다면 ',options:{color:WARM}},{text:'13.3x — peer 상단(13x)에 사실상 안착',options:{color:GREENLT,bold:true}},{text:' (잔여 +0.3x). 남는 미세 갭은 마진(ex-AMPC EBITDA)이나 시장 프리미엄이 닫는다. ★ 순차입금 $6.4bn·부채비중 60% 고정',options:{color:WARM}}],
+  s.addText('결론 — 희석 캡을 49%까지 열면 밴드 안으로 들어온다',{x:MX+0.3,y:6.44,w:W-2*MX-0.6,h:0.3,margin:0,fontFace:HEAD,bold:true,fontSize:13,color:REDLT,valign:'middle'});
+  s.addText([{text:'가동률 85%/82%로 run-rate EBITDA ',options:{color:WARM}},{text:'$554mm',options:{color:GREENLT,bold:true}},{text:' → BASE ',options:{color:WARM}},{text:'15.4x',options:{color:REDLT,bold:true}},{text:'. 그랜트 20%나 희석 30%로 14.1x, 희석을 ',options:{color:WARM}},{text:'49%(③)',options:{color:GREENLT,bold:true}},{text:'까지 열면 13.1x, ',options:{color:WARM}},{text:'그랜트20+희석49 결합 시 12.6x — peer 밴드(8~13x) 진입',options:{color:GREENLT,bold:true}},{text:'. DCF는 ',options:{color:WARM}},{text:'WACC 10.5%·영구성장 2.0%',options:{color:GREENLT,bold:true}},{text:' 기준 EV $5.0bn. 단 49% 희석은 지배력 약화(경영권·연결 이슈) 트레이드오프 — 협상 상한으로만. ★ 순차입금 $6.4bn·부채비중 60% 고정',options:{color:WARM}}],
     {x:MX+0.3,y:6.78,w:W-2*MX-0.6,h:0.78,margin:0,fontFace:BODY,fontSize:9.5,valign:'top',lineSpacingMultiple:1.15});
   footer(s);
 }

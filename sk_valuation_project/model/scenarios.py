@@ -42,11 +42,13 @@ print("=== 명명 시나리오 ===")
 scen("BASE (grant10/eq30/dil20)",        0.10, 0.20)
 scen("① CoC 20% 유지 + 그랜트 20%",       0.20, 0.20)
 scen("② CoC 해제 → 30% 희석 (grant10)",   0.10, 0.30)
+scen("③ CoC 대폭완화 → 49% 희석 (grant10)",0.10, 0.49)
 scen("①+② 결합 (grant20 + dil30)",        0.20, 0.30)
+scen("최대결합 (grant20 + dil49)",         0.20, 0.49)
 
 print("\n=== 민감도 매트릭스 : implied min EV/EBITDA (x) ===")
 grants = [0.10, 0.15, 0.20]
-dils   = [0.20, 0.25, 0.30]
+dils   = [0.20, 0.30, 0.49]
 hdr = "grant\\dil " + "".join(f"{d:>8.0%}" for d in dils)
 print(hdr)
 for g in grants:

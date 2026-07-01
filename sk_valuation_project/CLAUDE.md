@@ -80,7 +80,7 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 
 **결과**: DCF EV ≈ $5.0bn (가동률 85% + pre-SOP 기저 + NOL 반영), Equity(FCFE) ≈ +$2.4bn, NAV(SOTP) $5.0bn.
 
-**역산 시나리오 (implied min EV/EBITDA, run-rate $554mm 기준)**: BASE(그랜트10/희석20) 15.4x → ① 그랜트20 14.1x → ② 희석30 14.1x → ①+② 13.3x(peer 상단 사실상 안착, 잔여 +0.3x). 가동률 85%가 분모를 키워 BASE를 19.3→15.4x로 내리고, 조달 레버가 peer 밴드까지 마무리. `model/scenarios.py`로 재현.
+**역산 시나리오 (implied min EV/EBITDA, run-rate $554mm 기준)**: BASE(그랜트10/희석20) 15.4x → ① 그랜트20 14.1x → ② 희석30 14.1x → ③ 희석49 13.1x → 최대결합(그랜트20+희석49) 12.6x(peer 밴드 진입). 희석 캡을 49%까지 열면 peer 8~13x 안으로 들어오나 지배력 약화 트레이드오프(협상 상한). DCF는 WACC 10.5%·TGR 2%·Ke 13% 기준 EV $5.0bn. `model/scenarios.py`로 재현.
 
 ---
 
