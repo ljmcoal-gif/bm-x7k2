@@ -648,17 +648,21 @@ mL(r,"DCF 내재 멀티플 — run-rate",bold=True,color=RED); mV(r,4,f"=D{EVr}/
 mL(r,"DCF 내재 멀티플 — 2029E",color=RED); mV(r,4,f"=D{EVr}/D{FWr}",MXX,color=RED); r+=2
 msect(r,"2 · Peer 컴프스 (실측 forward EV/EBITDA · 입력 ★)"); r+=1
 mH(r,["EV/EBITDA","비고"],startcol=4); ms.cell(r,2,"회사").font=fnt(9,True,NAVY); ms.cell(r,2).border=b_tb; r+=1
-peers=[("LG에너지솔루션",19.0,"'26F (→15x '27F)"),("CATL",13.0,"PE 22.5x·최고수익"),
-       ("삼성SDI",None,"n.m. EBITDA 적자근접"),("Fluence",None,"n.m. adjEBITDA $40~60M"),
-       ("정상화 밴드 lo ★",13.0,"mid-cycle 비교기준"),("정상화 밴드 hi ★",15.0,"mid-cycle"),
-       ("보수 lo",8.0,"floor"),("보수 hi",13.0,"floor")]
+peers=[("LG에너지솔루션",19.0,"EV/EBITDA 26x'25F→19x'26F→15x'27F (stockanalysis·미래에셋)"),
+       ("CATL",13.0,"P/E 20.5x'26E(UBS)·22.5xTTM → EV/EBITDA ~12~14x 추정"),
+       ("삼성SDI",None,"'26 영업손실 예상(미래에셋)·TTM~87x → n.m."),
+       ("Fluence",None,"FY26 adjEBITDA $40~60M(가이던스) → n.m."),
+       ("Sungrow (참고)",None,"흑자 ESS·시총$54.6B/매출$12.1B(에너지스토리지뉴스)"),
+       ("정상화 밴드 lo ★",13.0,"mid-cycle 비교기준 (LGES'27F·CATL)"),("정상화 밴드 hi ★",15.0,"mid-cycle (LGES'27F 15x)"),
+       ("보수 lo",8.0,"장기 floor 가정"),("보수 hi",13.0,"장기 floor 가정")]
 for nm,mul,note in peers:
     mL(r,nm)
     if mul is not None: mV(r,4,mul,MXX,blue=True)
     else:
         c=ms.cell(r,4,"n.m."); c.font=fnt(10,False,"8C8473"); c.alignment=right
     ms.cell(r,5,note).font=fnt(8,False,"8C8473",it=True); r+=1
-ms.cell(r,2,"※ peer EBITDA엔 자체 보조금 포함 → 우리 ex-AMPC와 apples-to-apples 아님(보수적). 실데이터 Bloomberg/FactSet 확정 필요.").font=fnt(8,False,RED,it=True); r+=2
+ms.cell(r,2,"※ 출처: stockanalysis·미래에셋·UBS·gurufocus·각사 IR/가이던스 (2026.6~7, 웹 검색 스니펫 — WebFetch 대부분 차단). 정밀값 Bloomberg/FactSet 확정 필요.").font=fnt(8,False,RED,it=True); r+=1
+ms.cell(r,2,"※ 섹터가 이익 트로프라 현재 실측은 15~27x(LGES) 또는 n.m.(SDI·Fluence). peer EBITDA엔 자체 보조금 포함 → 우리 ex-AMPC와 apples-to-apples 아님(보수적).").font=fnt(8,False,RED,it=True); r+=2
 msect(r,"3 · 적용 — 멀티플 × EBITDA → 내재 EV → 지분가치 ($mm)"); r+=1
 mH(r,["멀티플(입력)","× run EV","−순차입=지분","× 2029E EV","−순차입=지분"]); ms.cell(r,2,"멀티플별").font=fnt(9,True,NAVY); ms.cell(r,2).border=b_tb; r+=1
 for mult in [8.0,10.5,13.0,15.0,19.0]:

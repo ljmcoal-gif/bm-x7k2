@@ -241,8 +241,8 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
     prow('보수(장기) 가정','8~13x','floor',SAND,MUTE),
   ];
   s.addTable(ptbl,{x:colL,y:2.06,w:colLW,colW:[2.05,1.45,1.50],rowH:[0.34,0.40,0.40,0.40,0.40,0.42,0.42],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,7,2,7]});
-  s.addText('★ 현재 forward는 EV 다운사이클로 EBITDA 트로프 → 15~27x까지 상승(LGES 26x\'25F), \'27F 정상화 ~13~15x. peer EBITDA엔 자체 보조금 포함(우리 ex-AMPC=보수적). 출처: 증권사·stockanalysis·gurufocus \'26.7',
-    {x:colL,y:4.9,w:colLW,h:0.42,margin:0,fontFace:BODY,fontSize:7.5,italic:true,color:MUTE2,valign:'top',lineSpacingMultiple:1.1});
+  s.addText('★ LGES EV/EBITDA 26x\'25F→19x\'26F→15x\'27F(stockanalysis·미래에셋) · CATL P/E 20.5x\'26E(UBS) · 삼성SDI \'26 영업손실→n.m.(미래에셋) · Fluence adjEBITDA$40~60M→n.m. 섹터 트로프로 실측 15~27x·정상화 ~13~15x. peer는 자체보조금 포함(우리 ex-AMPC=보수적) · 정밀값 Bloomberg/FactSet 확정 要',
+    {x:colL,y:4.86,w:colLW,h:0.5,margin:0,fontFace:BODY,fontSize:7,italic:true,color:MUTE2,valign:'top',lineSpacingMultiple:1.08});
   // 우: 우리 멀티플 — 두 EBITDA 기준
   eb(s,colR,1.78,colRW,'우리 멀티플 · EBITDA 기준별 (분모 민감도)');
   const ah={fontFace:BODY,fontSize:8.5,bold:true,color:PAPER,align:'center',valign:'middle',fill:{color:INK}};
