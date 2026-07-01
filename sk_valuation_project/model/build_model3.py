@@ -617,6 +617,72 @@ ln=LineChart(); ln.add_data(Reference(cs,min_col=C0-2,max_col=C0+len(YEARS)-1,mi
 bar+=ln
 cs.add_chart(bar,f"B{r+3}")
 
+# ============ MULTIPLES 시트 (덱 P5 연동) ============
+ms=wb.create_sheet("Multiples"); ms.sheet_view.showGridLines=False
+ms.column_dimensions['A'].width=2; ms.column_dimensions['B'].width=30
+for cc in ['C','D','E','F','G','H','I']: ms.column_dimensions[cc].width=12
+MXX='0.0"x"'
+def msect(r,t):
+    ms.cell(r,2,t).font=fnt(10,True,"FFFFFF")
+    for cc in range(2,10): ms.cell(r,cc).fill=fred
+def mL(r,t,bold=False,color=BLACK):
+    c=ms.cell(r,2,t); c.font=fnt(10,bold,NAVY if bold else color); return r
+def mV(r,cl,val,fmt=USD,blue=False,bold=False,color=None):
+    c=ms.cell(r,cl,val); c.font=fnt(10,bold,BLUE if blue else (color or BLACK)); c.number_format=fmt; c.alignment=right; return r
+def mH(r,cols,startcol=3):
+    for j,h in enumerate(cols):
+        cc=ms.cell(r,startcol+j,h); cc.font=fnt(9,True,NAVY); cc.alignment=center; cc.border=b_tb
+    ms.cell(r,2).border=b_tb
+ms.cell(1,2,"MULTIPLES — EV/EBITDA 계산 (덱 P5 연동)").font=fnt(15,True,NAVY)
+ms.cell(2,2,"파란=입력 · 나머지=수식(Consolidated·Assumptions 참조) · run-rate = 2030–32 평균 ex-AMPC").font=fnt(9,False,"8C8473")
+ND=AR('netdebt'); RREref=f"Consolidated!D{RRE}"; FWEref=f"Consolidated!D{FWE}"; EVref=f"Consolidated!D{EV}"
+RRrev=f"AVERAGE(Consolidated!{col(4)}{CR['rev']}:{col(6)}{CR['rev']})"
+r=4
+msect(r,"1 · EBITDA 기준 & DCF 내재 멀티플"); r+=1
+mL(r,"run-rate ex-AMPC EBITDA (2030–32)"); mV(r,4,f"={RREref}"); RRr=r; r+=1
+mL(r,"2029E forward ex-AMPC EBITDA"); mV(r,4,f"={FWEref}"); FWr=r; r+=1
+mL(r,"run-rate 매출 (2030–32)"); mV(r,4,f"={RRrev}"); RVr=r; r+=1
+mL(r,"DCF EV",bold=True); mV(r,4,f"={EVref}",bold=True); EVr=r; r+=1
+mL(r,"순차입금 (BA 3.7 + OT 2.6)"); mV(r,4,f"={ND}"); NDr=r; r+=1
+mL(r,"DCF 내재 멀티플 — run-rate",bold=True,color=RED); mV(r,4,f"=D{EVr}/D{RRr}",MXX,bold=True,color=RED); r+=1
+mL(r,"DCF 내재 멀티플 — 2029E",color=RED); mV(r,4,f"=D{EVr}/D{FWr}",MXX,color=RED); r+=2
+msect(r,"2 · Peer 컴프스 (실측 forward EV/EBITDA · 입력 ★)"); r+=1
+mH(r,["EV/EBITDA","비고"],startcol=4); ms.cell(r,2,"회사").font=fnt(9,True,NAVY); ms.cell(r,2).border=b_tb; r+=1
+peers=[("LG에너지솔루션",19.0,"'26F (→15x '27F)"),("CATL",13.0,"PE 22.5x·최고수익"),
+       ("삼성SDI",None,"n.m. EBITDA 적자근접"),("Fluence",None,"n.m. adjEBITDA $40~60M"),
+       ("정상화 밴드 lo ★",13.0,"mid-cycle 비교기준"),("정상화 밴드 hi ★",15.0,"mid-cycle"),
+       ("보수 lo",8.0,"floor"),("보수 hi",13.0,"floor")]
+for nm,mul,note in peers:
+    mL(r,nm)
+    if mul is not None: mV(r,4,mul,MXX,blue=True)
+    else:
+        c=ms.cell(r,4,"n.m."); c.font=fnt(10,False,"8C8473"); c.alignment=right
+    ms.cell(r,5,note).font=fnt(8,False,"8C8473",it=True); r+=1
+ms.cell(r,2,"※ peer EBITDA엔 자체 보조금 포함 → 우리 ex-AMPC와 apples-to-apples 아님(보수적). 실데이터 Bloomberg/FactSet 확정 필요.").font=fnt(8,False,RED,it=True); r+=2
+msect(r,"3 · 적용 — 멀티플 × EBITDA → 내재 EV → 지분가치 ($mm)"); r+=1
+mH(r,["멀티플(입력)","× run EV","−순차입=지분","× 2029E EV","−순차입=지분"]); ms.cell(r,2,"멀티플별").font=fnt(9,True,NAVY); ms.cell(r,2).border=b_tb; r+=1
+for mult in [8.0,10.5,13.0,15.0,19.0]:
+    mL(r,f"{mult:g}x"); mV(r,3,mult,MXX,blue=True)
+    mV(r,4,f"=C{r}*$D${RRr}",USD); mV(r,5,f"=D{r}-$D${NDr}",USD,color=(GREEN if mult>=13 else RED))
+    mV(r,6,f"=C{r}*$D${FWr}",USD); mV(r,7,f"=F{r}-$D${NDr}",USD,color=(GREEN if mult>=15 else RED)); r+=1
+r+=1
+msect(r,"4 · 역산 필요 멀티플 (조달 시나리오)"); r+=1
+mL(r,"조달총액 ($mm)"); mV(r,4,1420,USD,blue=True); RAISEr=r; r+=1
+mL(r,"부채비중 (%)"); mV(r,4,0.60,PCT,blue=True); DPr=r; r+=1
+mH(r,["그랜트","희석캡","외부지분","최소지분","최소EV","필요멀티플(run)","필요(2029E)"]); ms.cell(r,2,"시나리오").font=fnt(9,True,NAVY); ms.cell(r,2).border=b_tb; r+=1
+scstart=r
+for nm,g,d in [("BASE",0.10,0.20),("① 그랜트20",0.20,0.20),("② 희석30",0.10,0.30),("③ 희석49",0.10,0.49),("최대결합",0.20,0.49)]:
+    mL(r,nm); mV(r,3,g,PCT,blue=True); mV(r,4,d,PCT,blue=True)
+    mV(r,5,f"=(1-C{r}-$D${DPr})*$D${RAISEr}",USD); mV(r,6,f"=E{r}/D{r}",USD); mV(r,7,f"=F{r}+$D${NDr}",USD)
+    mV(r,8,f"=G{r}/$D${RRr}",MXX,color=RED,bold=True); mV(r,9,f"=G{r}/$D${FWr}",MXX,color=RED); r+=1
+r+=1
+msect(r,"5 · 필요 EBITDA% (목표 멀티플 도달 · run-rate 매출 기준)"); r+=1
+mL(r,"목표 멀티플 (입력)"); mV(r,4,13.0,MXX,blue=True); TGTr=r; r+=1
+mH(r,["필요 EBITDA% (→목표배수)"]); ms.cell(r,2,"시나리오").font=fnt(9,True,NAVY); ms.cell(r,2).border=b_tb; r+=1
+for k,nm in enumerate(["BASE","① 그랜트20","② 희석30","③ 희석49","최대결합"]):
+    mL(r,nm); mV(r,3,f"=G{scstart+k}/($D${TGTr}*$D${RVr})",PCT,color=GREEN,bold=True); r+=1
+ms.cell(r,2,"필요EBITDA% = 최소EV ÷ (목표멀티플 × run-rate 매출) · 현 ex-AMPC 마진 9% 대비").font=fnt(8,False,"8C8473",it=True)
+
 import os
 _OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "output")
 os.makedirs(_OUT, exist_ok=True)

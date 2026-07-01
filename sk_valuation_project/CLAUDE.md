@@ -40,11 +40,12 @@ soffice --headless --convert-to pdf SK_Valuation_v2.pptx
 
 ## 모델 구조 (build_model3.py)
 
-4개 시트를 생성한다: **Assumptions, SKBA, SKOT, Consolidated**.
+5개 시트를 생성한다: **Assumptions, SKBA, SKOT, Consolidated, Multiples**.
 
-- **Assumptions**: 모든 입력값(★ 표시 = 핵심 가정, 노란셀). ASP·마진·AMPC·WACC·자본구조·NOL·그랜트 등.
+- **Assumptions**: 모든 입력값(★ 표시 = 핵심 가정, 노란셀). ASP·마진·AMPC·WACC·자본구조·NOL·그랜트·가동률 등.
 - **SKBA / SKOT**: 공장별 P&L → NOPAT(NOL 반영) → FCFF. `plant_common()` 함수가 양쪽 공용.
-- **Consolidated**: 합산 → DCF(EV) + 공장별 FCFE 브리지 + 메자닌 DSCR + NAV(SOTP).
+- **Consolidated**: 합산 → DCF(EV) + 공장별 FCFE 브리지 + NAV(SOTP) + EV/EBITDA 멀티플.
+- **Multiples** (덱 P5 연동): ① EBITDA 기준(run-rate $554mm / 2029E $455mm)·DCF 내재 멀티플(8.7x/10.6x) ② peer 컴프스(실측 입력) ③ 멀티플×EBITDA→EV→지분가치 ④ 역산 필요 멀티플(시나리오별, 두 기준) ⑤ 필요 EBITDA%(목표 멀티플 도달). 전부 Consolidated·Assumptions 참조 수식(입력=파란).
 
 ### 핵심 함수
 - `plant_common(ws, PROW, rev_row, ampc_gwh_keys, capex_key, head, nol_key)`: 공장 P&L·FCFF·NOL 생성.
