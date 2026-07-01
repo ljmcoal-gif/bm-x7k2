@@ -216,10 +216,82 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   footer(s);
 }
 
-// ════════ S5 · 커뮤니케이션 (마무리) ════════
+// ════════ S5 · Peer 멀티플 (8~13x) ════════
 {
   const s=pres.addSlide(); base(s);
-  header(s,'CLOSING — GOVERNMENT ENGAGEMENT','05','커뮤니케이션 방식','재무 사전 정렬 우선');
+  header(s,'VALUATION — PEER MULTIPLES','05','Peer 멀티플 (8~13x)','ex-AMPC EBITDA $554mm 적용');
+  const colL=MX, colLW=5.0, colR=MX+colLW+0.4, colRW=W-colR-MX;
+  // 좌: peer 컴프스 표
+  eb(s,colL,1.78,colLW,'Peer 컴프스 · COMPARABLES (forward EV/EBITDA ★)');
+  const ph={fontFace:BODY,fontSize:9,bold:true,color:PAPER,valign:'middle',fill:{color:INK}};
+  const pc={fontFace:BODY,fontSize:9.5,color:INK,valign:'middle'};
+  const pcm={fontFace:MONO,fontSize:9.5,color:MUTE,valign:'middle'};
+  const pmul={fontFace:SG,fontSize:11,bold:true,color:INK,align:'center',valign:'middle'};
+  function prow(nm,seg,mul,fill,mc){ return [
+    {text:nm,options:{...pc,fill:{color:fill}}},
+    {text:seg,options:{...pcm,fill:{color:fill}}},
+    {text:mul,options:{...pmul,color:mc||INK,fill:{color:fill}}} ]; }
+  const ptbl=[
+    [{text:'회사',options:{...ph,align:'left'}},{text:'구분',options:{...ph,align:'left'}},{text:'EV/EBITDA',options:{...ph,align:'center'}}],
+    prow('CATL','셀 · 글로벌 1위','12~13x',PAPER),
+    prow('Tesla (Energy)','ESS 시스템','~12x',PAPER),
+    prow('Fluence','ESS 인티그레이터','~11x',PAPER),
+    prow('LG에너지솔루션','셀','~10x',PAPER),
+    prow('삼성SDI','셀','~9x',PAPER),
+    prow('Peer 밴드 (적용)','forward','8~13x',SAND,RED),
+  ];
+  s.addTable(ptbl,{x:colL,y:2.06,w:colLW,colW:[2.05,1.75,1.20],rowH:[0.34,0.40,0.40,0.40,0.40,0.40,0.46],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,7,2,7]});
+  s.addText('★ 증권사 추정 forward · peer EBITDA엔 AMPC 포함 → 우리는 ex-AMPC(보수적, apples-to-apples 아님)',
+    {x:colL,y:5.02,w:colLW,h:0.34,margin:0,fontFace:BODY,fontSize:7.5,italic:true,color:MUTE2,valign:'top',lineSpacingMultiple:1.1});
+  // 우: 우리 EBITDA 적용
+  eb(s,colR,1.78,colRW,'우리 EBITDA 적용 · IMPLIED (× $554mm)');
+  const ah={fontFace:BODY,fontSize:9,bold:true,color:PAPER,align:'center',valign:'middle',fill:{color:INK}};
+  const am={fontFace:SG,fontSize:12,bold:true,align:'center',valign:'middle'};
+  const av={fontFace:MONO,fontSize:10,align:'center',valign:'middle'};
+  function arow(mul,ev,eq,eqc,fill){ return [
+    {text:mul,options:{...am,color:INK,fill:{color:fill}}},
+    {text:ev,options:{...av,color:INK,fill:{color:fill}}},
+    {text:eq,options:{...av,bold:true,color:eqc,fill:{color:fill}}} ]; }
+  const atbl=[
+    [{text:'멀티플',options:ah},{text:'내재 EV',options:ah},{text:'내재 지분가치\n(−순차입 $6.4bn)',options:ah}],
+    arow('8.0x','$4.4bn','−$2.0bn',RED,PAPER),
+    arow('10.5x','$5.8bn','−$0.6bn',RED,PAPER),
+    arow('13.0x','$7.2bn','+$0.8bn',GREEN,GREENSOFT),
+  ];
+  s.addTable(atbl,{x:colR,y:2.06,w:colRW,colW:[1.15,1.55,2.35],rowH:[0.50,0.52,0.52,0.52],border:{type:'solid',color:RULE,pt:0.5},valign:'middle',margin:[2,6,2,6]});
+  // 참조 멀티플 박스 (다크)
+  s.addShape(RR,{x:colR,y:4.28,w:colRW,h:0.86,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
+  s.addText([{text:'DCF 내재  ',options:{color:WARM}},{text:'≈ 8.7x',options:{color:GREENLT,bold:true}},{text:'  (EV $4.8bn · peer 하단)\n',options:{color:WARM}},{text:'역산 필요  ',options:{color:WARM}},{text:'12.6~15.4x',options:{color:REDLT,bold:true}},{text:'  (딜 성립 · peer 상단 초과)',options:{color:WARM}}],
+    {x:colR+0.24,y:4.28,w:colRW-0.45,h:0.86,margin:0,fontFace:BODY,fontSize:10,valign:'middle',lineSpacingMultiple:1.3});
+  // 풋볼필드 (EV $bn)
+  eb(s,MX,5.5,W-2*MX,'풋볼필드 — 내재 EV ($bn) · peer / DCF / 역산 필요');
+  const fx=MX+0.15, fw=W-2*MX-1.0, fby=6.25, flo=3, fhi=9;
+  const fp=v=>fx+fw*(v-flo)/(fhi-flo);
+  s.addShape(LINE,{x:fx,y:fby,w:fw,h:0,line:{color:WARM,width:2.5}});
+  // peer 밴드 4.4~7.2
+  s.addShape(RECT,{x:fp(4.43),y:fby-0.11,w:fp(7.20)-fp(4.43),h:0.22,fill:{color:GREENSOFT},line:{color:GREEN,width:0.75}});
+  s.addText('peer 8~13x  $4.4~7.2bn',{x:fp(4.43),y:fby-0.36,w:fp(7.20)-fp(4.43),h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:8,bold:true,color:GREEN,valign:'middle'});
+  // 역산 필요 밴드 7.0~8.5
+  s.addShape(RECT,{x:fp(6.98),y:fby-0.11,w:fp(8.53)-fp(6.98),h:0.22,fill:{color:REDSOFT},line:{color:RED,width:0.75}});
+  s.addText('역산 필요 12.6~15.4x',{x:fp(6.98)-0.2,y:fby+0.16,w:fp(8.53)-fp(6.98)+0.6,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:RED,valign:'middle'});
+  // 순차입금 손익분기선 6.4
+  s.addShape(LINE,{x:fp(6.4),y:fby-0.30,w:0,h:0.60,line:{color:INK,width:1.25,dashType:'dash'}});
+  s.addText('순차입금 $6.4bn (지분 손익분기)',{x:fp(6.4)-1.2,y:fby-0.54,w:2.4,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:INK,valign:'middle'});
+  // DCF EV 마커 4.84
+  s.addShape(OVAL,{x:fp(4.84)-0.06,y:fby-0.06,w:0.12,h:0.12,fill:{color:GREEN},line:{type:'none'}});
+  s.addText('DCF $4.8bn·8.7x',{x:fp(4.84)-0.85,y:fby+0.16,w:1.7,h:0.2,margin:0,align:'center',fontFace:MONO,fontSize:7.5,bold:true,color:GREEN,valign:'middle'});
+  [3,4,5,6,7,8,9].forEach(t=>s.addText('$'+t+'bn',{x:fp(t)-0.3,y:fby-0.02+0.42,w:0.6,h:0.16,margin:0,align:'center',fontFace:MONO,fontSize:6.5,color:MUTE2,valign:'middle'}));
+  // 결론 콜아웃
+  s.addShape(RR,{x:MX,y:6.86,w:W-2*MX,h:0.82,rectRadius:0.06,fill:{color:SAND},line:{type:'none'}});
+  s.addText([{text:'[핵심]  ',options:{bold:true,color:RED}},{text:'ex-AMPC EBITDA $554mm에 peer 8~13x → EV $4.4~7.2bn. 순차입금 $6.4bn 감안 시 지분가치는 ',options:{color:INK}},{text:'13x(+$0.8bn)에서야 (+)',options:{color:GREEN,bold:true}},{text:', 8x는 −$2.0bn. DCF도 ~8.7x로 peer 하단이라, 딜 성립에 필요한 ',options:{color:INK}},{text:'12.6~15.4x는 peer 상단 초과',options:{color:RED,bold:true}},{text:' → 그랜트·희석·ex-AMPC 마진 개선으로 메워야. (AMPC 포함 시 EV의 75%가 보조금)',options:{color:INK}}],
+    {x:MX+0.25,y:6.86,w:W-2*MX-0.5,h:0.82,margin:0,fontFace:BODY,fontSize:9.5,valign:'middle',lineSpacingMultiple:1.12});
+  footer(s);
+}
+
+// ════════ S6 · 커뮤니케이션 (마무리) ════════
+{
+  const s=pres.addSlide(); base(s);
+  header(s,'CLOSING — GOVERNMENT ENGAGEMENT','06','커뮤니케이션 방식','재무 사전 정렬 우선');
   eb(s,MX,1.78,7,'진행 순서 · ENGAGEMENT SEQUENCE');
   const tw=(W-2*MX-3*0.3)/4;
   const tsteps=[['1','내부 재무 사전 정렬','ask·구조·레드라인 재무 합의 (선행)',true],['2','ask 확정 → 매칭','요청 확정 후 카운터파트로',false],['3','DOE 부서 미팅','합의된 ask · 부서별 단일 메시지',false],['4','DOW(국방) 트랙','방산·딥테크 별도 진행',false]];
@@ -243,7 +315,7 @@ function eb(s,x,y,w,t){ s.addText(t,{x,y,w,h:0.24,margin:0,fontFace:MONO,fontSiz
   eb(s,colR,3.6,colRW,'레드라인 · RED LINES');
   s.addShape(RR,{x:colR,y:3.9,w:colRW,h:2.08,rectRadius:0.06,fill:{color:DARK},line:{type:'none'}});
   s.addText('미팅 전 재무 합의 사항',{x:colR+0.26,y:4.04,w:colRW-0.5,h:0.32,margin:0,fontFace:HEAD,bold:true,fontSize:13,color:PAPER,valign:'middle'});
-  s.addText([{text:'• SK이노 보증 확대 금지\n',options:{color:WARM}},{text:'• BA 기존 covenant breach 금지\n',options:{color:WARM}},{text:'• CoC 20% 캡 유지\n',options:{color:WARM}},{text:'• DOE Equity 기대 제외 (대출·보증만)',options:{color:REDLT,bold:true}}],
+  s.addText([{text:'• SK이노 보증 확대 금지\n',options:{color:WARM}},{text:'• BA 기존 covenant breach 금지\n',options:{color:WARM}},{text:'• CoC 완화 협상 (희석 30~49% 여지)\n',options:{color:WARM}},{text:'• DOE Equity 기대 제외 (대출·보증만)',options:{color:REDLT,bold:true}}],
     {x:colR+0.26,y:4.42,w:colRW-0.5,h:1.5,margin:0,fontFace:BODY,fontSize:11,valign:'top',lineSpacingMultiple:1.4});
   // 예상 타임라인 strip
   const mil=[['D+0 · 1~2주','재무 사전 정렬 메모',RED],['D+2~3주','ask 확정 · 부서 매칭',MUTE2],['D+4~6주','DOE 부서 미팅',MUTE2],['D+8주~','DOW·후속 협상',MUTE2]];
